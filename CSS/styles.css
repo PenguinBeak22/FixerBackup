@@ -1,0 +1,840 @@
+/* Universal Box Sizing */
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+/* Color Variables - Clean & Energetic (White/Grey with Vibrant Accents) */
+:root {
+    --primary-white: #FFFFFF; /* Crisp White */
+    --secondary-charcoal: #36454F; /* Charcoal Grey for strong text/elements */
+    --accent-yellow: #FFD700; /* Bright Yellow */
+    --accent-lime: #A7D129; /* Lime Green (alternative accent/secondary) */
+    --text-dark: #333333; /* Slightly lighter dark grey for general text */
+    --text-light: #FFFFFF; /* White for light backgrounds */
+    --bg-light: #F8F8F8; /* Off-white background */
+    --border-light-grey: #E0E0E0; /* Lighter grey for borders/dividers */
+}
+
+/* Basic Body Styles */
+body {
+    font-family: 'Poppins', sans-serif; /* Primary font for headings and some text */
+    margin: 0;
+    line-height: 1.6; /* Keep unitless for better scaling */
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    font-size: 16px; /* Explicitly setting base font size for px conversions */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* Semi-bold for headings */
+    color: var(--secondary-charcoal); /* Headings in charcoal */
+}
+
+h1 { font-size: 48px;  }
+h2 { font-size: 40px;  }
+h3 { font-size: 32px;  }
+h4 { font-size: 24px;  }
+h5 { font-size: 20px;  }
+h6 { font-size: 18px;  }
+
+
+/* Links */
+a {
+    color: var(--secondary-charcoal); /* Default links can be charcoal or primary accent */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-yellow); /* Yellow on hover for general links */
+}
+
+/* Header */
+header {
+    background-color: var(--primary-white); /* White header */
+    color: var(--secondary-charcoal); /* Dark text for header */
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Lighter shadow */
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Add horizontal padding */
+}
+
+.title {
+    font-family: 'Lato', sans-serif; /* Different font for the main title */
+    margin: 0;
+    font-size: 35px;
+    color: var(--secondary-charcoal); /* Title in charcoal */
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text-dark); /* Darker text for navigation links */
+    margin-left: 30px;
+    font-weight: 400; /* Regular weight */
+    font-size: 17px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--accent-lime); /* Lime green on hover for nav links */
+}
+
+.cta-button {
+    background-color: var(--accent-yellow); /* Yellow CTA button */
+    color: var(--secondary-charcoal); /* Dark text on yellow button for contrast */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; 
+    font-weight: 600;
+    margin-left: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cta-button:hover {
+    background-color: #E6C800; /* Slightly darker yellow on hover */
+    transform: translateY(-2px);
+}
+
+/* Banner Section */
+.banner {
+    /* Placeholder for a background image. Consider a light, clean image. */
+    background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('Images/StockImage1.jpg');
+    background-size: cover;
+    background-position: center;
+    color: var(--secondary-charcoal); /* Dark text for banner content */
+    text-align: center;
+    padding: 100px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px; /* Ensures a minimum height */
+}
+
+.banner-content h1 {
+    font-size: 48px; 
+    margin-bottom: 15px;
+    color: var(--secondary-charcoal); /* H1 in banner also charcoal */
+}
+
+.banner-content p {
+    font-size: 21px;
+    margin-bottom: 30px;
+    max-width: 800px;
+    opacity: 0.9;
+}
+
+.banner .cta-link {
+    background-color: var(--accent-lime); /* Lime green for main banner CTA */
+    color: var(--text-light); /* White text on lime green */
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 18px; 
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.banner .cta-link:hover {
+    background-color: #92B824; /* Slightly darker lime green */
+    transform: translateY(-2px);
+}
+
+/* Section Titles */
+.section-title {
+    text-align: center;
+    padding: 60px 20px 30px;
+}
+
+.section-title h2 {
+    font-size: 40px; 
+    margin: 0;
+    position: relative;
+    display: inline-block; /* To allow pseudo-elements to align */
+    color: var(--secondary-charcoal);
+}
+
+.section-title h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent-yellow); /* Yellow underline for titles */
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* Main Content (Service Boxes) */
+main {
+    max-width: 1200px;
+    margin: 0 auto 80px; /* Added bottom margin */
+    padding: 0 20px;
+}
+
+#Content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 30px;
+    justify-content: center; /* Center items if not filling all columns */
+}
+
+.service-box {
+    background-color: var(--primary-white); /* White service boxes */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.service-box img {
+    width: 100%;
+    height: 200px; /* Fixed height for consistency */
+    object-fit: cover; /* Ensures image covers the area without distortion */
+    display: block; /* Remove extra space below image */
+    border-bottom: 1px solid var(--border-light-grey);
+}
+
+.service-box p {
+    font-size: 22px; 
+    font-weight: 600;
+    color: var(--secondary-charcoal); /* Service box text in charcoal */
+    padding: 15px;
+    margin: 0;
+}
+
+/* How It Works Section */
+.how-it-works {
+    background-color: var(--secondary-charcoal); /* Charcoal background for this section */
+    color: var(--text-light); /* White text */
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.how-it-works .section-title h2 {
+    color: var(--text-light); /* White heading */
+}
+
+.how-it-works .section-title h2::after {
+    background-color: var(--accent-lime); /* Lime green underline */
+}
+
+.how-it-works .steps {
+    list-style: none;
+    padding: 0;
+    max-width: 800px;
+    margin: 40px auto 0;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center;
+    gap: 30px; /* Space between list items */
+}
+
+.how-it-works .steps li {
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 20px 30px;
+    margin-bottom: 15px; /* For smaller screens when wrapping */
+    font-size: 19px; 
+    flex: 1; /* Allow items to grow/shrink */
+    min-width: 280px; /* Minimum width before wrapping */
+    text-align: left; /* Align text left within steps */
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.how-it-works .steps li strong {
+    font-size: 24px; 
+    color: var(--accent-yellow); /* Yellow for numbers */
+    margin-right: 15px;
+    flex-shrink: 0; /* Prevent number from shrinking */
+}
+
+
+/* Footer */
+footer {
+    background-color: var(--text-dark); /* Dark grey footer */
+    color: var(--text-light);
+    padding: 30px 20px;
+    text-align: center;
+}
+
+#footercontent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footertext {
+    margin: 5px 0;
+    font-size: 15px; 
+    opacity: 0.8;
+}
+
+.footertext:first-child {
+    flex-grow: 1; /* Allows copyright to take more space on left */
+    text-align: left;
+}
+
+.footertext:last-child {
+    text-align: right;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+    .banner-content h1 {
+        font-size: 40px; 
+    }
+    .banner-content p {
+        font-size: 18px; 
+    }
+
+    .nav-links {
+        display: none; /* Hide navigation on smaller screens for simplicity.
+                          For a real site, you'd implement a hamburger menu. */
+    }
+
+    .header-container {
+        justify-content: center; /* Center title when nav is hidden */
+    }
+
+    #Content {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .how-it-works .steps li {
+        min-width: unset; /* Reset min-width for better flow on very small screens */
+        width: 100%; /* Make them full width */
+    }
+
+    #footercontent {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footertext:first-child,
+    .footertext:last-child {
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .title {
+        font-size: 29px; 
+    }
+    .banner-content h1 {
+        font-size: 32px; 
+    }
+    .banner-content p {
+        font-size: 16px; 
+    }
+    .banner .cta-link {
+        padding: 12px 25px;
+        font-size: 16px; 
+    }
+    .section-title h2 {
+        font-size: 32px; 
+    }
+    .service-box p {
+        font-size: 19px; 
+    }
+    .how-it-works .steps li {
+        font-size: 18px; 
+        padding: 15px 20px;
+    }
+    .how-it-works .steps li strong {
+        font-size: 21px;
+        margin-right: 10px;
+    }
+}
+
+
+        
+
+
+        /* Specific Styles for Professional Application Page */
+
+        .page-banner {
+            background: linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=Join+Our+Team');
+            background-size: cover;
+            background-position: center;
+            color: var(--text-light);
+            text-align: center;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .page-banner h1 {
+            font-size: 40px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .page-banner p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        .back-link {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 400;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .application-form-container {
+            max-width: 800px;
+            margin: 60px auto 80px;
+            padding: 20px;
+            background-color: var(--primary-white);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .professional-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .professional-form label {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary-charcoal);
+            margin-bottom: 8px;
+        }
+
+        .professional-form input[type="text"],
+        .professional-form input[type="email"],
+        .professional-form input[type="tel"],
+        .professional-form select,
+        .professional-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-light-grey);
+            border-radius: 5px;
+            font-size: 16px;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .professional-form input:focus,
+        .professional-form select:focus,
+        .professional-form textarea:focus {
+            border-color: var(--accent-lime);
+            box-shadow: 0 0 0 3px rgba(167, 209, 41, 0.2); /* Light shadow with accent color */
+            outline: none;
+        }
+
+        .professional-form textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            padding: 10px 0;
+            border: 1px solid var(--border-light-grey);
+            border-radius: 5px;
+            background-color: var(--bg-light);
+            padding: 15px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-bottom: 0; /* Override default label margin */
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto; /* Allow checkbox to be its natural size */
+            margin-right: 8px;
+            appearance: none; /* Hide default checkbox */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--secondary-charcoal);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"]:checked {
+            background-color: var(--accent-lime);
+            border-color: var(--accent-lime);
+        }
+
+        .checkbox-group input[type="checkbox"]:checked::after {
+            content: '\2713'; /* Checkmark symbol */
+            color: var(--text-light);
+            font-size: 14px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .submit-application-button {
+            background-color: var(--accent-lime);
+            color: var(--text-light);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .submit-application-button:hover {
+            background-color: #92B824;
+            transform: translateY(-2px);
+        }
+
+        .submit-application-button i {
+            margin-right: 10px;
+        }
+
+        .form-message {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: none; /* Hidden by default */
+        }
+
+        .form-message.success {
+            background-color: #D4EDDA; /* Light green */
+            color: #155724; /* Dark green text */
+            border: 1px solid #C3E6CB;
+        }
+
+        .form-message.error {
+            background-color: #F8D7DA; /* Light red */
+            color: #721C24; /* Dark red text */
+            border: 1px solid #F5C6CB;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .page-banner h1 {
+                font-size: 32px;
+            }
+            .page-banner p {
+                font-size: 16px;
+            }
+            .application-form-container {
+                padding: 15px;
+                margin: 40px auto 60px;
+            }
+            .professional-form label {
+                font-size: 16px;
+            }
+            .professional-form input,
+            .professional-form select,
+            .professional-form textarea {
+                padding: 10px;
+                font-size: 15px;
+            }
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+            .submit-application-button {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+        }
+
+
+                /* Specific Styles for Plumbing Page */
+
+        /* Override banner for specific service pages */
+        .page-banner {
+            background: linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=Plumbing+Services'); /* Darker gradient for text contrast */
+            background-size: cover;
+            background-position: center;
+            color: var(--text-light);
+            text-align: center;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .page-banner h1 {
+            font-size: 40px; /* Adjust as needed */
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .page-banner p {
+            font-size: 18px; /* Adjust as needed */
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        .back-link {
+            background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent white button */
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 400;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .filters-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--primary-white);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .filters-container label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--secondary-charcoal);
+            margin-bottom: 5px;
+        }
+
+        .filters-container select,
+        .filters-container input[type="number"] {
+            padding: 8px 12px;
+            border: 1px solid var(--border-light-grey);
+            border-radius: 5px;
+            font-size: 16px;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            appearance: none; /* Remove default arrow for selects */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2336454F%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20202.7%2018.8%2074.5a17.6%2017.6%200%200%200-25.1%2024.5l137.9%20137.8c3.2%203.2%207%204.7%2011.1%204.7%204.1%200%207.9-1.5%2011.1-4.7l137.9-137.8c5.7-5.8%205.7-15.1%200-20.9-5.7-5.7-15.1-5.7-20.8%200z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px top 50%;
+            background-size: 12px auto;
+        }
+
+        .filters-container input[type="number"] {
+            text-align: center;
+            -moz-appearance: textfield; /* Hide arrows on Firefox */
+        }
+        .filters-container input[type="number"]::-webkit-outer-spin-button,
+        .filters-container input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Hide arrows on Chrome/Safari */
+            margin: 0;
+        }
+
+        .plumber-list-container {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .plumber-card {
+            background-color: var(--primary-white);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .plumber-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .plumber-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-direction: column; /* Stack image and name */
+        }
+
+        .plumber-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-yellow); /* Yellow border for avatar */
+            margin-bottom: 10px; /* Space between avatar and name */
+        }
+
+        .plumber-card h3 {
+            font-size: 24px; /* Adjust font size */
+            margin: 0;
+            color: var(--secondary-charcoal);
+        }
+
+        .plumber-specialty {
+            font-size: 15px;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .plumber-rating {
+            color: var(--accent-yellow); /* Stars in yellow */
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .plumber-rating .fas {
+            margin-right: 2px;
+        }
+
+        .plumber-rating .far {
+            color: #ccc; /* Unfilled stars */
+        }
+
+        .plumber-description {
+            font-size: 16px;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .book-now-button {
+            background-color: var(--accent-lime); /* Lime green button */
+            color: var(--text-light);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%; /* Make button full width of card */
+            max-width: 200px;
+        }
+
+        .book-now-button:hover {
+            background-color: #92B824; /* Darker lime green */
+            transform: translateY(-2px);
+        }
+
+        .loading-message, .no-results-message {
+            grid-column: 1 / -1; /* Span across all columns */
+            text-align: center;
+            font-size: 1.2em;
+            color: #777;
+            padding: 40px;
+        }
+
+        /* Responsive adjustments for plumber cards and filters */
+        @media (max-width: 900px) {
+            .page-banner h1 {
+                font-size: 32px;
+            }
+            .page-banner p {
+                font-size: 16px;
+            }
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-group {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .plumber-card {
+                padding: 20px;
+            }
+            .plumber-header {
+                flex-direction: column;
+            }
+            .plumber-avatar {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .plumber-card h3 {
+                font-size: 20px;
+            }
+            .plumber-specialty, .plumber-description, .plumber-rating {
+                font-size: 14px;
+            }
+            .book-now-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }

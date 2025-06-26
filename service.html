@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – Plumbing Services</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for star icons and other icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/servicesfunctions.js" defer></script> <!-- Defer script loading for HTML parsing -->
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <a href="index.html" class="home-link">Home</a>
+                <a href="index.html#services">Services</a>
+                <a href="professionals.html">Professionals</a>
+                <a href="index.html#how-it-works">How It Works</a>
+                <a href="index.html#contact">Contact</a>
+                <button class="cta-button">Book a Pro</button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-banner">
+        <div class="banner-content">
+            <h1>Expert Plumbers Ready to Help 💧</h1>
+            <p>Find highly-rated, reliable plumbers for all your needs.</p>
+            <a href="index.html#services" class="back-link">← Back to Services</a>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>Available Plumbers</h2>
+    </div>
+
+    <section class="filters-container">
+        <div class="filter-group">
+            <label for="filterCountry">Country:</label>
+            <select id="filterCountry" name="filterCountry">
+                <option value="all">All Countries</option>
+                <!-- Options populated by JS -->
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="filterLocality">Locality:</label>
+            <select id="filterLocality" name="filterLocality" disabled>
+                <option value="all">All Localities</option>
+                <!-- Options populated by JS -->
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="minRating">Min. Rating:</label>
+            <select id="minRating" name="minRating">
+                <option value="0">Any Rating</option>
+                <option value="1">1 Star & Up</option>
+                <option value="2">2 Stars & Up</option>
+                <option value="3">3 Stars & Up</option>
+                <option value="4">4 Stars & Up</option>
+                <option value="5">5 Stars</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy" name="sortBy">
+                <option value="default">Default</option>
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="highestRated">Highest Rated</option>
+            </select>
+        </div>
+    </section>
+
+    <main id="plumbersDisplay" class="plumber-list-container">
+        <!-- Plumber cards will be dynamically loaded here by JavaScript -->
+        <p class="loading-message">Loading plumbers...</p>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>
