@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fixalo – Find Trusted Tradespeople</title>
     <link rel="stylesheet" type="text/css" href="CSS/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons if needed (not directly used here but good practice to include if used globally) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js"></script>
+
+
 </head>
 <body>
 
@@ -12,11 +18,16 @@
         <div class="header-container">
             <h1 class="title">Fixalo</h1>
             <nav class="nav-links">
-                <a href="#services">Services</a>
-                <a href="#how-it-works">How It Works</a>
-                <a href="professionals.html">Professionals</a> 
-                <a href="#contact">Contact</a>
-                <button class="cta-button">Book a Pro</button>
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a> <!-- Added Home link explicitly -->
+                    <a href="#Content">Services</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -25,7 +36,7 @@
         <div class="banner-content">
             <h1>Book Trusted Tradespeople</h1>
             <p>Plumbers, Carpenters, Electricians & More — Reliable Help at Your Fingertips</p>
-            <a href="#services" class="cta-link">Browse Services</a>
+            <a href="services.html" class="cta-link">Browse Services</a> <!-- Updated to services.html -->
         </div>
     </section>
 
@@ -35,33 +46,33 @@
 
     <main>
         <div id="Content">
-            <a href="service.html" id="Plumbing" class="service-box">
-                <img src="images/PlumberImage.jpg" alt="Plumbing" />
+            <a href="plumbing.html" id="Plumbing" class="service-box">
+                <img src="images/PlumberImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/FFD700/36454F?text=Plumbing';" alt="Plumbing" />
                 <p>Plumbing</p>
             </a>
 
             <a href="carpentry.html" id="Carpentry" class="service-box">
-                <img src="images/CarpenterImage.jpg" alt="Carpentry" />
+                <img src="images/CarpenterImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/A7D129/FFFFFF?text=Carpentry';" alt="Carpentry" />
                 <p>Carpentry</p>
             </a>
 
             <a href="electrical.html" id="Electrical" class="service-box">
-                <img src="images/ElectricianImage.jpg" alt="Electrical" />
+                <img src="images/ElectricianImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/36454F/FFD700?text=Electrical';" alt="Electrical" />
                 <p>Electrical</p>
             </a>
 
             <a href="painting.html" id="Painting" class="service-box">
-                <img src="images/PaintingImage.jpg" alt="Painting" />
+                <img src="images/PaintingImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/FFD700/36454F?text=Painting';" alt="Painting" />
                 <p>Painting</p>
             </a>
 
             <a href="cleaning.html" id="Cleaning" class="service-box">
-                <img src="images/CleaningImage.jpg" alt="Cleaning" />
+                <img src="images/CleaningImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/A7D129/36454F?text=Cleaning';" alt="Cleaning" />
                 <p>Cleaning</p>
             </a>
 
             <a href="blacksmithing.html" id="Blacksmithing" class="service-box">
-                <img src="images/BlackSmithImage.jpg" alt="Blacksmithing" />
+                <img src="images/BlackSmithImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/36454F/A7D129?text=Blacksmithing';" alt="Blacksmithing" />
                 <p>Blacksmithing</p>
             </a>
         </div>

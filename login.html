@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – Login</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button> <!-- Added ID -->
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button> <!-- Added ID -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-banner">
+        <div class="banner-content">
+            <h1>Welcome Back! 👋</h1>
+            <p>Log in to manage your bookings or professional profile.</p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>Login to Your Account</h2>
+    </div>
+
+    <main class="application-form-container"> <!-- Reusing application-form-container for consistent styling -->
+        <form id="loginForm" class="professional-form"> <!-- Reusing professional-form for consistent styling -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <button type="submit" class="submit-application-button"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+        <div id="formMessage" class="form-message"></div>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>

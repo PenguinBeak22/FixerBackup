@@ -8,20 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome for star icons and other icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="Javascript/servicesfunctions.js" defer></script> <!-- Defer script loading for HTML parsing -->
+    <script src="Javascript/functions.js" defer></script> <!-- Defer script loading for HTML parsing -->
 </head>
 <body>
+
 
     <header>
         <div class="header-container">
             <h1 class="title">Fixalo</h1>
             <nav class="nav-links">
-                <a href="index.html" class="home-link">Home</a>
-                <a href="index.html#services">Services</a>
-                <a href="professionals.html">Professionals</a>
-                <a href="index.html#how-it-works">How It Works</a>
-                <a href="index.html#contact">Contact</a>
-                <button class="cta-button">Book a Pro</button>
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a> <!-- Added Home link explicitly -->
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
             </nav>
         </div>
     </header>

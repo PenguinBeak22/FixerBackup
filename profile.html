@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – Plumber Profile: John Paul</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for star and contact icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js" defer></script> <!-- Added 'defer' attribute -->
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a>
+                    <a href="services.html">Services</a> <!-- Corrected link -->
+                    <a href="index.html#how-it-works">How It Works</a> <!-- Link to section on homepage -->
+                    <a href="professional-apply-page.html">Apply</a> <!-- Link to apply page -->
+                    <a href="index.html#contact">Contact</a> <!-- Link to section on homepage -->
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-banner"> <!-- Reusing .page-banner for consistent top styling -->
+        <div class="banner-content">
+            <img src="https://placehold.co/150x150/A7D129/36454F?text=JP" alt="John Paul Profile" class="profile-avatar"> <!-- Changed class to .profile-avatar -->
+            <h1 class="profile-name">John "The Pipe" Paul</h1> <!-- Changed to .profile-name -->
+            <p class="profile-specialty">Emergency Leaks, Drain Cleaning, Water Heater Repair</p> <!-- Changed to .profile-specialty -->
+            <div class="profile-rating"> <!-- Changed class to .profile-rating -->
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> 4.5 (87 reviews)
+            </div>
+            <a href="plumbing.html" class="back-link">← Back to Plumbers List</a> <!-- Link to plumbers listing -->
+        </div>
+    </section>
+
+    <main class="plumber-profile-container"> <!-- Main content container using .plumber-profile-container -->
+        <div class="profile-description-section">
+            <h3>About John</h3>
+            <p>John Paul has been serving the Malta community for over 15 years, specializing in both residential and commercial plumbing solutions. From tricky leak detections to full bathroom renovations, he handles every job with precision, efficiency, and a friendly attitude. His commitment to quality workmanship and customer satisfaction has earned him a stellar reputation.</p>
+            <p>He is fully licensed and insured, providing peace of mind with every service call. John is known for his prompt response to emergencies and his transparent pricing.</p>
+        </div>
+
+        <div class="profile-info-grid"> <!-- This div will hold the service list and contact info side-by-side or stacked -->
+            <div class="info-box"> <!-- Used info-box for consistency -->
+                <h3>Services Offered</h3>
+                <ul class="services-list">
+                    <li><i class="fas fa-check-circle"></i> Emergency Leak Repair</li>
+                    <li><i class="fas fa-check-circle"></i> Drain Cleaning & Unblocking</li>
+                    <li><i class="fas fa-check-circle"></i> Water Heater Installation & Repair</li>
+                    <li><i class="fas fa-check-circle"></i> Faucet & Fixture Installation</li>
+                    <li><i class="fas fa-check-circle"></i> Toilet Repair & Replacement</li>
+                    <li><i class="fas fa-check-circle"></i> Pipe Repair & Replacement</li>
+                    <li><i class="fas fa-check-circle"></i> Boiler Servicing & Installation</li>
+                    <li><i class="fas fa-check-circle"></i> Bathroom & Kitchen Plumbing</li>
+                </ul>
+            </div>
+
+            <div class="info-box"> <!-- Used info-box for consistency -->
+                <h3>Contact John</h3>
+                <p><i class="fas fa-phone-alt"></i> Phone: <a href="tel:+35612345678">+356 1234 5678</a></p>
+                <p><i class="fas fa-envelope"></i> Email: <a href="mailto:john.paul@example.com">john.paul@example.com</a></p>
+                <p class="contact-note">Available: Mon - Sat, 8:00 AM - 6:00 PM</p>
+            </div>
+        </div>
+
+        <div class="profile-cta-buttons"> <!-- Container for CTA buttons -->
+            <button class="profile-contact-button"><i class="fas fa-comment-dots"></i> Message John</button>
+            <button class="profile-book-button"><i class="fas fa-calendar-alt"></i> Book Appointment</button>
+        </div>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>
+</body>
+</html>
