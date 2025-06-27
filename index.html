@@ -8,9 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons if needed (not directly used here but good practice to include if used globally) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="Javascript/functions.js"></script>
-
-
+    <script src="Javascript/functions.js" defer></script> <!-- Link to functions.js -->
 </head>
 <body>
 
@@ -19,9 +17,10 @@
             <h1 class="title">Fixalo</h1>
             <nav class="nav-links">
                 <div class="main-nav-items">
-                    <a href="index.html">Home</a> <!-- Added Home link explicitly -->
+                    <a href="index.html">Home</a>
                     <a href="#Content">Services</a>
                     <a href="#how-it-works">How It Works</a>
+                    <a href="professional-apply-page.html">Apply</a> <!-- Ensure this path is correct for apply page -->
                     <a href="#contact">Contact</a>
                 </div>
                 <div class="auth-buttons">
@@ -36,7 +35,7 @@
         <div class="banner-content">
             <h1>Book Trusted Tradespeople</h1>
             <p>Plumbers, Carpenters, Electricians & More — Reliable Help at Your Fingertips</p>
-            <a href="services.html" class="cta-link">Browse Services</a> <!-- Updated to services.html -->
+            <a href="services.html" class="cta-link">Browse Services</a>
         </div>
     </section>
 
@@ -46,32 +45,33 @@
 
     <main>
         <div id="Content">
-            <a href="service-listing.html" id="Plumbing" class="service-box">
+            <!-- Updated hrefs to point to service-listing.html with a query parameter -->
+            <a href="service-listing.html?service=plumbing" id="Plumbing" class="service-box">
                 <img src="images/PlumberImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/FFD700/36454F?text=Plumbing';" alt="Plumbing" />
                 <p>Plumbing</p>
             </a>
 
-            <a href="carpentry.html" id="Carpentry" class="service-box">
+            <a href="service-listing.html?service=carpentry" id="Carpentry" class="service-box">
                 <img src="images/CarpenterImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/A7D129/FFFFFF?text=Carpentry';" alt="Carpentry" />
                 <p>Carpentry</p>
             </a>
 
-            <a href="electrical.html" id="Electrical" class="service-box">
+            <a href="service-listing.html?service=electrical" id="Electrical" class="service-box">
                 <img src="images/ElectricianImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/36454F/FFD700?text=Electrical';" alt="Electrical" />
                 <p>Electrical</p>
             </a>
 
-            <a href="painting.html" id="Painting" class="service-box">
+            <a href="service-listing.html?service=painting" id="Painting" class="service-box">
                 <img src="images/PaintingImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/FFD700/36454F?text=Painting';" alt="Painting" />
                 <p>Painting</p>
             </a>
 
-            <a href="cleaning.html" id="Cleaning" class="service-box">
+            <a href="service-listing.html?service=cleaning" id="Cleaning" class="service-box">
                 <img src="images/CleaningImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/A7D129/36454F?text=Cleaning';" alt="Cleaning" />
                 <p>Cleaning</p>
             </a>
 
-            <a href="blacksmithing.html" id="Blacksmithing" class="service-box">
+            <a href="service-listing.html?service=blacksmithing" id="Blacksmithing" class="service-box">
                 <img src="images/BlackSmithImage.jpg" onerror="this.onerror=null;this.src='https://placehold.co/400x200/36454F/A7D129?text=Blacksmithing';" alt="Blacksmithing" />
                 <p>Blacksmithing</p>
             </a>
