@@ -1448,19 +1448,6 @@ footer {
    and works well for a two-column or stacked dashboard layout. */
 
 /* Page banner specific to customer account */
-.page-banner {
-    background: linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.7)), url('https://placehold.co/1600x600/0056b3/FFFFFF?text=Customer+Account+Banner'); /* Blue gradient banner for customer */
-    background-size: cover;
-    background-position: center;
-    color: var(--text-light);
-    text-align: center;
-    padding: 80px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 300px;
-}
 
 .page-banner h1 {
     font-size: 40px;
@@ -1533,3 +1520,302 @@ footer {
     }
 }
 /* --- END of CSS for customer-account.html --- */
+
+/* --- Messaging Page Specific Styles --- */
+.messaging-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 50px auto;
+    background-color: var(--primary-white);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    min-height: 70vh; /* Ensure it takes up enough vertical space */
+    overflow: hidden; /* Contains children, especially for sticky elements */
+}
+
+.message-sidebar {
+    flex: 0 0 300px; /* Fixed width sidebar */
+    border-right: 1px solid var(--border-light-grey);
+    padding: 20px;
+    background-color: var(--bg-light);
+    overflow-y: auto; /* Scrollable sidebar */
+    display: flex;
+    flex-direction: column;
+}
+
+.message-sidebar h3 {
+    color: var(--secondary-charcoal);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light-grey);
+}
+
+.message-threads-list {
+    flex-grow: 1;
+}
+
+.message-thread-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: var(--primary-white);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    border: 1px solid var(--border-light-grey);
+}
+
+.message-thread-item:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.message-thread-item.active {
+    background-color: var(--accent-lime);
+    color: var(--text-light);
+    border-color: var(--accent-lime);
+    box-shadow: 0 3px 8px rgba(167, 209, 41, 0.4);
+}
+
+.message-thread-item.active h4,
+.message-thread-item.active p {
+    color: var(--text-light);
+}
+
+.message-thread-item .thread-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid var(--accent-yellow); /* Accent border for avatars */
+}
+
+.message-thread-item.active .thread-avatar {
+    border-color: var(--text-light); /* White border when active */
+}
+
+.message-thread-item .thread-info {
+    flex-grow: 1;
+}
+
+.message-thread-item h4 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: var(--secondary-charcoal);
+}
+
+.message-thread-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.loading-message, .empty-conversation-message {
+    text-align: center;
+    color: #888;
+    margin-top: 30px;
+    font-style: italic;
+}
+
+.message-main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.active-conversation-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-light-grey);
+    background-color: var(--primary-white);
+    display: flex;
+    align-items: center;
+    position: sticky; /* Make header sticky within its parent */
+    top: 0;
+    z-index: 10;
+}
+
+.active-conversation-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--secondary-charcoal);
+    display: flex;
+    align-items: center;
+}
+
+.active-conversation-header .header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid var(--accent-lime);
+}
+
+.conversation-display {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto; /* Makes messages scrollable */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between message bubbles */
+}
+
+.message-bubble {
+    max-width: 75%;
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    word-wrap: break-word; /* Ensures long words break */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.message-bubble.sent {
+    background-color: var(--accent-lime);
+    color: var(--text-light);
+    align-self: flex-end; /* Align to the right */
+    border-bottom-right-radius: 5px; /* Tweak corner for "tail" effect */
+}
+
+.message-bubble.received {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    align-self: flex-start; /* Align to the left */
+    border: 1px solid var(--border-light-grey);
+    border-bottom-left-radius: 5px; /* Tweak corner for "tail" effect */
+}
+
+.message-timestamp {
+    display: block;
+    font-size: 11px;
+    margin-top: 5px;
+    opacity: 0.7;
+    text-align: right; /* Align timestamp within bubble */
+    color: inherit; /* Inherit color from parent bubble for contrast */
+}
+
+.message-input-area {
+    display: flex;
+    padding: 15px 20px;
+    border-top: 1px solid var(--border-light-grey);
+    background-color: var(--primary-white);
+    gap: 10px;
+    align-items: center;
+}
+
+.message-input-area textarea {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-light-grey);
+    border-radius: 8px;
+    font-size: 16px;
+    min-height: 45px;
+    max-height: 120px; /* Prevent textarea from growing too large */
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.message-input-area textarea:focus {
+    border-color: var(--accent-lime);
+}
+
+.message-input-area .button-primary {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: none; /* No shadow for smaller button */
+}
+
+.message-input-area .button-primary:hover {
+    transform: none; /* No lift effect for smaller button */
+}
+
+/* Responsive adjustments for Messaging Page */
+@media (max-width: 768px) {
+    .messaging-container {
+        flex-direction: column; /* Stack sidebar and main content */
+        margin: 20px auto;
+        border-radius: 8px;
+    }
+
+    .message-sidebar {
+        flex: none; /* Remove fixed width */
+        width: 100%; /* Take full width */
+        border-right: none;
+        border-bottom: 1px solid var(--border-light-grey); /* Add bottom border */
+        max-height: 300px; /* Limit sidebar height on mobile */
+    }
+
+    .message-main-content {
+        flex: 1; /* Allow main content to grow */
+    }
+
+    .active-conversation-header {
+        border-radius: 0;
+    }
+
+    .message-bubble {
+        max-width: 85%; /* Give more space to messages on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .message-sidebar {
+        padding: 15px;
+    }
+
+    .message-thread-item {
+        padding: 12px;
+    }
+
+    .message-thread-item .thread-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .message-thread-item h4 {
+        font-size: 16px;
+    }
+
+    .message-thread-item p {
+        font-size: 13px;
+    }
+
+    .conversation-display {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .message-bubble {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .message-input-area {
+        flex-direction: column; /* Stack textarea and button */
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .message-input-area textarea {
+        width: 100%;
+        min-height: 40px;
+    }
+
+    .message-input-area .button-primary {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+    }
+}

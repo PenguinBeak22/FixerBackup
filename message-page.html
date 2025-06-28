@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – My Messages</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js" defer></script> <!-- Referencing the external JS file -->
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-banner">
+        <div class="banner-content">
+            <h1>Your Inbox 💬</h1>
+            <p>Communicate directly with your booked professionals.</p>
+            <a href="customer-account.html" class="back-link">← Back to Dashboard</a>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>Your Conversations</h2>
+    </div>
+
+    <main class="messaging-container">
+        <aside class="message-sidebar">
+            <h3>Threads</h3>
+            <div id="messageThreadsList" class="message-threads-list">
+                <!-- Message threads will be dynamically loaded here by JavaScript -->
+                <p class="loading-message">Loading conversations...</p>
+            </div>
+        </aside>
+
+        <section class="message-main-content">
+            <div id="activeConversationHeader" class="active-conversation-header">
+                <!-- Dynamic header for active conversation (e.g., Professional Name) -->
+                <h3>Select a conversation to view messages</h3>
+            </div>
+            <div id="conversationDisplay" class="conversation-display">
+                <!-- Messages for the active conversation will be loaded here -->
+                <p class="empty-conversation-message">No messages selected.</p>
+            </div>
+            <div id="messageInputArea" class="message-input-area" style="display: none;">
+                <textarea id="messageTextarea" placeholder="Type your message here..."></textarea>
+                <button id="sendMessageButton" class="button-primary"><i class="fas fa-paper-plane"></i> Send</button>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>
+
+</body>
+</html>

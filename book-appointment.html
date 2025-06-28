@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – Book Appointment</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js" defer></script> <!-- Referencing the external JS file -->
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-banner">
+        <div class="banner-content">
+            <h1>Book Your Service Now! 🗓️</h1>
+            <p>Schedule an appointment with your chosen professional.</p>
+            <a href="javascript:history.back()" class="back-link">← Back</a>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>Schedule Your Appointment</h2>
+    </div>
+
+    <main class="form-container">
+        <h3 id="professionalNameHeading" style="text-align: center; margin-bottom: 25px; color: var(--secondary-charcoal);">
+            Booking with: <span id="professionalDisplayName">Professional Name</span>
+            <img id="professionalAvatar" src="https://placehold.co/80x80/A7D129/36454F?text=Pro" alt="Professional Avatar" class="profile-avatar-small">
+        </h3>
+
+        <form id="bookingForm" class="professional-form">
+            <h4>Appointment Details</h4>
+            <div class="form-group">
+                <label for="bookingDate">Preferred Date:</label>
+                <input type="date" id="bookingDate" name="bookingDate" required>
+            </div>
+            <div class="form-group">
+                <label for="bookingTime">Preferred Time Slot:</label>
+                <select id="bookingTime" name="bookingTime" required>
+                    <option value="">-- Select Time --</option>
+                    <option value="08:00-09:00">08:00 AM - 09:00 AM</option>
+                    <option value="09:00-10:00">09:00 AM - 10:00 AM</option>
+                    <option value="10:00-11:00">10:00 AM - 11:00 AM</option>
+                    <option value="11:00-12:00">11:00 AM - 12:00 PM</option>
+                    <option value="13:00-14:00">01:00 PM - 02:00 PM</option>
+                    <option value="14:00-15:00">02:00 PM - 03:00 PM</option>
+                    <option value="15:00-16:00">03:00 PM - 04:00 PM</option>
+                    <option value="16:00-17:00">04:00 PM - 05:00 PM</option>
+                    <option value="17:00-18:00">05:00 PM - 06:00 PM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="issueDescription">Describe the Issue/Service Needed:</label>
+                <textarea id="issueDescription" name="issueDescription" rows="5" placeholder="e.g., Leaky faucet in kitchen, install new light fixture, deep clean of a 3-bedroom apartment, etc." required></textarea>
+            </div>
+
+            <h4>Your Contact Information</h4>
+            <div class="form-group">
+                <label for="customerName">Your Name:</label>
+                <input type="text" id="customerName" name="customerName" value="Jane Doe" disabled>
+            </div>
+            <div class="form-group">
+                <label for="customerEmail">Your Email:</label>
+                <input type="email" id="customerEmail" name="customerEmail" value="jane.doe@example.com" disabled>
+            </div>
+            <div class="form-group">
+                <label for="customerPhone">Your Phone Number (Optional):</label>
+                <input type="tel" id="customerPhone" name="customerPhone" pattern="[0-9]{8,}" title="Please enter a valid phone number (at least 8 digits)">
+            </div>
+
+            <button type="submit" class="submit-application-button"><i class="fas fa-calendar-plus"></i> Confirm Booking</button>
+            <div id="bookingMessage" class="form-message"></div>
+        </form>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bookingForm = document.getElementById('bookingForm');
+            const bookingMessage = document.getElementById('bookingMessage');
+            const professionalDisplayName = document.getElementById('professionalDisplayName');
+            const professionalAvatar = document.getElementById('professionalAvatar');
+            const customerNameInput = document.getElementById('customerName');
+            const customerEmailInput = document.getElementById('customerEmail');
+            const customerPhoneInput = document.getElementById('customerPhone');
+
+            // Function to get professional data (mock)
+            function getProfessionalById(proId) {
+                for (const serviceType in tradespeopleData) {
+                    const professionals = tradespeopleData[serviceType];
+                    const foundPro = professionals.find(pro => pro.id === proId);
+                    if (foundPro) {
+                        return foundPro;
+                    }
+                }
+                return null;
+            }
+
+            // Function to get customer data (mock)
+            function getCustomerByUsername(username) {
+                return customerData.find(cust => cust.username.toLowerCase() === username.toLowerCase());
+            }
+
+            // Load professional and customer data based on URL and login status
+            const urlParams = new URLSearchParams(window.location.search);
+            const professionalId = urlParams.get('proId');
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+            let professional = null;
+            let customer = null;
+
+            if (professionalId) {
+                professional = getProfessionalById(professionalId);
+                if (professional) {
+                    professionalDisplayName.textContent = professional.name;
+                    professionalAvatar.src = professional.avatar;
+                } else {
+                    professionalDisplayName.textContent = 'Professional Not Found';
+                    professionalAvatar.src = 'https://placehold.co/80x80/CCCCCC/000000?text=N/A';
+                    bookingForm.innerHTML = '<p class="form-message error">Professional details could not be loaded. Please go back.</p>';
+                    bookingForm.style.textAlign = 'center';
+                    return; // Stop further execution if professional isn't found
+                }
+            } else {
+                professionalDisplayName.textContent = 'No Professional Selected';
+                professionalAvatar.src = 'https://placehold.co/80x80/CCCCCC/000000?text=N/A';
+                bookingForm.innerHTML = '<p class="form-message error">No professional selected for booking. Please select one from a service listing page.</p>';
+                bookingForm.style.textAlign = 'center';
+                return; // Stop further execution if no professional ID
+            }
+
+            // Pre-fill customer details if logged in as a customer
+            if (loggedInUser && loggedInUserType === 'customer') {
+                customer = getCustomerByUsername(loggedInUser);
+                if (customer) {
+                    customerNameInput.value = customer.name;
+                    customerEmailInput.value = customer.email;
+                    customerPhoneInput.value = customer.mobileNumber || '';
+                } else {
+                    // Fallback if customer data isn't found for logged in user
+                    customerNameInput.value = 'Guest Customer';
+                    customerEmailInput.value = 'guest@example.com';
+                    customerPhoneInput.value = '';
+                }
+            } else {
+                // If not logged in as customer, disable form or redirect
+                bookingForm.innerHTML = '<p class="form-message error">You must be logged in as a customer to book an appointment. <a href="login.html">Login here</a> or <a href="customer-signup.html">Sign Up</a></p>';
+                bookingForm.style.textAlign = 'center';
+                return; // Stop further execution if not logged in as customer
+            }
+
+
+            // Handle booking form submission
+            bookingForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                bookingMessage.style.display = 'none';
+                bookingMessage.className = 'form-message';
+
+                const bookingDate = document.getElementById('bookingDate').value;
+                const bookingTime = document.getElementById('bookingTime').value;
+                const issueDescription = document.getElementById('issueDescription').value.trim();
+                const customerPhone = customerPhoneInput.value.trim();
+
+                // Basic validation
+                if (!bookingDate || !bookingTime || issueDescription === '') {
+                    bookingMessage.textContent = 'Please fill in all required appointment details.';
+                    bookingMessage.className = 'form-message error';
+                    bookingMessage.style.display = 'block';
+                    return;
+                }
+                if (customerPhone !== '' && !customerPhone.match(/^[0-9]{8,}$/)) {
+                    bookingMessage.textContent = 'Please enter a valid phone number (at least 8 digits) or leave it empty.';
+                    bookingMessage.className = 'form-message error';
+                    bookingMessage.style.display = 'block';
+                    return;
+                }
+
+                // Simulate booking process
+                bookingMessage.textContent = 'Booking confirmed! Redirecting to your dashboard...';
+                bookingMessage.className = 'form-message success';
+                bookingMessage.style.display = 'block';
+
+                const newBooking = {
+                    id: 'booking-' + Date.now(),
+                    professionalId: professionalId,
+                    professionalName: professional.name,
+                    customerId: customer.id, // Assuming customer.id exists
+                    customerName: customer.name,
+                    date: bookingDate,
+                    time: bookingTime,
+                    description: issueDescription,
+                    customerPhone: customerPhone,
+                    status: 'Pending' // Initial status
+                };
+
+                console.log('New Booking Data (simulated):', newBooking);
+
+                // In a real application, you would send `newBooking` to your backend.
+                // For this demo, we can simulate adding it to local storage or a global array
+                // (e.g., in functions.js if you had a global bookings array)
+
+                setTimeout(() => {
+                    window.location.href = 'customer-account.html'; // Redirect to customer dashboard
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

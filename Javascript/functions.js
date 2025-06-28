@@ -215,6 +215,10 @@ const customerData = [
     }
 ];
 
+// Global array to store message data (simulated for demonstration)
+// Structure: { id: string, from: string (customer username), to: string (professional ID), text: string, timestamp: number, isRead: boolean }
+let messagesData = JSON.parse(localStorage.getItem('messagesData')) || [];
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Elements from professional-apply-page.html (professional application form)
@@ -280,9 +284,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteCustomerAccountButton = document.getElementById('deleteCustomerAccountButton');
     const deleteCustomerAccountMessage = document.getElementById('deleteCustomerAccountMessage');
 
+    // Elements for plumber-profile.html (the current page being referenced)
+    const messageJohnButton = document.getElementById('messageJohnButton');
+    const bookAppointmentButton = document.querySelector('.profile-book-button'); // Get the book appointment button
+
+    // Elements for messaging-page.html
+    const messageThreadsList = document.getElementById('messageThreadsList');
+    const activeConversationHeader = document.getElementById('activeConversationHeader');
+    const conversationDisplay = document.getElementById('conversationDisplay');
+    const messageInputArea = document.getElementById('messageInputArea');
+    const messageTextarea = document.getElementById('messageTextarea');
+    const sendMessageButton = document.getElementById('sendMessageButton');
+
 
     let currentServiceType = null; // Will store 'plumbing', 'carpentry', etc.
     let currentProfessionalsData = []; // The array of professionals for the current service
+    let activeProfessionalId = null; // Stores the ID of the professional in the active conversation
+
 
     // --- Functions for Header Buttons (Login/Logout, Account/Sign Up) ---
     function handleAuthButtons() {
@@ -297,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (loggedInUserType === 'professional') {
                         window.location.href = 'professional-account-page.html';
                     } else if (loggedInUserType === 'customer') {
-                        window.location.href = 'customer-account-page.html'; // Redirect to customer account page
+                        window.location.href = 'customer-account-page.html'; // Corrected to customer-account.html
                     } else {
                         // Default fallback or prompt for account type if missing
                         console.log('Logged in user type unknown, redirecting to general account area or prompting.');
@@ -606,6 +624,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
+    // Function to find a professional by ID (used for messaging)
+    function findProfessionalById(proId) {
+        for (const serviceType in tradespeopleData) {
+            const professionals = tradespeopleData[serviceType];
+            const foundPro = professionals.find(pro => pro.id === proId);
+            if (foundPro) {
+                return foundPro;
+            }
+        }
+        return null;
+    }
+
     // Function to populate professional profile form with data
     function loadProfessionalProfile(professional) {
         if (!professionalProfileForm || !professional) return;
@@ -698,6 +728,168 @@ document.addEventListener('DOMContentLoaded', () => {
         custEmailInput.value = customer.email || 'not-available@example.com';
         custMobileNumberInput.value = customer.mobileNumber || '';
         custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
+    }
+
+    // --- Functions for Messaging Page (messaging-page.html) ---
+
+    // Function to save messages to localStorage
+    function saveMessages() {
+        localStorage.setItem('messagesData', JSON.stringify(messagesData));
+    }
+
+    // Function to load and display message threads
+    function loadMessageThreads() {
+        if (!messageThreadsList) return;
+
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (!loggedInUser) {
+            messageThreadsList.innerHTML = '<p class="loading-message">Please log in to view your messages.</p>';
+            return;
+        }
+
+        const customerMessages = messagesData.filter(msg => msg.from === loggedInUser);
+        const professionalMessages = messagesData.filter(msg => msg.to === loggedInUser); // Messages sent *to* the current user (if they are a professional)
+
+        const involvedProfessionalIds = new Set();
+        customerMessages.forEach(msg => involvedProfessionalIds.add(msg.to));
+        // If current user is a professional, they'd see threads from customers
+        // This demo assumes customer-centric messaging, so focusing on 'to' professional
+
+        messageThreadsList.innerHTML = ''; // Clear existing threads
+
+        if (involvedProfessionalIds.size === 0) {
+            messageThreadsList.innerHTML = '<p class="empty-conversation-message">No active conversations found. Send a message from a professional\'s profile to start one!</p>';
+            return;
+        }
+
+        involvedProfessionalIds.forEach(proId => {
+            const professional = findProfessionalById(proId);
+            if (professional) {
+                // Get the last message in this thread for a preview
+                const threadMessages = messagesData.filter(msg =>
+                    (msg.from === loggedInUser && msg.to === proId) ||
+                    (msg.from === proId && msg.to === loggedInUser) // Include messages from pro to customer
+                ).sort((a, b) => a.timestamp - b.timestamp); // Sort by time to get last
+
+                const lastMessage = threadMessages[threadMessages.length - 1];
+                const lastMessagePreview = lastMessage ?
+                    (lastMessage.from === loggedInUser ? 'You: ' : `${professional.name.split(' ')[0]}: `) + lastMessage.text.substring(0, 40) + (lastMessage.text.length > 40 ? '...' : '')
+                    : 'No messages yet.';
+
+                const threadItem = document.createElement('div');
+                threadItem.className = 'message-thread-item';
+                threadItem.dataset.professionalId = proId;
+                threadItem.innerHTML = `
+                    <img src="${professional.avatar}" alt="${professional.name}" class="thread-avatar">
+                    <div class="thread-info">
+                        <h4>${professional.name}</h4>
+                        <p>${lastMessagePreview}</p>
+                    </div>
+                `;
+                threadItem.addEventListener('click', () => {
+                    loadConversation(proId);
+                    // Add an active class to the selected thread
+                    Array.from(messageThreadsList.children).forEach(item => item.classList.remove('active'));
+                    threadItem.classList.add('active');
+                });
+                messageThreadsList.appendChild(threadItem);
+            }
+        });
+    }
+
+    // Function to load a specific conversation
+    function loadConversation(professionalId) {
+        if (!conversationDisplay || !activeConversationHeader || !messageInputArea) return;
+
+        activeProfessionalId = professionalId;
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const professional = findProfessionalById(professionalId);
+
+        if (!professional) {
+            activeConversationHeader.innerHTML = '<h3>Professional not found.</h3>';
+            conversationDisplay.innerHTML = '<p class="empty-conversation-message">Could not load conversation.</p>';
+            messageInputArea.style.display = 'none';
+            return;
+        }
+
+        activeConversationHeader.innerHTML = `<h3><img src="${professional.avatar}" class="header-avatar"> ${professional.name}</h3>`;
+        conversationDisplay.innerHTML = ''; // Clear previous conversation
+        messageInputArea.style.display = 'flex'; // Show input area
+
+        const conversation = messagesData.filter(msg =>
+            (msg.from === loggedInUser && msg.to === professionalId) ||
+            (msg.from === professionalId && msg.to === loggedInUser)
+        ).sort((a, b) => a.timestamp - b.timestamp); // Sort by time
+
+        if (conversation.length === 0) {
+            conversationDisplay.innerHTML = '<p class="empty-conversation-message">Start a new conversation!</p>';
+        } else {
+            conversation.forEach(msg => {
+                conversationDisplay.appendChild(renderMessage(msg, loggedInUser));
+            });
+            // Scroll to the bottom of the conversation
+            conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+        }
+    }
+
+    // Helper to render individual message bubbles
+    function renderMessage(message, loggedInUser) {
+        const messageBubble = document.createElement('div');
+        messageBubble.className = `message-bubble ${message.from === loggedInUser ? 'sent' : 'received'}`;
+        
+        const timestamp = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        messageBubble.innerHTML = `
+            <p>${message.text}</p>
+            <span class="message-timestamp">${timestamp}</span>
+        `;
+        return messageBubble;
+    }
+
+    // Function to send a message
+    function sendMessage() {
+        if (!activeProfessionalId || !messageTextarea || !conversationDisplay) return;
+
+        const messageText = messageTextarea.value.trim();
+        if (messageText === '') return;
+
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const newMessage = {
+            id: 'msg-' + Date.now(),
+            from: loggedInUser,
+            to: activeProfessionalId,
+            text: messageText,
+            timestamp: Date.now(),
+            isRead: false
+        };
+
+        messagesData.push(newMessage);
+        saveMessages(); // Persist to localStorage
+
+        conversationDisplay.appendChild(renderMessage(newMessage, loggedInUser));
+        messageTextarea.value = ''; // Clear input
+        conversationDisplay.scrollTop = conversationDisplay.scrollHeight; // Scroll to bottom
+
+        // Simulate a reply from the professional after a short delay (for demo)
+        setTimeout(() => {
+            const professional = findProfessionalById(activeProfessionalId);
+            if (professional) {
+                const replyText = `Thanks for your message, I'll get back to you shortly, I'm just ${professional.specialty.split(',')[0].toLowerCase()} right now!`;
+                const replyMessage = {
+                    id: 'msg-' + (Date.now() + 1),
+                    from: professional.id, // Professional's ID
+                    to: loggedInUser, // Customer's username
+                    text: replyText,
+                    timestamp: Date.now() + 100, // Slightly later timestamp
+                    isRead: false
+                };
+                messagesData.push(replyMessage);
+                saveMessages();
+                conversationDisplay.appendChild(renderMessage(replyMessage, loggedInUser));
+                conversationDisplay.scrollTop = conversationDisplay.scrollHeight;
+                loadMessageThreads(); // Update threads list to show new activity/unread status if implemented
+            }
+        }, 2000);
     }
 
 
@@ -1340,7 +1532,135 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Common modal styles for confirmation dialogs
+    // Logic specifically for messaging-page.html
+    if (messageThreadsList && conversationDisplay) {
+        loadMessageThreads();
+
+        // Event listener for sending messages
+        if (sendMessageButton) {
+            sendMessageButton.addEventListener('click', sendMessage);
+            messageTextarea.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault(); // Prevent new line
+                    sendMessage();
+                }
+            });
+        }
+
+        // Check if there's a professional ID in the URL to pre-load a conversation
+        const urlParams = new URLSearchParams(window.location.search);
+        const proIdFromUrl = urlParams.get('proId');
+        if (proIdFromUrl) {
+            loadConversation(proIdFromUrl);
+            // Highlight the corresponding thread if it exists
+            const threadItemToHighlight = document.querySelector(`.message-thread-item[data-professional-id="${proIdFromUrl}"]`);
+            if (threadItemToHighlight) {
+                Array.from(messageThreadsList.children).forEach(item => item.classList.remove('active'));
+                threadItemToHighlight.classList.add('active');
+            }
+        }
+    }
+
+    // Logic for the message button on plumber-profile.html
+    if (messageJohnButton) {
+        messageJohnButton.addEventListener('click', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+            if (isLoggedIn && loggedInUserType === 'customer') {
+                // Get the professional's ID from the URL or a data attribute on the button/page
+                const urlParams = new URLSearchParams(window.location.search);
+                const professionalId = urlParams.get('id'); // Assuming the ID is passed in the URL
+                window.location.href = `messaging-page.html?proId=${professionalId}`;
+            } else if (isLoggedIn && loggedInUserType === 'professional') {
+                showTemporaryMessage('Professionals cannot message other professionals directly from this profile page.', 'error');
+            } else {
+                showTemporaryMessage('You need to be logged in as a customer to use messaging features.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'customer-sign-up.html';
+                }, 2000); // Redirect after 2 seconds
+            }
+        });
+    }
+
+    // Logic for the book appointment button on plumber-profile.html
+    // Assuming this button exists on a profile page and needs to pass the proId
+    if (bookAppointmentButton) {
+        bookAppointmentButton.addEventListener('click', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+            if (isLoggedIn && loggedInUserType === 'customer') {
+                // Get the professional's ID from the URL or a data attribute on the button/page
+                const urlParams = new URLSearchParams(window.location.search);
+                const professionalId = urlParams.get('id'); // Assuming the ID is passed in the URL
+                window.location.href = `book-appointment.html?proId=${professionalId}`;
+            } else {
+                // Show error message using the temporary message function
+                showTemporaryMessage('You need to be a customer to book an appointment. Please sign up or log in as a customer.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'customer-sign-up.html';
+                }, 2000); // Redirect after 2 seconds
+            }
+        });
+    }
+
+    // Global function to show temporary messages (replaces alert/confirm)
+    function showTemporaryMessage(message, type = 'info', duration = 3000) {
+        let messageElement = document.getElementById('tempMessageDisplay');
+        if (!messageElement) {
+            messageElement = document.createElement('div');
+            messageElement.id = 'tempMessageDisplay';
+            document.body.appendChild(messageElement);
+
+            // Add basic styling for the temporary message
+            const tempMessageStyle = document.createElement('style');
+            tempMessageStyle.textContent = `
+                #tempMessageDisplay {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    color: var(--text-light);
+                    z-index: 1001;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    opacity: 0;
+                    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+                    max-width: 90%;
+                    text-align: center;
+                }
+                #tempMessageDisplay.info {
+                    background-color: var(--primary-blue);
+                }
+                #tempMessageDisplay.success {
+                    background-color: var(--accent-lime);
+                }
+                #tempMessageDisplay.error {
+                    background-color: var(--error-red);
+                }
+                #tempMessageDisplay.show {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            `;
+            document.head.appendChild(tempMessageStyle);
+        }
+
+        messageElement.textContent = message;
+        messageElement.className = ''; // Clear previous classes
+        messageElement.classList.add(type);
+        messageElement.classList.add('show');
+
+        setTimeout(() => {
+            messageElement.classList.remove('show');
+        }, duration);
+    }
+
+
+    // Common modal styles for confirmation dialogs (already present, ensuring it's available)
     const styleTag = document.createElement('style');
     styleTag.textContent = `
         .modal-overlay {

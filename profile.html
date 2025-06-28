@@ -18,9 +18,7 @@
             <nav class="nav-links">
                 <div class="main-nav-items">
                     <a href="index.html">Home</a>
-                    <a href="services.html">Services</a> <!-- Corrected link -->
                     <a href="index.html#how-it-works">How It Works</a> <!-- Link to section on homepage -->
-                    <a href="professional-apply-page.html">Apply</a> <!-- Link to apply page -->
                     <a href="index.html#contact">Contact</a> <!-- Link to section on homepage -->
                 </div>
                 <div class="auth-buttons">
@@ -39,7 +37,7 @@
             <div class="profile-rating"> <!-- Changed class to .profile-rating -->
                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> 4.5 (87 reviews)
             </div>
-            <a href="plumbing.html" class="back-link">← Back to Plumbers List</a> <!-- Link to plumbers listing -->
+            <a href="service-listing.html" class="back-link">← Back to Plumbers List</a> <!-- Link to plumbers listing -->
         </div>
     </section>
 
@@ -74,7 +72,7 @@
         </div>
 
         <div class="profile-cta-buttons"> <!-- Container for CTA buttons -->
-            <button class="profile-contact-button"><i class="fas fa-comment-dots"></i> Message John</button>
+            <button class="profile-contact-button" id="messageJohnButton"><i class="fas fa-comment-dots"></i> Message John</button>
             <button class="profile-book-button"><i class="fas fa-calendar-alt"></i> Book Appointment</button>
         </div>
     </main>
@@ -85,5 +83,31 @@
             <h4 class="footertext">Contact: hello@fixalo.com</h4>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const messageJohnButton = document.getElementById('messageJohnButton');
+
+            if (messageJohnButton) {
+                messageJohnButton.addEventListener('click', function() {
+                    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                    const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+                    if (isLoggedIn && loggedInUserType === 'customer') {
+                        // If logged in as a customer, redirect to messages page
+                        window.location.href = 'customer-account.html#messages'; // Assuming a messages section in customer account
+                    } else if (isLoggedIn && loggedInUserType === 'professional') {
+                        // If logged in as a professional, maybe show an error or redirect to their dashboard
+                        alert('Professionals cannot message other professionals directly from this profile page.');
+                    }
+                    else {
+                        // If not logged in, redirect to customer sign-up page
+                        window.location.href = 'customer-sign-up.html'; // Assuming this is your customer sign-up page
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
