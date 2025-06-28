@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – Customer Account</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js" defer></script> <!-- Referencing the external JS file -->
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-banner">
+        <div class="banner-content">
+            <h1>Welcome Back, Customer! 👋</h1>
+            <p>Manage your profile, bookings, and preferences.</p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>Your Customer Dashboard</h2>
+    </div>
+
+    <main class="account-dashboard-container">
+        <!-- Profile Management Section -->
+        <section class="dashboard-section profile-management">
+            <h3><i class="fas fa-user-circle"></i> Profile Management</h3>
+            <form id="customerProfileForm" class="professional-form"> <!-- Reusing .professional-form for styling -->
+                <h4>Personal Information</h4>
+                <div class="form-group">
+                    <label for="custFirstName">First Name:</label>
+                    <input type="text" id="custFirstName" name="custFirstName" value="Jane" required>
+                </div>
+                <div class="form-group">
+                    <label for="custLastName">Last Name:</label>
+                    <input type="text" id="custLastName" name="custLastName" value="Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="custEmail">Email Address:</label>
+                    <input type="email" id="custEmail" name="custEmail" value="jane.doe@example.com" disabled title="Email cannot be changed">
+                    <p class="form-hint">Email cannot be changed.</p>
+                </div>
+                <div class="form-group">
+                    <label for="custMobileNumber">Mobile Number (Optional):</label>
+                    <input type="tel" id="custMobileNumber" name="custMobileNumber" pattern="[0-9]{8,}" title="Please enter a valid mobile number (at least 8 digits)" value="">
+                </div>
+                <!-- You could add address fields here if customer address is relevant for bookings -->
+                <!-- <div class="form-group">
+                    <label for="custAddress">Address:</label>
+                    <input type="text" id="custAddress" name="custAddress" value="123 Main St">
+                </div> -->
+
+                <h4>Profile Photo</h4>
+                <div class="form-group profile-photo-upload">
+                    <img id="custProfilePhotoPreview" src="https://placehold.co/150x150/FFD700/36454F?text=JD" alt="Customer Profile Photo" class="profile-avatar-large">
+                    <input type="file" id="uploadCustPhoto" name="uploadCustPhoto" accept="image/*">
+                    <label for="uploadCustPhoto" class="button-small"><i class="fas fa-upload"></i> Upload New Photo</label>
+                    <p class="form-hint">Max file size: 2MB. JPG, PNG only.</p>
+                </div>
+                
+                <button type="submit" class="submit-application-button"><i class="fas fa-save"></i> Save Profile Changes</button>
+                <div id="customerProfileUpdateMessage" class="form-message"></div>
+            </form>
+        </section>
+
+        <!-- My Bookings Section -->
+        <section class="dashboard-section">
+            <h3><i class="fas fa-calendar-check"></i> My Bookings</h3>
+            <div class="dashboard-card">
+                <h4>Upcoming Appointments</h4>
+                <ul class="booking-list">
+                    <li><strong>July 15, 2025 - 10:00 AM:</strong> Leak Repair (Professional: John Paul) <button class="button-small">View Details</button></li>
+                    <li><strong>July 28, 2025 - 09:00 AM:</strong> Deep Cleaning (Professional: Chris Green) <button class="button-small">View Details</button></li>
+                </ul>
+                <button class="button-primary">View All Bookings</button>
+            </div>
+            <div class="dashboard-card">
+                <h4>Past Bookings</h4>
+                <ul class="booking-list">
+                    <li><strong>June 10, 2025:</strong> Electrical Inspection (Professional: Mark Davis) <button class="button-small">Leave Review</button></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Messages Section -->
+        <section class="dashboard-section">
+            <h3><i class="fas fa-comments"></i> Messages</h3>
+            <div class="dashboard-card">
+                <p>You have <strong>1 new message</strong> from "John Paul".</p>
+                <button class="button-primary">Go to Inbox</button>
+                <ul class="message-preview-list">
+                    <li><strong>John Paul:</strong> "Confirming our appointment for Tuesday." (1 hour ago)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Favorites/Saved Professionals Section -->
+        <section class="dashboard-section">
+            <h3><i class="fas fa-heart"></i> My Favorites</h3>
+            <div class="dashboard-card">
+                <p>Quickly re-book your preferred tradespeople.</p>
+                <ul class="favorite-pro-list">
+                    <li>John "The Pipe" Paul (Plumber) <button class="button-small">View Profile</button></li>
+                    <li>Anna "Artisan" Wood (Carpenter) <button class="button-small">View Profile</button></li>
+                </ul>
+                <button class="button-primary">Manage Favorites</button>
+            </div>
+        </section>
+
+        <!-- Account Settings Section -->
+        <section class="dashboard-section account-settings">
+            <h3><i class="fas fa-cogs"></i> Account Settings</h3>
+            <div class="dashboard-card">
+                <h4>Delete Account</h4>
+                <p>Permanently delete your Fixalo customer account.</p>
+                <button class="button-delete" id="deleteCustomerAccountButton"><i class="fas fa-trash-alt"></i> Delete Account</button>
+                <div id="deleteCustomerAccountMessage" class="form-message"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>
+
+</body>
+</html>

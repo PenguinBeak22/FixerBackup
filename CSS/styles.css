@@ -1,32 +1,33 @@
-/* Universal Box Sizing */
+/* Universal Box-Sizing for consistency */
 html {
     box-sizing: border-box;
-    scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+    font-family: 'Lato', sans-serif; /* Fallback font */
 }
 *, *::before, *::after {
     box-sizing: inherit;
 }
 
-/* Color Variables - Clean & Energetic (White/Grey with Vibrant Accents) */
+/* Color Variables */
 :root {
-    --primary-white: #FFFFFF; /* Crisp White */
-    --secondary-charcoal: #36454F; /* Charcoal Grey for strong text/elements */
-    --accent-yellow: #FFD700; /* Bright Yellow */
-    --accent-lime: #A7D129; /* Lime Green (alternative accent/secondary) */
-    --text-dark: #333333; /* Slightly lighter dark grey for general text */
-    --text-light: #FFFFFF; /* White for light backgrounds */
-    --bg-light: #F8F8F8; /* Off-white background */
-    --border-light-grey: #E0E0E0; /* Lighter grey for borders/dividers */
+    --primary-blue: #0056b3; /* A strong blue for primary elements */
+    --accent-yellow: #FFD700; /* Gold/yellow for highlights/CTAs */
+    --accent-lime: #A7D129; /* A vibrant lime green for success/positive actions */
+    --secondary-charcoal: #36454F; /* Dark grey for text and backgrounds */
+    --text-dark: #333; /* Standard dark text */
+    --text-light: #f4f4f4; /* Light text for dark backgrounds */
+    --border-light-grey: #ddd; /* Light grey for borders and separators */
+    --background-light: #f9f9f9; /* Light background for sections */
+    --error-red: #dc3545; /* Red for error messages */
+    --success-green: #28a745; /* Green for success messages */
 }
 
-/* Basic Body Styles */
 body {
-    font-family: 'Poppins', sans-serif; /* Primary font for headings and some text */
     margin: 0;
-    line-height: 1.6; /* Keep unitless for better scaling */
+    padding: 0;
+    font-family: 'Poppins', sans-serif; /* Poppins for headings and bolder text */
     color: var(--text-dark);
-    background-color: var(--bg-light);
-    font-size: 16px; /* Explicitly setting base font size for px conversions */
+    background-color: var(--background-light);
+    line-height: 1.6;
 }
 
 /* Headings */
@@ -494,447 +495,6 @@ footer {
     }
 }
 
-/* Specific Styles for Professional Application Page */
-.page-banner {
-    background: linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=Join+Our+Team');
-    background-size: cover;
-    background-position: center;
-    color: var(--text-light);
-    text-align: center;
-    padding: 80px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 300px;
-}
-
-.page-banner h1 {
-    font-size: 40px;
-    color: var(--text-light);
-    margin-bottom: 10px;
-}
-
-.page-banner p {
-    font-size: 18px;
-    margin-bottom: 20px;
-    max-width: 700px;
-}
-
-.back-link {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--text-light);
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: 400;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.back-link:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-.application-form-container {
-    max-width: 800px;
-    margin: 60px auto 80px;
-    padding: 20px;
-    background-color: var(--primary-white);
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.professional-form .form-group {
-    margin-bottom: 20px;
-}
-
-.professional-form label {
-    display: block;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--secondary-charcoal);
-    margin-bottom: 8px;
-}
-
-.form-hint {
-    font-size: 14px;
-    color: #666;
-    margin-top: 5px;
-    margin-bottom: 15px;
-}
-
-.professional-form input[type="text"],
-.professional-form input[type="email"],
-.professional-form input[type="tel"],
-.professional-form input[type="password"], /* Added password input type */
-.professional-form select, /* Keep select for styling consistency if used elsewhere */
-.professional-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-light-grey);
-    border-radius: 5px;
-    font-size: 16px;
-    color: var(--text-dark);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.professional-form input:focus,
-.professional-form select:focus, /* Keep select for styling consistency if used elsewhere */
-.professional-form textarea:focus {
-    border-color: var(--accent-lime);
-    box-shadow: 0 0 0 3px rgba(167, 209, 41, 0.2); /* Light shadow with accent color */
-    outline: none;
-}
-
-.professional-form textarea {
-    resize: vertical; /* Allow vertical resizing */
-    min-height: 100px;
-}
-
-.checkbox-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-    padding: 10px 0;
-    border: 1px solid var(--border-light-grey);
-    border-radius: 5px;
-    background-color: var(--bg-light);
-    padding: 15px;
-}
-
-.checkbox-group label {
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--text-dark);
-    cursor: pointer;
-    margin-bottom: 0; /* Override default label margin */
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: auto; /* Allow checkbox to be its natural size */
-    margin-right: 8px;
-    appearance: none; /* Hide default checkbox */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--secondary-charcoal);
-    border-radius: 4px;
-    position: relative;
-    cursor: pointer;
-    flex-shrink: 0; /* Prevent checkbox from shrinking */
-}
-
-.checkbox-group input[type="checkbox"]:checked {
-    background-color: var(--accent-lime);
-    border-color: var(--accent-lime);
-}
-
-.checkbox-group input[type="checkbox"]:checked::after {
-    content: '\2713'; /* Checkmark symbol */
-    color: var(--text-light);
-    font-size: 14px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.submit-application-button {
-    background-color: var(--accent-lime);
-    color: var(--text-light);
-    border: none;
-    padding: 15px 30px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: 600;
-    width: 100%;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin-top: 20px;
-}
-
-.submit-application-button:hover {
-    background-color: #92B824;
-    transform: translateY(-2px);
-}
-
-.submit-application-button i {
-    margin-right: 10px;
-}
-
-.form-message {
-    text-align: center;
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 5px;
-    font-size: 16px;
-    display: none; /* Hidden by default */
-}
-
-.form-message.success {
-    background-color: #D4EDDA; /* Light green */
-    color: #155724; /* Dark green text */
-    border: 1px solid #C3E6CB;
-}
-
-.form-message.error {
-    background-color: #F8D7DA; /* Light red */
-    color: #721C24; /* Dark red text */
-    border: 1px solid #F5C6CB;
-}
-
-.select-hint {
-    color: #888;
-    font-style: italic;
-    grid-column: 1 / -1; /* Span across all columns */
-    text-align: center;
-    padding: 10px;
-}
-
-/* Specific Styles for Plumbing Page */
-
-/* Override banner for specific service pages */
-.page-banner {
-    background: linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=Plumbing+Services'); /* Darker gradient for text contrast */
-    background-size: cover;
-    background-position: center;
-    color: var(--text-light);
-    text-align: center;
-    padding: 80px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 300px;
-}
-
-.page-banner h1 {
-    font-size: 40px; /* Adjust as needed */
-    color: var(--text-light);
-    margin-bottom: 10px;
-}
-
-.page-banner p {
-    font-size: 18px; /* Adjust as needed */
-    margin-bottom: 20px;
-    max-width: 700px;
-}
-
-.back-link {
-    background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent white button */
-    color: var(--text-light);
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: 400;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-.back-link:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-}
-
-.filters-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: var(--primary-white);
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.filters-container label {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--secondary-charcoal);
-    margin-bottom: 5px;
-}
-
-.filters-container select,
-.filters-container input[type="number"] {
-    padding: 8px 12px;
-    border: 1px solid var(--border-light-grey);
-    border-radius: 5px;
-    font-size: 16px;
-    color: var(--text-dark);
-    background-color: var(--bg-light);
-    appearance: none; /* Remove default arrow for selects */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2336454F%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20202.7%2018.8%2074.5a17.6%2017.6%200%200%200-25.1%2024.5l137.9%20137.8c3.2%203.2%207%204.7%2011.1%204.7%204.1%200%207.9-1.5%2011.1-4.7l137.9-137.8c5.7-5.8%205.7-15.1%200-20.9-5.7-5.7-15.1-5.7-20.8%200z%22%2F%3E%3C%2Fsvg%3E');
-    background-repeat: no-repeat;
-    background-position: right 10px top 50%;
-    background-size: 12px auto;
-}
-
-.filters-container input[type="number"] {
-    text-align: center;
-    -moz-appearance: textfield; /* Hide arrows on Firefox */
-}
-.filters-container input[type="number"]::-webkit-outer-spin-button,
-.filters-container input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none; /* Hide arrows on Chrome/Safari */
-    margin: 0;
-}
-
-.plumber-list-container {
-    max-width: 1200px;
-    margin: 0 auto 80px;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.plumber-card {
-    background-color: var(--primary-white);
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.plumber-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.plumber-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    flex-direction: column; /* Stack image and name */
-}
-
-.plumber-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--accent-yellow); /* Yellow border for avatar */
-    margin-bottom: 10px; /* Space between avatar and name */
-}
-
-.plumber-card h3 {
-    font-size: 24px; /* Adjust font size */
-    margin: 0;
-    color: var(--secondary-charcoal);
-}
-
-.plumber-specialty {
-    font-size: 15px;
-    color: var(--text-dark);
-    margin-bottom: 15px;
-    opacity: 0.8;
-}
-
-.plumber-rating {
-    color: var(--accent-yellow); /* Stars in yellow */
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
-.plumber-rating .fas {
-    margin-right: 2px;
-}
-
-.plumber-rating .far {
-    color: #ccc; /* Unfilled stars */
-}
-
-.plumber-description {
-    font-size: 16px;
-    color: var(--text-dark);
-    margin-bottom: 25px;
-    line-height: 1.5;
-}
-
-.book-now-button {
-    background-color: var(--accent-lime); /* Lime green button */
-    color: var(--text-light);
-    border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    width: 100%; /* Make button full width of card */
-    max-width: 200px;
-}
-
-.book-now-button:hover {
-    background-color: #92B824; /* Darker lime green */
-    transform: translateY(-2px);
-}
-
-.loading-message, .no-results-message {
-    grid-column: 1 / -1; /* Span across all columns */
-    text-align: center;
-    font-size: 1.2em;
-    color: #777;
-    padding: 40px;
-}
-
-/* Responsive adjustments for plumber cards and filters */
-@media (max-width: 900px) {
-    .page-banner h1 {
-        font-size: 32px;
-    }
-    .page-banner p {
-        font-size: 16px;
-    }
-    .filters-container {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .filter-group {
-        width: 100%;
-    }
-}
-
-/* Responsive adjustments for plumber cards and filters */
-@media (max-width: 600px) {
-    .plumber-card {
-        padding: 20px;
-    }
-    .plumber-header {
-        flex-direction: column;
-    }
-    .plumber-avatar {
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-    .plumber-card h3 {
-        font-size: 20px;
-    }
-    .plumber-specialty, .plumber-description, .plumber-rating {
-        font-size: 14px;
-    }
-    .book-now-button {
-        padding: 10px 20px;
-        font-size: 14px;
-    }
-}
-
 
 /* Specific Styles for Login/Application Pages */
 /* These classes are reused for the top banner and forms on login.html and professional-apply-page.html */
@@ -1208,6 +768,10 @@ body.login-page .application-form-container {
     margin-right: 3px;
 }
 
+.profile-rating .far {
+    color: #ccc; /* Unfilled stars */
+}
+
 /* Sections for description and info grid */
 .profile-description-section {
     width: 100%;
@@ -1369,4 +933,603 @@ body.login-page .application-form-container {
         max-width: 300px;
     }
 }
-        
+
+
+/* Specific Styles for Professional Account Page */
+.account-dashboard-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns by default */
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto 80px;
+    padding: 0 20px;
+    align-items: flex-start; /* Align sections to the top */
+}
+
+.dashboard-section {
+    background-color: var(--primary-white);
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.dashboard-section h3 {
+    font-size: 28px;
+    color: var(--primary-blue);
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-light-grey);
+    display: flex;
+    align-items: center;
+}
+
+.dashboard-section h3 i {
+    margin-right: 15px;
+    color: var(--accent-lime); /* Icon color for section titles */
+    font-size: 30px;
+}
+
+.dashboard-card {
+    background-color: var(--background-light);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-light-grey);
+}
+
+.dashboard-card p {
+    font-size: 16px;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.dashboard-card .button-primary {
+    background-color: var(--primary-blue);
+    color: var(--text-light);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+}
+
+.dashboard-card .button-primary:hover {
+    background-color: #004499;
+}
+
+.message-preview-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.message-preview-list li {
+    background-color: var(--primary-white);
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-light-grey);
+    font-size: 15px;
+    color: var(--text-dark);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.message-preview-list li:last-child {
+    border-bottom: none;
+}
+
+.message-preview-list li strong {
+    color: var(--secondary-charcoal);
+}
+
+.big-rating {
+    font-size: 4em; /* Very large rating number */
+    font-weight: 700;
+    color: var(--accent-yellow);
+    margin: 0;
+    line-height: 1;
+}
+.big-rating i {
+    font-size: 0.8em; /* Adjust star size relative to number */
+    vertical-align: middle;
+}
+.text-center {
+    text-align: center;
+}
+
+.booking-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.booking-list li {
+    background-color: var(--primary-white);
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-light-grey);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: var(--text-dark);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.booking-list li:last-child {
+    border-bottom: none;
+}
+
+.booking-list li strong {
+    color: var(--secondary-charcoal);
+}
+
+.button-small {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--accent-lime);
+    color: var(--text-light);
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.button-small:hover {
+    background-color: #92B824;
+}
+
+.account-settings .button-delete {
+    background-color: var(--error-red);
+    color: var(--text-light);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.account-settings .button-delete:hover {
+    background-color: #c82333; /* Darker red */
+    transform: translateY(-2px);
+}
+
+
+/* Profile Photo Upload specific styles */
+.profile-photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px dashed var(--border-light-grey);
+    border-radius: 10px;
+    background-color: #fcfcfc;
+}
+
+.profile-avatar-large {
+    width: 120px; /* Slightly smaller than banner for form */
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent-yellow);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-photo-upload input[type="file"] {
+    display: none; /* Hide default file input */
+}
+
+/* Styles for the label acting as a custom file input button */
+.profile-photo-upload label.button-small {
+    background-color: var(--primary-blue);
+    color: var(--text-light);
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex; /* To align icon and text */
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-photo-upload label.button-small:hover {
+    background-color: #004499;
+    transform: translateY(-1px);
+}
+
+
+/* Responsive Dashboard */
+@media (max-width: 992px) {
+    .account-dashboard-container {
+        grid-template-columns: 1fr; /* Stack all sections on smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-section {
+        padding: 20px;
+    }
+    .dashboard-section h3 {
+        font-size: 24px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .dashboard-section h3 i {
+        margin-right: 0;
+        margin-bottom: 10px;
+        font-size: 26px;
+    }
+    .profile-avatar-large {
+        width: 100px;
+        height: 100px;
+    }
+    .big-rating {
+        font-size: 3em;
+    }
+    .booking-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .booking-list li button {
+        align-self: flex-end; /* Keep button to the right */
+    }
+}
+
+
+
+/* --- START of CSS for service-listing.html --- */
+
+/* Override banner for specific service pages */
+.page-banner {
+    background: linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=Service+Listing+Banner'); /* Darker gradient for text contrast */
+    background-size: cover;
+    background-position: center;
+    color: var(--text-light);
+    text-align: center;
+    padding: 80px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.page-banner h1 {
+    font-size: 40px; /* Adjust as needed */
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.page-banner p {
+    font-size: 18px; /* Adjust as needed */
+    margin-bottom: 20px;
+    max-width: 700px;
+}
+
+.back-link {
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent white button */
+    color: var(--text-light);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.back-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.filters-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: var(--primary-white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.filters-container label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--secondary-charcoal);
+    margin-bottom: 5px;
+}
+
+.filters-container select,
+.filters-container input[type="number"] {
+    padding: 8px 12px;
+    border: 1px solid var(--border-light-grey);
+    border-radius: 5px;
+    font-size: 16px;
+    color: var(--text-dark);
+    background-color: var(--bg-light);
+    appearance: none; /* Remove default arrow for selects */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2336454F%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20202.7%2018.8%2074.5a17.6%2017.6%200%200%200-25.1%2024.5l137.9%20137.8c3.2%203.2%207%204.7%2011.1%204.7%204.1%200%207.9-1.5%2011.1-4.7l137.9-137.8c5.7-5.8%205.7-15.1%200-20.9-5.7-5.7-15.1-5.7-20.8%200z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px auto;
+}
+
+.filters-container input[type="number"] {
+    text-align: center;
+    -moz-appearance: textfield; /* Hide arrows on Firefox */
+}
+.filters-container input[type="number"]::-webkit-outer-spin-button,
+.filters-container input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Hide arrows on Chrome/Safari */
+    margin: 0;
+}
+
+.plumber-list-container {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.plumber-card {
+    background-color: var(--primary-white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plumber-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.plumber-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-direction: column; /* Stack image and name */
+}
+
+.plumber-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent-yellow); /* Yellow border for avatar */
+    margin-bottom: 10px; /* Space between avatar and name */
+}
+
+.plumber-card h3 {
+    font-size: 24px; /* Adjust font size */
+    margin: 0;
+    color: var(--secondary-charcoal);
+}
+
+.plumber-specialty {
+    font-size: 15px;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.plumber-rating {
+    color: var(--accent-yellow); /* Stars in yellow */
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.plumber-rating .fas {
+    margin-right: 2px;
+}
+
+.plumber-rating .far {
+    color: #ccc; /* Unfilled stars */
+}
+
+.plumber-description {
+    font-size: 16px;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.book-now-button {
+    background-color: var(--accent-lime); /* Lime green button */
+    color: var(--text-light);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%; /* Make button full width of card */
+    max-width: 200px;
+}
+
+.book-now-button:hover {
+    background-color: #92B824; /* Darker lime green */
+    transform: translateY(-2px);
+}
+
+.loading-message, .no-results-message {
+    grid-column: 1 / -1; /* Span across all columns */
+    text-align: center;
+    font-size: 1.2em;
+    color: #777;
+    padding: 40px;
+}
+
+/* Responsive adjustments for plumber cards and filters */
+@media (max-width: 900px) {
+    .page-banner h1 {
+        font-size: 32px;
+    }
+    .page-banner p {
+        font-size: 16px;
+    }
+    .filters-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-group {
+        width: 100%;
+    }
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--secondary-charcoal);
+    color: var(--text-light);
+    padding: 30px 20px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#footercontent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.footertext {
+    margin: 5px 0;
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    #footercontent {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+
+/* --- START of CSS for customer-account.html --- */
+
+/* Reusing .account-dashboard-container for layout */
+/* .account-dashboard-container is already defined for professional-account.html
+   and works well for a two-column or stacked dashboard layout. */
+
+/* Page banner specific to customer account */
+.page-banner {
+    background: linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.7)), url('https://placehold.co/1600x600/0056b3/FFFFFF?text=Customer+Account+Banner'); /* Blue gradient banner for customer */
+    background-size: cover;
+    background-position: center;
+    color: var(--text-light);
+    text-align: center;
+    padding: 80px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.page-banner h1 {
+    font-size: 40px;
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.page-banner p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    max-width: 700px;
+}
+
+.dashboard-section.profile-management h3 i,
+.dashboard-section .fas.fa-calendar-check,
+.dashboard-section .fas.fa-comments,
+.dashboard-section .fas.fa-heart,
+.dashboard-section .fas.fa-cogs {
+    color: var(--accent-yellow); /* Customer-specific icon color */
+}
+
+.dashboard-card .favorite-pro-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.dashboard-card .favorite-pro-list li {
+    background-color: var(--primary-white);
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-light-grey);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: var(--text-dark);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.dashboard-card .favorite-pro-list li:last-child {
+    border-bottom: none;
+}
+
+/* Ensure customer form uses consistent button styling */
+#customerProfileForm .submit-application-button {
+    background-color: var(--primary-blue); /* Use primary blue for customer save button */
+}
+#customerProfileForm .submit-application-button:hover {
+    background-color: #004499;
+}
+
+/* Specific styling for customer profile photo upload */
+#customerProfileForm .profile-photo-upload .profile-avatar-large {
+    border: 4px solid var(--accent-lime); /* Lime border for customer avatar */
+}
+
+/* Customer account deletion button is already styled via .button-delete */
+
+/* Responsive adjustments for customer dashboard (reusing existing media queries where applicable) */
+@media (max-width: 600px) {
+    .page-banner h1 {
+        font-size: 32px;
+    }
+    .page-banner p {
+        font-size: 16px;
+    }
+    .dashboard-section h3 {
+        font-size: 24px;
+    }
+}
+/* --- END of CSS for customer-account.html --- */

@@ -202,21 +202,38 @@ const countriesAndLocalities = {
     "Spain": ["Madrid", "Barcelona", "Valencia", "Seville", "Zaragoza", "Malaga", "Murcia", "Palma", "Las Palmas", "Bilbao"]
 };
 
+// Global array to store customer data (for demonstration purposes, typically this would be a backend)
+const customerData = [
+    {
+        id: 'jane-doe-123',
+        name: 'Jane Doe',
+        email: 'jane.doe@example.com',
+        username: 'customer123', // Example username for demo login
+        mobileNumber: '+35699112233', // Example mobile number
+        avatar: 'https://placehold.co/150x150/FFD700/36454F?text=JD',
+        joinDate: '2023-01-01'
+    }
+];
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Elements from professional-apply-page.html (professional application form)
     const mainServiceCheckboxesContainer = document.getElementById('mainServiceCheckboxes');
     const specificServicesCheckboxesDiv = document.getElementById('specificServicesCheckboxes');
     const professionalApplicationForm = document.getElementById('professionalApplicationForm');
-    const formMessage = document.getElementById('formMessage');
-    const countrySelectApply = document.getElementById('country');
-    const localitySelectApply = document.getElementById('locality');
+    const formMessage = document.getElementById('formMessage'); // Generic form message div
+    const countrySelectApply = document.getElementById('country'); // For professional apply page
+    const localitySelectApply = document.getElementById('locality'); // For professional apply page
 
     // Elements for login.html
     const loginForm = document.getElementById('loginForm');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-    const loginFormMessage = document.getElementById('formMessage'); // Use a distinct name to avoid conflict if already used
+    // Using 'formMessage' for login page as well, assuming it's the only one on that page for messages
+
+    // Elements for customer-signup.html
+    const customerSignupForm = document.getElementById('customerSignupForm');
+    // Reusing formMessage for customer signup page
 
 
     // Elements for header buttons (present on all pages)
@@ -233,40 +250,76 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortBySelect = document.getElementById('sortBy');
     const serviceDisplayContainer = document.getElementById('serviceDisplay'); // The main container for service cards
 
+    // Elements for professional-account.html
+    const professionalProfileForm = document.getElementById('professionalProfileForm');
+    const profFirstNameInput = document.getElementById('profFirstName');
+    const profLastNameInput = document.getElementById('profLastName');
+    const profEmailInput = document.getElementById('profEmail');
+    const profMobileNumberInput = document.getElementById('profMobileNumber');
+    const profCountrySelect = document.getElementById('profCountry');
+    const profLocalitySelect = document.getElementById('profLocality');
+    const profilePhotoPreview = document.getElementById('profilePhotoPreview');
+    const uploadPhotoInput = document.getElementById('uploadPhoto');
+    const profSpecialtyInput = document.getElementById('profSpecialty');
+    const profMainServiceCheckboxesContainer = document.getElementById('profMainServiceCheckboxes');
+    const profSpecificServicesCheckboxesDiv = document.getElementById('profSpecificServicesCheckboxes');
+    const profDescriptionTextarea = document.getElementById('profDescription');
+    const profileUpdateMessage = document.getElementById('profileUpdateMessage');
+    const deleteAccountButton = document.querySelector('.dashboard-section.account-settings .button-delete');
+    const deleteAccountMessage = document.getElementById('deleteAccountMessage');
+
+    // Elements for customer-account.html
+    const customerProfileForm = document.getElementById('customerProfileForm');
+    const custFirstNameInput = document.getElementById('custFirstName');
+    const custLastNameInput = document.getElementById('custLastName');
+    const custEmailInput = document.getElementById('custEmail');
+    const custMobileNumberInput = document.getElementById('custMobileNumber');
+    const custProfilePhotoPreview = document.getElementById('custProfilePhotoPreview');
+    const uploadCustPhotoInput = document.getElementById('uploadCustPhoto');
+    const customerProfileUpdateMessage = document.getElementById('customerProfileUpdateMessage');
+    const deleteCustomerAccountButton = document.getElementById('deleteCustomerAccountButton');
+    const deleteCustomerAccountMessage = document.getElementById('deleteCustomerAccountMessage');
+
+
     let currentServiceType = null; // Will store 'plumbing', 'carpentry', etc.
     let currentProfessionalsData = []; // The array of professionals for the current service
-
 
     // --- Functions for Header Buttons (Login/Logout, Account/Sign Up) ---
     function handleAuthButtons() {
         if (loginHeaderButton && signUpHeaderButton) {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const loggedInUser = localStorage.getItem('loggedInUser');
+            const loggedInUser = localStorage.getItem('loggedInUser'); // Stores username
+            const loggedInUserType = localStorage.getItem('loggedInUserType'); // 'customer' or 'professional'
 
             if (isLoggedIn) {
                 loginHeaderButton.textContent = 'Account';
                 loginHeaderButton.onclick = () => {
-                    console.log(`Navigating to account page for user: ${loggedInUser}`);
-                    // window.location.href = 'account.html';
+                    if (loggedInUserType === 'professional') {
+                        window.location.href = 'professional-account-page.html';
+                    } else if (loggedInUserType === 'customer') {
+                        window.location.href = 'customer-account-page.html'; // Redirect to customer account page
+                    } else {
+                        // Default fallback or prompt for account type if missing
+                        console.log('Logged in user type unknown, redirecting to general account area or prompting.');
+                    }
                 };
-                // Reset to default button style for Account (which was login-button initially)
                 loginHeaderButton.style.backgroundColor = '';
                 loginHeaderButton.style.color = '';
-                loginHeaderButton.className = 'login-button'; // Ensure it retains its class for styling
+                loginHeaderButton.className = 'login-button';
 
                 signUpHeaderButton.textContent = 'Logout';
-                signUpHeaderButton.style.backgroundColor = 'var(--secondary-charcoal)'; // Darker color for Logout
-                signUpHeaderButton.style.color = 'var(--text-light)'; // White text on dark background
-                signUpHeaderButton.className = 'cta-button'; // Ensure it keeps the button class for base styling
+                signUpHeaderButton.style.backgroundColor = 'var(--secondary-charcoal)';
+                signUpHeaderButton.style.color = 'var(--text-light)';
+                signUpHeaderButton.className = 'cta-button';
                 signUpHeaderButton.onclick = () => {
                     localStorage.removeItem('isLoggedIn');
                     localStorage.removeItem('loggedInUser');
+                    localStorage.removeItem('loggedInUserType'); // Clear user type on logout
                     window.location.href = 'index.html';
                 };
             } else {
                 loginHeaderButton.textContent = 'Login';
-                // Reset to default login button styling
-                loginHeaderButton.className = 'login-button'; // Ensure it has the base styling
+                loginHeaderButton.className = 'login-button';
                 loginHeaderButton.style.backgroundColor = '';
                 loginHeaderButton.style.color = '';
                 loginHeaderButton.onclick = () => {
@@ -274,12 +327,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 signUpHeaderButton.textContent = 'Sign Up';
-                // Reset to default CTA button styling
                 signUpHeaderButton.className = 'cta-button';
                 signUpHeaderButton.style.backgroundColor = '';
                 signUpHeaderButton.style.color = '';
                 signUpHeaderButton.onclick = () => {
-                    window.location.href = 'professional-apply-page.html';
+                    window.location.href = 'signup.html'; // Direct to the choice page
                 };
             }
         }
@@ -294,7 +346,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let sectionTitle = "Available Professionals";
         let bannerImageText = "Service Listing Banner"; // Placeholder for banner image
 
-        // Determine specific text and banner image based on serviceType
         switch (serviceType) {
             case 'plumbing':
                 title = "Fixalo – Plumbing Services";
@@ -333,20 +384,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 bannerImageText = "Blacksmithing Services";
                 break;
             default:
-                // Fallback for unknown service types
                 break;
         }
 
-        // Update document title
         document.title = title;
-
-        // Update banner content if elements exist
         if (serviceTitleElement) {
-            serviceTitleElement.textContent = title.replace('Fixalo – ', ''); // Remove 'Fixalo -' for banner h1
-            // Optional: update banner background image dynamically
+            serviceTitleElement.textContent = title.replace('Fixalo – ', '');
             const pageBanner = document.querySelector('.page-banner');
             if (pageBanner) {
-                // EncodeURIComponent for spaces/special chars in URL
                 pageBanner.style.backgroundImage = `linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=${encodeURIComponent(bannerImageText)}')`;
             }
         }
@@ -358,8 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-    // Populates the country filter dropdown on the service listing page
     function populateCountryFilters(professionalsData) {
         if (!filterCountrySelect) return;
 
@@ -373,20 +416,18 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = country;
             filterCountrySelect.appendChild(option);
         });
-        populateLocalityFilters(professionalsData); // Also update localities when country changes
+        populateLocalityFilters(professionalsData);
     }
 
-    // Populates the locality filter dropdown based on the selected country
     function populateLocalityFilters(professionalsData) {
         if (!filterLocalitySelect) return;
 
         filterLocalitySelect.innerHTML = '<option value="all">All Localities</option>';
-        filterLocalitySelect.disabled = true; // Disable until a country is selected
+        filterLocalitySelect.disabled = true;
 
         const selectedCountry = filterCountrySelect.value;
         if (selectedCountry && selectedCountry !== 'all' && countriesAndLocalities[selectedCountry]) {
             const uniqueLocalities = new Set();
-            // Filter professionals by selected country to get relevant localities
             professionalsData.filter(p => p.country === selectedCountry)
                         .forEach(p => uniqueLocalities.add(p.locality));
 
@@ -396,15 +437,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 option.textContent = locality;
                 filterLocalitySelect.appendChild(option);
             });
-            filterLocalitySelect.disabled = false; // Enable locality dropdown
+            filterLocalitySelect.disabled = false;
         }
     }
 
-    // Displays the filtered and sorted professionals on the page
     function displayProfessionals(professionalsToDisplay) {
         if (!serviceDisplayContainer) return;
 
-        serviceDisplayContainer.innerHTML = ''; // Clear existing content
+        serviceDisplayContainer.innerHTML = '';
 
         if (professionalsToDisplay.length === 0) {
             serviceDisplayContainer.innerHTML = '<p class="no-results-message">No professionals found matching your criteria.</p>';
@@ -413,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         professionalsToDisplay.forEach(professional => {
             const professionalCard = document.createElement('div');
-            professionalCard.className = 'plumber-card'; // Reusing existing card styling from styles.css
+            professionalCard.className = 'plumber-card';
             professionalCard.innerHTML = `
                 <div class="plumber-header">
                     <img src="${professional.avatar}" alt="Professional ${professional.name} Profile" class="plumber-avatar">
@@ -424,30 +464,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${generateStarRating(professional.rating)} ${professional.rating} (${professional.reviews} reviews)
                 </div>
                 <p class="plumber-description">${professional.description}</p>
-                <button class="book-now-button" onclick="location.href='plumber-profile.html?id=${professional.id}'">View Profile</button>
+                <button class="book-now-button" onclick="location.href='profile.html?id=${professional.id}'">View Profile</button>
             `;
             serviceDisplayContainer.appendChild(professionalCard);
         });
     }
 
-    // Generates the HTML for star ratings
     function generateStarRating(rating) {
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
             if (rating >= i) {
-                starsHtml += '<i class="fas fa-star"></i>'; // Full star
+                starsHtml += '<i class="fas fa-star"></i>';
             } else if (rating >= i - 0.5) {
-                starsHtml += '<i class="fas fa-star-half-alt"></i>'; // Half star
+                starsHtml += '<i class="fas fa-star-half-alt"></i>';
             } else {
-                starsHtml += '<i class="far fa-star"></i>'; // Empty star
+                starsHtml += '<i class="far fa-star"></i>';
             }
         }
         return starsHtml;
     }
 
-    // Filters and sorts the professionals based on current filter selections
     function filterAndSortProfessionals() {
-        let filtered = [...currentProfessionalsData]; // Use the currently active service's data
+        let filtered = [...currentProfessionalsData];
 
         const selectedCountry = filterCountrySelect ? filterCountrySelect.value : 'all';
         if (selectedCountry !== 'all') {
@@ -478,28 +516,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Functions for Professional Application Form (professional-apply-page.html) ---
 
-    function updateSpecificServices() {
-        if (!specificServicesCheckboxesDiv || !mainServiceCheckboxesContainer) return;
+    function updateSpecificServices(targetSpecificServicesCheckboxesDiv, targetMainServiceCheckboxesContainer, isProfileEdit = false, currentProfessionalServices = []) {
+        const specificDiv = targetSpecificServicesCheckboxesDiv || specificServicesCheckboxesDiv;
+        const mainContainer = targetMainServiceCheckboxesContainer || mainServiceCheckboxesContainer;
+        if (!specificDiv || !mainContainer) return;
 
-        specificServicesCheckboxesDiv.innerHTML = '';
-        const selectedMainServiceCheckboxes = Array.from(mainServiceCheckboxesContainer.querySelectorAll('input[name="mainService"]:checked'));
+        specificDiv.innerHTML = '';
+        const selectedMainServiceCheckboxes = Array.from(mainContainer.querySelectorAll('input[name*="mainService"]:checked'));
         const selectedCategories = selectedMainServiceCheckboxes.map(checkbox => checkbox.value);
 
         if (selectedCategories.length === 0) {
-            specificServicesCheckboxesDiv.innerHTML = '<p class="select-hint">Select at least one \'Main Service Category\' above to see specific services.</p>';
+            specificDiv.innerHTML = '<p class="select-hint">Select at least one \'Main Service Category\' above to see specific services.</p>';
             return;
         }
 
         const uniqueServices = new Set();
         selectedCategories.forEach(serviceCategory => {
-            const services = servicesData[serviceCategory]; // Use the servicesData for application form
+            const services = servicesData[serviceCategory];
             if (services) {
                 services.forEach(service => uniqueServices.add(service));
             }
         });
 
         if (uniqueServices.size === 0) {
-             specificServicesCheckboxesDiv.innerHTML = '<p class="select-hint">No specific services defined for the selected category(ies). Please describe in the "About" section.</p>';
+             specificDiv.innerHTML = '<p class="select-hint">No specific services defined for the selected category(ies). Please describe in the "About" section.</p>';
              return;
         }
 
@@ -507,13 +547,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const label = document.createElement('label');
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.name = 'servicesOffered';
+            // Adjust name attribute based on context (apply form vs. profile edit)
+            checkbox.name = isProfileEdit ? 'profServicesOffered' : 'servicesOffered';
             checkbox.value = service;
+            // Pre-check checkboxes if editing profile
+            if (isProfileEdit && currentProfessionalServices.includes(service)) {
+                checkbox.checked = true;
+            }
             label.appendChild(checkbox);
             label.appendChild(document.createTextNode(` ${service}`));
-            specificServicesCheckboxesDiv.appendChild(label);
+            specificDiv.appendChild(label);
         });
     }
+
 
     function populateApplyCountries() {
         if (!countrySelectApply) return;
@@ -546,6 +592,115 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Functions for Professional Account Page (professional-account.html) ---
+
+    // Function to find a professional by username
+    function findProfessionalByUsername(username) {
+        for (const serviceType in tradespeopleData) {
+            const professionals = tradespeopleData[serviceType];
+            const foundPro = professionals.find(pro => pro.name.toLowerCase().includes(username.toLowerCase()));
+            if (foundPro) {
+                return foundPro;
+            }
+        }
+        return null;
+    }
+
+    // Function to populate professional profile form with data
+    function loadProfessionalProfile(professional) {
+        if (!professionalProfileForm || !professional) return;
+
+        profFirstNameInput.value = professional.name.split(' ')[0] || '';
+        profLastNameInput.value = professional.name.split(' ').slice(-1)[0] || '';
+        // Assuming email is part of the professional object if we were fetching from backend
+        // For now, it's just a placeholder as we don't store email in tradespeopleData
+        profEmailInput.value = professional.email || 'not-available@example.com'; // Placeholder
+        profMobileNumberInput.value = professional.mobileNumber || ''; // Placeholder
+        
+        // Populate Countries and Localities for profile form
+        populateProfCountries(professional.country);
+        // After populating countries, wait for it to render then populate localities
+        setTimeout(() => {
+            populateProfLocalities(professional.country, professional.locality);
+        }, 0);
+
+
+        profilePhotoPreview.src = professional.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
+        profSpecialtyInput.value = professional.specialty || '';
+        profDescriptionTextarea.value = professional.description || '';
+
+        // Handle main service checkboxes
+        Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]')).forEach(checkbox => {
+            // Assuming specialty or another field dictates main service, or it was saved
+            // For now, let's assume if 'plumbing' is in specialty, check plumbing etc.
+            // A more robust solution would save selected main services with the professional data.
+            const isChecked = professional.specialty.toLowerCase().includes(checkbox.value); // Simple check
+            checkbox.checked = isChecked;
+        });
+
+        // Dynamically update specific services checkboxes based on selected main services
+        // Pass the actual checkboxes container and also indicate it's for profile edit
+        updateSpecificServices(profSpecificServicesCheckboxesDiv, profMainServiceCheckboxesContainer, true, professional.specificServices || []);
+    }
+
+    // Populate countries dropdown for professional account page
+    function populateProfCountries(selectedCountry = '') {
+        if (!profCountrySelect) return;
+
+        profCountrySelect.innerHTML = '<option value="">-- Select Country --</option>';
+        for (const countryName in countriesAndLocalities) {
+            const option = document.createElement('option');
+            option.value = countryName;
+            option.textContent = countryName;
+            if (countryName === selectedCountry) {
+                option.selected = true;
+            }
+            profCountrySelect.appendChild(option);
+        }
+    }
+
+    // Update localities dropdown for professional account page
+    function populateProfLocalities(country, selectedLocality = '') {
+        if (!profLocalitySelect) return;
+
+        profLocalitySelect.innerHTML = '<option value="">-- Select Locality --</option>';
+        profLocalitySelect.disabled = true;
+
+        if (country && countriesAndLocalities[country]) {
+            const localities = countriesAndLocalities[country].sort();
+            localities.forEach(locality => {
+                const option = document.createElement('option');
+                option.value = locality;
+                option.textContent = locality;
+                if (locality === selectedLocality) {
+                    option.selected = true;
+                }
+                profLocalitySelect.appendChild(option);
+            });
+            profLocalitySelect.disabled = false;
+        }
+    }
+
+
+    // --- Functions for Customer Account Page (customer-account.html) ---
+
+    // Function to find a customer by username
+    function findCustomerByUsername(username) {
+        return customerData.find(cust => cust.username.toLowerCase() === username.toLowerCase());
+    }
+
+    // Function to load customer profile data into the form
+    function loadCustomerProfile(customer) {
+        if (!customerProfileForm || !customer) return;
+
+        custFirstNameInput.value = customer.name.split(' ')[0] || '';
+        custLastNameInput.value = customer.name.split(' ').slice(-1)[0] || '';
+        custEmailInput.value = customer.email || 'not-available@example.com';
+        custMobileNumberInput.value = customer.mobileNumber || '';
+        custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
+    }
+
+
     // --- Main Initialization Logic ---
 
     // Initialize header buttons on all pages
@@ -563,14 +718,19 @@ document.addEventListener('DOMContentLoaded', () => {
             formMessage.style.display = 'none';
             formMessage.className = 'form-message';
 
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            const email = document.getElementById('email').value;
             const selectedMainServices = Array.from(this.querySelectorAll('input[name="mainService"]:checked')).map(checkbox => checkbox.value);
             const selectedSpecificServices = Array.from(this.querySelectorAll('input[name="servicesOffered"]:checked')).map(checkbox => checkbox.value);
             const country = countrySelectApply.value;
             const locality = localitySelectApply.value;
+            const description = document.getElementById('description').value;
+
 
             // Client-side Validation
             if (username.length < 5) {
@@ -616,15 +776,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const newProfessional = {
                 id: username.toLowerCase().replace(/\s/g, '-') + '-' + Date.now(),
-                name: `${document.getElementById('firstName').value} "${username}" ${document.getElementById('lastName').value}`,
+                name: `${firstName} "${username}" ${lastName}`,
+                email: email, // Store email with professional data
+                mobileNumber: mobileNumber, // Store mobile number
                 specialty: selectedSpecificServices.length > 0 ? selectedSpecificServices.join(', ') : selectedMainServices.join(', '),
                 rating: 0,
                 reviews: 0,
-                description: document.getElementById('description').value,
+                description: description,
                 avatar: `https://placehold.co/100x100/A7D129/FFFFFF?text=${username.substring(0,2).toUpperCase()}`,
                 country: country,
                 locality: locality,
-                joinDate: new Date().toISOString().split('T')[0]
+                joinDate: new Date().toISOString().split('T')[0],
+                specificServices: selectedSpecificServices // Store specific services
             };
 
             console.log('Simulating email sent to:', email);
@@ -641,6 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('loggedInUser', username);
+                localStorage.setItem('loggedInUserType', 'professional'); // Set user type
                 handleAuthButtons();
                 professionalApplicationForm.reset();
                 updateSpecificServices();
@@ -650,43 +814,125 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Logic for customer-signup.html
+    if (customerSignupForm) {
+        customerSignupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            formMessage.style.display = 'none';
+            formMessage.className = 'form-message';
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Client-side Validation
+            if (username.length < 5) {
+                formMessage.textContent = 'Username must be at least 5 characters long.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
+            if (password.length < 8) {
+                formMessage.textContent = 'Password must be at least 8 characters long.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
+            if (password !== confirmPassword) {
+                formMessage.textContent = 'Password and Confirm Password do not match.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
+
+            formMessage.textContent = 'Registration successful! Redirecting to homepage...';
+            formMessage.className = 'form-message success';
+            formMessage.style.display = 'block';
+
+            const newCustomer = {
+                id: username.toLowerCase().replace(/\s/g, '-') + '-' + Date.now(),
+                name: `${firstName} ${lastName}`,
+                email: email,
+                username: username,
+                mobileNumber: '', // Initialize mobile number for new customer
+                avatar: `https://placehold.co/150x150/FFD700/36454F?text=${firstName.substring(0,1).toUpperCase()}${lastName.substring(0,1).toUpperCase()}`, // Generate initial avatar
+                joinDate: new Date().toISOString().split('T')[0]
+            };
+
+            console.log('New Customer Data:', newCustomer);
+            customerData.push(newCustomer); // Add to global customerData array
+
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('loggedInUser', username);
+            localStorage.setItem('loggedInUserType', 'customer'); // Set user type
+            handleAuthButtons();
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+    }
+
+
     // Logic for login page (login.html)
     if (loginForm) {
-        const VALID_USERNAME = 'user123';
-        const VALID_PASSWORD = 'password123';
+        // For demonstration, these can be either a professional or a customer
+        // In a real app, you'd check against stored users
+        const VALID_PROF_USERNAME = 'john-paul'; // Example professional username
+        const VALID_PROF_PASSWORD = 'password123';
+
+        const VALID_CUST_USERNAME = 'customer123'; // Example customer username
+        const VALID_CUST_PASSWORD = 'password123';
 
         loginForm.addEventListener('submit', function(event) {
             event.preventDefault();
 
-            loginFormMessage.style.display = 'none';
-            loginFormMessage.className = 'form-message';
+            formMessage.style.display = 'none'; // Use the generic formMessage
+            formMessage.className = 'form-message';
 
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
             if (username === '' || password === '') {
-                loginFormMessage.textContent = 'Please enter both username and password.';
-                loginFormMessage.className = 'form-message error';
-                loginFormMessage.style.display = 'block';
+                formMessage.textContent = 'Please enter both username and password.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
                 return;
             }
 
             setTimeout(() => {
-                if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-                    loginFormMessage.textContent = 'Login successful! Redirecting to homepage...';
-                    loginFormMessage.className = 'form-message success';
-                    loginFormMessage.style.display = 'block';
+                if (username === VALID_PROF_USERNAME && password === VALID_PROF_PASSWORD) {
+                    formMessage.textContent = 'Login successful as Professional! Redirecting...';
+                    formMessage.className = 'form-message success';
+                    formMessage.style.display = 'block';
 
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('loggedInUser', username);
+                    localStorage.setItem('loggedInUserType', 'professional'); // Set user type
 
                     setTimeout(() => {
-                        window.location.href = 'index.html';
+                        window.location.href = 'professional-account-page.html'; // Redirect to professional account page
                     }, 1500);
-                } else {
-                    loginFormMessage.textContent = 'Invalid username or password.';
-                    loginFormMessage.className = 'form-message error';
-                    loginFormMessage.style.display = 'block';
+                } else if (username === VALID_CUST_USERNAME && password === VALID_CUST_PASSWORD) {
+                    formMessage.textContent = 'Login successful as Customer! Redirecting...';
+                    formMessage.className = 'form-message success';
+                    formMessage.style.display = 'block';
+
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loggedInUser', username);
+                    localStorage.setItem('loggedInUserType', 'customer'); // Set user type
+
+                    setTimeout(() => {
+                        window.location.href = 'customer-account-page.html'; // Redirect customers to customer account page
+                    }, 1500);
+                }
+                else {
+                    formMessage.textContent = 'Invalid username or password.';
+                    formMessage.className = 'form-message error';
+                    formMessage.style.display = 'block';
                 }
             }, 1000);
         });
@@ -694,20 +940,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Logic specifically for generic service listing page (service-listing.html)
-    // Check if elements unique to service-listing.html are present (e.g., serviceDisplayContainer)
     if (serviceDisplayContainer && serviceTitleElement) {
         const urlParams = new URLSearchParams(window.location.search);
-        const serviceTypeFromUrl = urlParams.get('service'); // Get service type from URL
+        const serviceTypeFromUrl = urlParams.get('service');
 
         if (serviceTypeFromUrl && tradespeopleData[serviceTypeFromUrl]) {
             currentServiceType = serviceTypeFromUrl;
             currentProfessionalsData = tradespeopleData[currentServiceType];
 
-            updateServicePageContent(currentServiceType); // Update dynamic text on the page
-            populateCountryFilters(currentProfessionalsData); // Populate filters based on current service data
-            filterAndSortProfessionals(); // Initial display of professionals with filters/sort applied
+            updateServicePageContent(currentServiceType);
+            populateCountryFilters(currentProfessionalsData);
+            filterAndSortProfessionals();
             
-            // Add event listeners for filters specific to this page
             filterCountrySelect.addEventListener('change', () => {
                 populateLocalityFilters(currentProfessionalsData);
                 filterAndSortProfessionals();
@@ -717,17 +961,449 @@ document.addEventListener('DOMContentLoaded', () => {
             sortBySelect.addEventListener('change', filterAndSortProfessionals);
 
         } else {
-            // Handle case where service type is invalid or not provided in URL
             document.title = "Fixalo – Service Not Found";
             if (serviceTitleElement) serviceTitleElement.textContent = "Service Not Found";
             if (serviceDescriptionElement) serviceDescriptionElement.textContent = "The service you are looking for does not exist or could not be loaded.";
             if (availableProfessionalsTitle) availableProfessionalsTitle.textContent = "No Professionals Available";
             if (serviceDisplayContainer) serviceDisplayContainer.innerHTML = '<p class="no-results-message">Please go back to <a href="index.html">Home</a> and select a valid service.</p>';
-            // Hide filters if no valid service is loaded
             const filtersContainer = document.querySelector('.filters-container');
             if (filtersContainer) {
                 filtersContainer.style.display = 'none';
             }
         }
     }
+
+    // Logic specifically for professional account page (professional-account.html)
+    if (professionalProfileForm) {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+        if (loggedInUser && loggedInUserType === 'professional') {
+            const professional = findProfessionalByUsername(loggedInUser); // Find the professional's data
+            if (professional) {
+                loadProfessionalProfile(professional); // Load existing data into the form
+
+                // Event listener for main service checkboxes on profile page to update specific services
+                profMainServiceCheckboxesContainer.addEventListener('change', () => {
+                    updateSpecificServices(profSpecificServicesCheckboxesDiv, profMainServiceCheckboxesContainer, true, professional.specificServices || []);
+                });
+
+                // Event listener for country change on profile page
+                profCountrySelect.addEventListener('change', () => {
+                    populateProfLocalities(profCountrySelect.value, professional.locality);
+                });
+
+            } else {
+                console.error('Professional data not found for logged in user:', loggedInUser);
+                professionalProfileForm.innerHTML = '<p class="form-message error">Professional profile could not be loaded. Please log in again.</p>';
+                // Optionally redirect to login
+            }
+        } else {
+            // Not logged in as a professional, redirect to login or show message
+            professionalProfileForm.innerHTML = '<p class="form-message error">You must be logged in as a professional to view this page. <a href="login.html">Login here</a></p>';
+            professionalProfileForm.style.textAlign = 'center';
+        }
+
+        professionalProfileForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            profileUpdateMessage.style.display = 'none';
+            profileUpdateMessage.className = 'form-message';
+
+            const loggedInUsername = localStorage.getItem('loggedInUser');
+            if (!loggedInUsername) {
+                profileUpdateMessage.textContent = 'You are not logged in.';
+                profileUpdateMessage.className = 'form-message error';
+                profileUpdateMessage.style.display = 'block';
+                return;
+            }
+
+            // Find the professional to update
+            let professionalToUpdate = null;
+            let professionalServiceType = null;
+            let professionalIndex = -1;
+
+            for (const serviceType in tradespeopleData) {
+                const index = tradespeopleData[serviceType].findIndex(pro => pro.name.toLowerCase().includes(loggedInUsername.toLowerCase()));
+                if (index !== -1) {
+                    professionalToUpdate = tradespeopleData[serviceType][index];
+                    professionalServiceType = serviceType;
+                    professionalIndex = index;
+                    break;
+                }
+            }
+
+            if (!professionalToUpdate) {
+                profileUpdateMessage.textContent = 'Could not find your professional profile.';
+                profileUpdateMessage.className = 'form-message error';
+                profileUpdateMessage.style.display = 'block';
+                return;
+            }
+
+            // Gather updated data from the form
+            const newFirstName = profFirstNameInput.value;
+            const newLastName = profLastNameInput.value;
+            const newMobileNumber = profMobileNumberInput.value;
+            const newCountry = profCountrySelect.value;
+            const newLocality = profLocalitySelect.value;
+            const newSpecialty = profSpecialtyInput.value;
+            const newDescription = profDescriptionTextarea.value;
+            const newMainServices = Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]:checked')).map(cb => cb.value);
+            const newSpecificServices = Array.from(profSpecificServicesCheckboxesDiv.querySelectorAll('input[name="profServicesOffered"]:checked')).map(cb => cb.value);
+
+
+            // Validate inputs (similar to signup form but focused on profile fields)
+            if (newFirstName.trim() === '' || newLastName.trim() === '' || newMobileNumber.trim() === '' || newCountry === '' || newLocality === '') {
+                 profileUpdateMessage.textContent = 'Please fill in all required personal information fields.';
+                 profileUpdateMessage.className = 'form-message error';
+                 profileUpdateMessage.style.display = 'block';
+                 return;
+            }
+             if (!newMobileNumber.match(/^[0-9]{8,}$/)) {
+                profileUpdateMessage.textContent = 'Please enter a valid mobile number (at least 8 digits).';
+                profileUpdateMessage.className = 'form-message error';
+                profileUpdateMessage.style.display = 'block';
+                return;
+            }
+
+            // Simulate file upload (for real app, this would send to server/cloud storage)
+            const photoFile = uploadPhotoInput.files[0];
+            let newAvatarUrl = professionalToUpdate.avatar;
+            if (photoFile) {
+                // For demonstration, use a placeholder URL or a Data URL (not for production)
+                // In a real app, you'd upload this and get a persistent URL.
+                newAvatarUrl = URL.createObjectURL(photoFile); // Temporary URL for preview
+                console.log('Simulating photo upload:', photoFile.name);
+            }
+
+            // Update the professional's data
+            professionalToUpdate.name = `${newFirstName} "${loggedInUsername}" ${newLastName}`; // Keep username in name
+            professionalToUpdate.mobileNumber = newMobileNumber;
+            professionalToUpdate.country = newCountry;
+            professionalToUpdate.locality = newLocality;
+            professionalToUpdate.avatar = newAvatarUrl;
+            professionalToUpdate.specialty = newSpecialty;
+            professionalToUpdate.description = newDescription;
+            professionalToUpdate.mainServices = newMainServices; // Store selected main services
+            professionalToUpdate.specificServices = newSpecificServices; // Store selected specific services
+
+
+            // Update preview image immediately
+            profilePhotoPreview.src = newAvatarUrl;
+
+
+            profileUpdateMessage.textContent = 'Profile updated successfully!';
+            profileUpdateMessage.className = 'form-message success';
+            profileUpdateMessage.style.display = 'block';
+
+            console.log('Updated Professional Data:', professionalToUpdate);
+            // In a real application, you would send this updated data to your backend database.
+        });
+
+        // Delete Account functionality
+        if (deleteAccountButton) {
+            deleteAccountButton.addEventListener('click', () => {
+                deleteAccountMessage.style.display = 'none';
+                deleteAccountMessage.className = 'form-message';
+
+                // Replaced alert/confirm with custom modal logic
+                const confirmModal = document.createElement('div');
+                confirmModal.className = 'modal-overlay';
+                confirmModal.innerHTML = `
+                    <div class="modal-content">
+                        <h3>Confirm Account Deletion</h3>
+                        <p>Are you sure you want to permanently delete your professional account? This action cannot be undone.</p>
+                        <div class="modal-buttons">
+                            <button id="confirmDeleteYes" class="button-delete">Yes, Delete</button>
+                            <button id="confirmDeleteNo" class="button-primary">No, Cancel</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmModal);
+
+                document.getElementById('confirmDeleteYes').addEventListener('click', () => {
+                    confirmModal.remove(); // Close modal
+                    const loggedInUsername = localStorage.getItem('loggedInUser');
+                    if (loggedInUsername) {
+                        let foundAndRemoved = false;
+                        for (const serviceType in tradespeopleData) {
+                            const initialLength = tradespeopleData[serviceType].length;
+                            tradespeopleData[serviceType] = tradespeopleData[serviceType].filter(pro =>
+                                !pro.name.toLowerCase().includes(loggedInUsername.toLowerCase())
+                            );
+                            if (tradespeopleData[serviceType].length < initialLength) {
+                                foundAndRemoved = true;
+                                break;
+                            }
+                        }
+
+                        if (foundAndRemoved) {
+                            localStorage.removeItem('isLoggedIn');
+                            localStorage.removeItem('loggedInUser');
+                            localStorage.removeItem('loggedInUserType');
+                            deleteAccountMessage.textContent = 'Your account has been successfully deleted. Redirecting...';
+                            deleteAccountMessage.className = 'form-message success';
+                            deleteAccountMessage.style.display = 'block';
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 2000);
+                        } else {
+                            deleteAccountMessage.textContent = 'Error: Could not find your account to delete.';
+                            deleteAccountMessage.className = 'form-message error';
+                            deleteAccountMessage.style.display = 'block';
+                        }
+                    } else {
+                        deleteAccountMessage.textContent = 'You are not logged in.';
+                        deleteAccountMessage.className = 'form-message error';
+                        deleteAccountMessage.style.display = 'block';
+                    }
+                });
+
+                document.getElementById('confirmDeleteNo').addEventListener('click', () => {
+                    confirmModal.remove(); // Close modal
+                    deleteAccountMessage.textContent = 'Account deletion cancelled.';
+                    deleteAccountMessage.className = 'form-message'; // Clear status
+                    deleteAccountMessage.style.display = 'block';
+                });
+            });
+        }
+    }
+
+
+    // Logic specifically for customer account page (customer-account.html)
+    if (customerProfileForm) {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+        if (loggedInUser && loggedInUserType === 'customer') {
+            const customer = findCustomerByUsername(loggedInUser);
+            if (customer) {
+                loadCustomerProfile(customer);
+
+                // Handle photo upload preview for customer
+                if (uploadCustPhotoInput) {
+                    uploadCustPhotoInput.addEventListener('change', function(event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                if (custProfilePhotoPreview) {
+                                    custProfilePhotoPreview.src = e.target.result;
+                                }
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            if (custProfilePhotoPreview) {
+                                custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
+                            }
+                        }
+                    });
+                }
+                
+            } else {
+                console.error('Customer data not found for logged in user:', loggedInUser);
+                customerProfileForm.innerHTML = '<p class="form-message error">Customer profile could not be loaded. Please log in again.</p>';
+                customerProfileForm.style.textAlign = 'center';
+            }
+        } else {
+            customerProfileForm.innerHTML = '<p class="form-message error">You must be logged in as a customer to view this page. <a href="login.html">Login here</a></p>';
+            customerProfileForm.style.textAlign = 'center';
+        }
+
+        customerProfileForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            customerProfileUpdateMessage.style.display = 'none';
+            customerProfileUpdateMessage.className = 'form-message';
+
+            const loggedInUsername = localStorage.getItem('loggedInUser');
+            if (!loggedInUsername) {
+                customerProfileUpdateMessage.textContent = 'You are not logged in.';
+                customerProfileUpdateMessage.className = 'form-message error';
+                customerProfileUpdateMessage.style.display = 'block';
+                return;
+            }
+
+            let customerToUpdate = findCustomerByUsername(loggedInUsername);
+            if (!customerToUpdate) {
+                customerProfileUpdateMessage.textContent = 'Could not find your customer profile.';
+                customerProfileUpdateMessage.className = 'form-message error';
+                customerProfileUpdateMessage.style.display = 'block';
+                return;
+            }
+
+            const newFirstName = custFirstNameInput.value;
+            const newLastName = custLastNameInput.value;
+            const newMobileNumber = custMobileNumberInput.value;
+            
+            // Validate inputs
+            if (newFirstName.trim() === '' || newLastName.trim() === '') {
+                 customerProfileUpdateMessage.textContent = 'First name and last name are required.';
+                 customerProfileUpdateMessage.className = 'form-message error';
+                 customerProfileUpdateMessage.style.display = 'block';
+                 return;
+            }
+            if (newMobileNumber.trim() !== '' && !newMobileNumber.match(/^[0-9]{8,}$/)) {
+                customerProfileUpdateMessage.textContent = 'Please enter a valid mobile number (at least 8 digits) or leave it empty.';
+                customerProfileUpdateMessage.className = 'form-message error';
+                customerProfileUpdateMessage.style.display = 'block';
+                return;
+            }
+
+            // Simulate file upload for customer photo
+            const photoFile = uploadCustPhotoInput.files[0];
+            let newAvatarUrl = customerToUpdate.avatar;
+            if (photoFile) {
+                newAvatarUrl = URL.createObjectURL(photoFile);
+                console.log('Simulating customer photo upload:', photoFile.name);
+            }
+
+            // Update customer's data
+            customerToUpdate.name = `${newFirstName} ${newLastName}`;
+            customerToUpdate.mobileNumber = newMobileNumber;
+            customerToUpdate.avatar = newAvatarUrl;
+
+            // Update preview image immediately
+            if (custProfilePhotoPreview) {
+                custProfilePhotoPreview.src = newAvatarUrl;
+            }
+
+            customerProfileUpdateMessage.textContent = 'Profile updated successfully!';
+            customerProfileUpdateMessage.className = 'form-message success';
+            customerProfileUpdateMessage.style.display = 'block';
+
+            console.log('Updated Customer Data:', customerToUpdate);
+            // In a real application, you would send this updated data to your backend database.
+        });
+
+        // Delete Customer Account functionality
+        if (deleteCustomerAccountButton) {
+            deleteCustomerAccountButton.addEventListener('click', () => {
+                deleteCustomerAccountMessage.style.display = 'none';
+                deleteCustomerAccountMessage.className = 'form-message';
+
+                // Custom modal for confirmation
+                const confirmModal = document.createElement('div');
+                confirmModal.className = 'modal-overlay'; // Use modal-overlay for styling
+                confirmModal.innerHTML = `
+                    <div class="modal-content">
+                        <h3>Confirm Account Deletion</h3>
+                        <p>Are you sure you want to permanently delete your customer account? This action cannot be undone.</p>
+                        <div class="modal-buttons">
+                            <button id="confirmCustDeleteYes" class="button-delete">Yes, Delete</button>
+                            <button id="confirmCustDeleteNo" class="button-primary">No, Cancel</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmModal);
+
+                document.getElementById('confirmCustDeleteYes').addEventListener('click', () => {
+                    confirmModal.remove(); // Close modal
+                    const loggedInUsername = localStorage.getItem('loggedInUser');
+                    if (loggedInUsername) {
+                        const initialLength = customerData.length;
+                        // Remove the customer from the global array
+                        const updatedCustomerData = customerData.filter(cust =>
+                            cust.username.toLowerCase() !== loggedInUsername.toLowerCase()
+                        );
+                        // This effectively replaces the old array with the filtered one
+                        customerData.splice(0, customerData.length, ...updatedCustomerData);
+
+
+                        if (customerData.length < initialLength) { // If a customer was removed
+                            localStorage.removeItem('isLoggedIn');
+                            localStorage.removeItem('loggedInUser');
+                            localStorage.removeItem('loggedInUserType');
+                            deleteCustomerAccountMessage.textContent = 'Your account has been successfully deleted. Redirecting...';
+                            deleteCustomerAccountMessage.className = 'form-message success';
+                            deleteCustomerAccountMessage.style.display = 'block';
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 2000);
+                        } else {
+                            deleteCustomerAccountMessage.textContent = 'Error: Could not find your account to delete.';
+                            deleteCustomerAccountMessage.className = 'form-message error';
+                            deleteCustomerAccountMessage.style.display = 'block';
+                        }
+                    } else {
+                        deleteCustomerAccountMessage.textContent = 'You are not logged in.';
+                        deleteCustomerAccountMessage.className = 'form-message error';
+                        deleteCustomerAccountMessage.style.display = 'block';
+                    }
+                });
+
+                document.getElementById('confirmCustDeleteNo').addEventListener('click', () => {
+                    confirmModal.remove(); // Close modal
+                    deleteCustomerAccountMessage.textContent = 'Account deletion cancelled.';
+                    deleteCustomerAccountMessage.className = 'form-message'; // Clear status
+                    deleteCustomerAccountMessage.style.display = 'block';
+                });
+            });
+        }
+    }
+
+    // Common modal styles for confirmation dialogs
+    const styleTag = document.createElement('style');
+    styleTag.textContent = `
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal-content h3 {
+            color: var(--secondary-charcoal);
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .modal-content p {
+            margin-bottom: 25px;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .modal-buttons button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .modal-buttons .button-delete {
+            background-color: var(--error-red);
+            color: var(--text-light);
+        }
+        .modal-buttons .button-delete:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        .modal-buttons .button-primary {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+        }
+        .modal-buttons .button-primary:hover {
+            background-color: #004499;
+            transform: translateY(-2px);
+        }
+    `;
+    document.head.appendChild(styleTag);
 });
