@@ -14,7 +14,7 @@
 
     <header>
         <div class="header-container">
-            <h1 class="title">Fixalo</h1>
+            <h1 class="title">FixingFixes</h1>
             <nav class="nav-links">
                 <div class="main-nav-items">
                     <a href="index.html">Home</a>
@@ -79,35 +79,10 @@
 
     <footer id="contact">
         <div id="footercontent">
-            <h4 class="footertext">Copyright © Fixalo</h4>
-            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+            <h4 class="footertext">Copyright © FixingFixes</h4>
+            <h4 class="footertext">Contact: hello@FixingFixes.com</h4>
         </div>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const messageJohnButton = document.getElementById('messageJohnButton');
-
-            if (messageJohnButton) {
-                messageJohnButton.addEventListener('click', function() {
-                    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                    const loggedInUserType = localStorage.getItem('loggedInUserType');
-
-                    if (isLoggedIn && loggedInUserType === 'customer') {
-                        // If logged in as a customer, redirect to messages page
-                        window.location.href = 'customer-account.html#messages'; // Assuming a messages section in customer account
-                    } else if (isLoggedIn && loggedInUserType === 'professional') {
-                        // If logged in as a professional, maybe show an error or redirect to their dashboard
-                        alert('Professionals cannot message other professionals directly from this profile page.');
-                    }
-                    else {
-                        // If not logged in, redirect to customer sign-up page
-                        window.location.href = 'customer-sign-up.html'; // Assuming this is your customer sign-up page
-                    }
-                });
-            }
-        });
-    </script>
 
 </body>
 </html>
