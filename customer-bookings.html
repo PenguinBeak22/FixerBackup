@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixalo – Your Bookings</title>
+    <link rel="stylesheet" type="text/css" href="CSS/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="Javascript/functions.js" defer></script> <!-- Referencing the external JS file -->
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <h1 class="title">Fixalo</h1>
+            <nav class="nav-links">
+                <div class="main-nav-items">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="login-button" id="loginHeaderButton">Login</button>
+                    <button class="cta-button" id="signUpHeaderButton">Sign Up</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-banner">
+        <div class="banner-content">
+            <h1>Your Appointments Calendar 🗓️</h1>
+            <p>View and manage all your upcoming and past bookings.</p>
+            <a href="customer-account.html" class="back-link">← Back to Dashboard</a>
+        </div>
+    </section>
+
+    <div class="section-title">
+        <h2>Your Bookings</h2>
+    </div>
+
+    <main class="bookings-management-container">
+        <!-- Upcoming Appointments Section -->
+        <section class="booking-section upcoming-bookings">
+            <h3><i class="fas fa-calendar-alt"></i> Upcoming Appointments</h3>
+            <div id="customerUpcomingBookingsList" class="booking-list-container">
+                <p class="loading-message">Loading upcoming appointments...</p>
+                <!-- Upcoming appointments will be dynamically loaded here -->
+            </div>
+            <p id="noCustomerUpcomingBookings" class="no-bookings-message" style="display: none;">No upcoming appointments at the moment.</p>
+        </section>
+
+        <!-- Past Appointments Section -->
+        <section class="booking-section past-bookings">
+            <h3><i class="fas fa-history"></i> Past Appointments</h3>
+            <div id="customerPastBookingsList" class="booking-list-container">
+                <p class="loading-message">Loading past appointments...</p>
+                <!-- Past appointments will be dynamically loaded here -->
+            </div>
+            <p id="noCustomerPastBookings" class="no-bookings-message" style="display: none;">No past appointments yet.</p>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div id="footercontent">
+            <h4 class="footertext">Copyright © Fixalo</h4>
+            <h4 class="footertext">Contact: hello@fixalo.com</h4>
+        </div>
+    </footer>
+
+</body>
+</html>

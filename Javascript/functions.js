@@ -12,7 +12,10 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/A7D129/36454F?text=JP',
             country: 'Malta',
             locality: 'Birkirkara',
-            joinDate: '2010-03-15'
+            joinDate: '2010-03-15',
+            isPremium: true, // Added premium flag
+            promotionRank: 1, // Added promotion rank
+            specificServices: ['Emergency Leaks', 'Drain Cleaning', 'Water Heater Repair'] // Example of specific services saved
         },
         {
             id: 'mary-evans',
@@ -24,7 +27,10 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/FFD700/36454F?text=ME',
             country: 'Malta',
             locality: 'Sliema',
-            joinDate: '2012-07-22'
+            joinDate: '2012-07-22',
+            isPremium: true, // Added premium flag
+            promotionRank: 2, // Added promotion rank
+            specificServices: ['Bathroom Installations', 'Pipe Repair', 'Boiler Servicing']
         },
         {
             id: 'alex-pace',
@@ -36,7 +42,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/36454F/FFFFFF?text=AP',
             country: 'Malta',
             locality: 'Mosta',
-            joinDate: '2015-11-01'
+            joinDate: '2015-11-01',
+            isPremium: false,
+            specificServices: ['General Plumbing', 'Fixture Installation', 'Leak Detection']
         },
         {
             id: 'sarah-camilleri',
@@ -48,7 +56,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/A7D129/36454F?text=SC',
             country: 'Malta',
             locality: 'Qormi',
-            joinDate: '2018-01-10'
+            joinDate: '2018-01-10',
+            isPremium: false,
+            specificServices: ['Commercial Plumbing', 'Water Conservation', 'Backflow Prevention']
         },
         {
             id: 'david-rossi',
@@ -60,7 +70,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/FFD700/36454F?text=DR',
             country: 'Italy',
             locality: 'Rome',
-            joinDate: '2008-05-20'
+            joinDate: '2008-05-20',
+            isPremium: false,
+            specificServices: ['Drainage Systems', 'Septic Tank Maintenance', 'Water Filtration']
         },
         {
             id: 'emily-smith',
@@ -72,7 +84,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/36454F/FFFFFF?text=ES',
             country: 'United Kingdom',
             locality: 'London',
-            joinDate: '2011-09-05'
+            joinDate: '2011-09-05',
+            isPremium: false,
+            specificServices: ['Residential Plumbing', 'Leak Detection', 'Bathroom Remodels']
         }
     ],
     carpentry: [
@@ -86,7 +100,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/36454F/A7D129?text=BS',
             country: 'Malta',
             locality: 'Mosta',
-            joinDate: '2013-05-01'
+            joinDate: '2013-05-01',
+            isPremium: false,
+            specificServices: ['Custom Cabinets', 'Furniture Assembly', 'Deck Building']
         },
         {
             id: 'anna-wood',
@@ -98,7 +114,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/A7D129/FFFFFF?text=AW',
             country: 'Malta',
             locality: 'Naxxar',
-            joinDate: '2016-09-10'
+            joinDate: '2016-09-10',
+            isPremium: false,
+            specificServices: ['Flooring Installation', 'Custom Shelving', 'Door Repair']
         }
     ],
     electrical: [
@@ -112,7 +130,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/FFD700/36454F?text=MD',
             country: 'Malta',
             locality: 'Birkirkara',
-            joinDate: '2011-02-20'
+            joinDate: '2011-02-20',
+            isPremium: false,
+            specificServices: ['Electrical Wiring', 'Light Fixture Installation', 'Outlet Repair']
         }
     ],
     painting: [
@@ -126,7 +146,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/A7D129/FFFFFF?text=LW',
             country: 'Malta',
             locality: 'Sliema',
-            joinDate: '2017-04-05'
+            joinDate: '2017-04-05',
+            isPremium: false,
+            specificServices: ['Interior Painting', 'Exterior Painting', 'Wallpaper Installation']
         }
     ],
     cleaning: [
@@ -140,7 +162,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/36454F/FFD700?text=CG',
             country: 'Malta',
             locality: 'Mosta',
-            joinDate: '2014-08-12'
+            joinDate: '2014-08-12',
+            isPremium: false,
+            specificServices: ['Residential Cleaning', 'Deep Cleaning', 'Commercial Cleaning']
         }
     ],
     blacksmithing: [
@@ -154,7 +178,9 @@ const tradespeopleData = {
             avatar: 'https://placehold.co/100x100/FFD700/A7D129?text=GB',
             country: 'Malta',
             locality: 'Valletta',
-            joinDate: '2010-01-01'
+            joinDate: '2010-01-01',
+            isPremium: false,
+            specificServices: ['Custom Metalwork', 'Wrought Iron Gates', 'Repairs']
         }
     ]
 };
@@ -164,11 +190,12 @@ const servicesData = {
     plumbing: [
         'Emergency Leaks', 'Drain Cleaning', 'Water Heater Repair',
         'Bathroom Installations', 'Pipe Repair', 'Boiler Servicing',
-        'Fixture Installation', 'Leak Detection'
+        'Fixture Installation', 'Leak Detection', 'General Plumbing'
     ],
     carpentry: [
         'Furniture Assembly', 'Custom Cabinets', 'Door Installation',
-        'Window Repair', 'Deck Building', 'Flooring Installation'
+        'Window Repair', 'Deck Building', 'Flooring Installation',
+        'Custom Shelving'
     ],
     electrical: [
         'Electrical Wiring', 'Light Fixture Installation', 'Outlet Repair',
@@ -194,13 +221,43 @@ const servicesData = {
 
 // Data for countries and localities
 const countriesAndLocalities = {
-    "Malta": ["Birkirkara", "Bormla (Cospicua)", "Fgura", "Floriana", "Fontana", "Għajnsielem", "Għarb", "Għargħur", "Għasri", "Għaxaq", "Gudja", "Gżira", "Ħamrun", "Iklin", "Isla (Senglea)", "Kalkara", "Kerċem", "Kirkop", "Lija", "Luqa", "Marsa", "Marsaskala", "Marsaxlokk", "Mdina", "Mellieħa", "Mosta", "Mqabba", "Msida", "Mtarfa", "Munxar", "Nadur", "Naxxar", "Paola", "Pembroke", "Pietà", "Qala", "Qormi", "Qrendi", "Rabat (Gozo)", "Rabat (Malta)", "Safi", "San Ġiljan (St. Julian's)", "San Lawrenz", "San Pawl il-Baħar (St. Paul's Bay)", "Sannat", "Santa Luċija", "Santa Venera", "Siġġiewi", "Sliema", "Swieqi", "Ta' Xbiex", "Tarxien", "Valletta", "Victoria (Rabat, Gozo)", "Xagħra", "Xewkija", "Xgħajra", "Żabbar", "Żebbuġ (Gozo)", "Żebbuġ (Malta)", "Żejtun", "Żurrieq"],
+    "Malta": ["Birkirkara", "Bormla (Cospicua)", "Fgura", "Floriana", "Fontana", "Għajnsielem", "Għarb", "Għargħur", "Għasri", "Għaxaq", "Gudja", "Gżira", "Ħamrun", "Iklin", "Isla (Senglea)", "Kalkara", "Kerċem", "Kirkop", "Lija", "Luqa", "Marsa", "Marsaskala", "Marsaxlokk", "Mdina", "Mellieħa", "Mosta", "Mqabba", "Msida", "Mtarfa", "Munxar", "Nadur", "Naxxar", "Paola", "Pembroke", "Pietà", "Qala", "Qormi", "Qrendi", "Rabat (Gozo)", "Rabat (Malta)", "Safi", "San Ġiljan (St. Julian's)", "San Pawl il-Baħar (St. Paul's Bay)", "Sannat", "Santa Luċija", "Santa Venera", "Siġġiewi", "Sliema", "Swieqi", "Ta' Xbiex", "Tarxien", "Valletta", "Victoria (Rabat, Gozo)", "Xagħra", "Xewkija", "Xgħajra", "Żabbar", "Żebbuġ (Gozo)", "Żebbuġ (Malta)", "Żejtun", "Żurrieq"],
     "Italy": ["Rome", "Milan", "Naples", "Turin", "Palermo", "Genoa", "Bologna", "Florence", "Bari", "Catania"],
     "United Kingdom": ["London", "Manchester", "Birmingham", "Glasgow", "Liverpool", "Bristol", "Edinburgh", "Leeds", "Sheffield", "Newcastle"],
     "Germany": ["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt", "Stuttgart", "Düsseldorf", "Leipzig", "Dortmund", "Essen"],
     "France": ["Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg", "Montpellier", "Bordeaux", "Lille"],
     "Spain": ["Madrid", "Barcelona", "Valencia", "Seville", "Zaragoza", "Malaga", "Murcia", "Palma", "Las Palmas", "Bilbao"]
 };
+
+// Common international dial codes
+const countryDialCodes = {
+    "Afghanistan": "+93", "Albania": "+355", "Algeria": "+213", "Andorra": "+376", "Angola": "+244",
+    "Argentina": "+54", "Armenia": "+374", "Australia": "+61", "Austria": "+43", "Azerbaijan": "+994",
+    "Bahrain": "+973", "Bangladesh": "+880", "Belarus": "+375", "Belgium": "+32", "Bolivia": "+591",
+    "Bosnia & Herzegovina": "+387", "Brazil": "+55", "Bulgaria": "+359", "Cambodia": "+855",
+    "Cameroon": "+237", "Canada": "+1", "Chile": "+56", "China": "+86", "Colombia": "+57",
+    "Costa Rica": "+506", "Croatia": "+385", "Cuba": "+53", "Cyprus": "+357", "Czech Republic": "+420",
+    "Denmark": "+45", "Dominican Republic": "+1", "Ecuador": "+593", "Egypt": "+20",
+    "El Salvador": "+503", "Estonia": "+372", "Ethiopia": "+251", "Finland": "+358", "France": "+33",
+    "Georgia": "+995", "Germany": "+49", "Ghana": "+233", "Greece": "+30", "Guatemala": "+502",
+    "Honduras": "+504", "Hong Kong": "+852", "Hungary": "+36", "Iceland": "+354", "India": "+91",
+    "Indonesia": "+62", "Iran": "+98", "Iraq": "+964", "Ireland": "+353", "Israel": "+972",
+    "Italy": "+39", "Jamaica": "+1", "Japan": "+81", "Jordan": "+962", "Kazakhstan": "+7",
+    "Kenya": "+254", "Kuwait": "+965", "Latvia": "+371", "Lebanon": "+961", "Libya": "+218",
+    "Lithuania": "+370", "Luxembourg": "+352", "Malaysia": "+60", "Malta": "+356", "Mexico": "+52",
+    "Moldova": "+373", "Monaco": "+377", "Morocco": "+212", "Netherlands": "+31", "New Zealand": "+64",
+    "Nicaragua": "+505", "Nigeria": "+234", "North Macedonia": "+389", "Norway": "+47", "Oman": "+968",
+    "Pakistan": "+92", "Panama": "+507", "Paraguay": "+595", "Peru": "+51", "Philippines": "+63",
+    "Poland": "+48", "Portugal": "+351", "Qatar": "+974", "Romania": "+40", "Russia": "+7",
+    "San Marino": "+378", "Saudi Arabia": "+966", "Serbia": "+381", "Singapore": "+65",
+    "Slovakia": "+421", "Slovenia": "+386", "South Africa": "+27", "South Korea": "+82", "Spain": "+34",
+    "Sri Lanka": "+94", "Sweden": "+46", "Switzerland": "+41", "Syria": "+963", "Taiwan": "+886",
+    "Tanzania": "+255", "Thailand": "+66", "Tunisia": "+216", "Turkey": "+90", "Ukraine": "+380",
+    "United Arab Emirates": "+971", "United Kingdom": "+44", "United States": "+1", "Uruguay": "+598",
+    "Uzbekistan": "+998", "Venezuela": "+58", "Vietnam": "+84", "Yemen": "+967", "Zambia": "+260",
+    "Zimbabwe": "+263"
+};
+
 
 // Global array to store customer data (for demonstration purposes, typically this would be a backend)
 const customerData = [
@@ -218,6 +275,98 @@ const customerData = [
 // Global array to store message data (simulated for demonstration)
 // Structure: { id: string, from: string (customer username), to: string (professional ID), text: string, timestamp: number, isRead: boolean }
 let messagesData = JSON.parse(localStorage.getItem('messagesData')) || [];
+
+// Global array to store booking data (simulated for demonstration)
+// Structure: { id: string, professionalId: string, professionalName: string, customerId: string, customerName: string, date: string (YYYY-MM-DD), time: string (HH:MM-HH:MM), description: string, customerPhone: string, status: 'Pending' | 'Confirmed' | 'Rejected' | 'Cancelled' }
+let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
+    // Sample bookings for John "The Pipe" Paul
+    {
+        id: 'booking-1',
+        professionalId: 'john-paul',
+        professionalName: 'John "The Pipe" Paul',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-07-15',
+        time: '10:00-11:00',
+        description: 'Leaky faucet in kitchen sink. Drips constantly.',
+        customerPhone: '+35699112233',
+        status: 'Pending'
+    },
+    {
+        id: 'booking-2',
+        professionalId: 'john-paul',
+        professionalName: 'John "The Pipe" Paul',
+        customerId: 'another-cust-456',
+        customerName: 'Mark Smith',
+        date: '2025-07-20',
+        time: '14:00-15:00',
+        description: 'Annual boiler servicing and check-up.',
+        customerPhone: '+35677889900',
+        status: 'Confirmed'
+    },
+    {
+        id: 'booking-3',
+        professionalId: 'john-paul',
+        professionalName: 'John "The Pipe" Paul',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-06-28', // Today's date (if running on June 28, 2025) or a past date for testing
+        time: '09:00-10:00',
+        description: 'Blocked drain in bathroom.',
+        customerPhone: '+35699112233',
+        status: 'Pending'
+    },
+    // Sample bookings for Mary "The Fixer" Evans
+    {
+        id: 'booking-4',
+        professionalId: 'mary-evans',
+        professionalName: 'Mary "The Fixer" Evans',
+        customerId: 'some-cust-789',
+        customerName: 'Alice Brown',
+        date: '2025-07-01',
+        time: '08:00-09:00',
+        description: 'Installation of new bathroom vanity and sink.',
+        customerPhone: '+35655443322',
+        status: 'Pending'
+    },
+    {
+        id: 'booking-5',
+        professionalId: 'mary-evans',
+        professionalName: 'Mary "The Fixer" Evans',
+        customerId: 'another-cust-456',
+        customerName: 'Mark Smith',
+        date: '2025-07-05',
+        time: '11:00-12:00',
+        description: 'Pipe repair in utility room.',
+        customerPhone: '+35677889900',
+        status: 'Confirmed'
+    },
+    // Sample booking for jane-doe-123 as customer
+    {
+        id: 'booking-cust-1',
+        professionalId: 'mark-spark',
+        professionalName: 'Mark "Sparky" Davis',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-08-10',
+        time: '13:00-14:00',
+        description: 'Light fixture installation in living room.',
+        customerPhone: '+35699112233',
+        status: 'Pending'
+    },
+    {
+        id: 'booking-cust-2',
+        professionalId: 'lisa-brush',
+        professionalName: 'Lisa "The Brush" White',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-07-01', // Past booking for testing past bookings display
+        time: '09:00-11:00',
+        description: 'Bedroom repainting.',
+        customerPhone: '+35699112233',
+        status: 'Confirmed'
+    }
+];
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -259,18 +408,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const profFirstNameInput = document.getElementById('profFirstName');
     const profLastNameInput = document.getElementById('profLastName');
     const profEmailInput = document.getElementById('profEmail');
+    const profCountryCodeSelect = document.getElementById('profCountryCode'); // New element for country code
     const profMobileNumberInput = document.getElementById('profMobileNumber');
     const profCountrySelect = document.getElementById('profCountry');
     const profLocalitySelect = document.getElementById('profLocality');
     const profilePhotoPreview = document.getElementById('profilePhotoPreview');
     const uploadPhotoInput = document.getElementById('uploadPhoto');
-    const profSpecialtyInput = document.getElementById('profSpecialty');
+    // const profSpecialtyInput = document.getElementById('profSpecialty'); // This element is removed from HTML
     const profMainServiceCheckboxesContainer = document.getElementById('profMainServiceCheckboxes');
     const profSpecificServicesCheckboxesDiv = document.getElementById('profSpecificServicesCheckboxes');
     const profDescriptionTextarea = document.getElementById('profDescription');
     const profileUpdateMessage = document.getElementById('profileUpdateMessage');
     const deleteAccountButton = document.querySelector('.dashboard-section.account-settings .button-delete');
     const deleteAccountMessage = document.getElementById('deleteAccountMessage');
+    const manageAllBookingsButton = document.getElementById('manageAllBookingsButton'); // Added for professional dashboard
 
     // Elements for customer-account.html
     const customerProfileForm = document.getElementById('customerProfileForm');
@@ -283,6 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const customerProfileUpdateMessage = document.getElementById('customerProfileUpdateMessage');
     const deleteCustomerAccountButton = document.getElementById('deleteCustomerAccountButton');
     const deleteCustomerAccountMessage = document.getElementById('deleteCustomerAccountMessage');
+    const viewMyBookingsButton = document.getElementById('viewMyBookingsButton'); // Added for customer dashboard
 
     // Elements for plumber-profile.html (the current page being referenced)
     const messageJohnButton = document.getElementById('messageJohnButton');
@@ -295,6 +447,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageInputArea = document.getElementById('messageInputArea');
     const messageTextarea = document.getElementById('messageTextarea');
     const sendMessageButton = document.getElementById('sendMessageButton');
+
+    // Elements for professional-bookings.html
+    const unconfirmedBookingsList = document.getElementById('unconfirmedBookingsList');
+    const confirmedBookingsList = document.getElementById('confirmedBookingsList');
+    const noUnconfirmedBookingsMessage = document.getElementById('noUnconfirmedBookings');
+    const noConfirmedBookingsMessage = document.getElementById('noConfirmedBookings');
+
+    // Elements for customer-bookings.html
+    const customerUpcomingBookingsList = document.getElementById('customerUpcomingBookingsList');
+    const customerPastBookingsList = document.getElementById('customerPastBookingsList');
+    const noCustomerUpcomingBookingsMessage = document.getElementById('noCustomerUpcomingBookings');
+    const noCustomerPastBookingsMessage = document.getElementById('noCustomerPastBookings');
 
 
     let currentServiceType = null; // Will store 'plumbing', 'carpentry', etc.
@@ -315,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (loggedInUserType === 'professional') {
                         window.location.href = 'professional-account-page.html';
                     } else if (loggedInUserType === 'customer') {
-                        window.location.href = 'customer-account-page.html'; // Corrected to customer-account.html
+                        window.location.href = 'customer-account.html'; // Corrected to customer-account.html
                     } else {
                         // Default fallback or prompt for account type if missing
                         console.log('Logged in user type unknown, redirecting to general account area or prompting.');
@@ -469,13 +633,41 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Sort professionals: premium first, then by rating, then by name
+        professionalsToDisplay.sort((a, b) => {
+            // Premium status (true comes before false)
+            if (a.isPremium && !b.isPremium) return -1;
+            if (!a.isPremium && b.isPremium) return 1;
+            
+            // If both are premium or both are not, sort by promotionRank (lower number = higher rank)
+            if (a.isPremium && b.isPremium) {
+                if (a.promotionRank !== undefined && b.promotionRank !== undefined) {
+                    return a.promotionRank - b.promotionRank;
+                }
+            }
+
+            // Then by rating (highest first)
+            if (b.rating !== a.rating) {
+                return b.rating - a.rating;
+            }
+            // Then by name (alphabetical)
+            return a.name.localeCompare(b.name);
+        });
+
+
         professionalsToDisplay.forEach(professional => {
             const professionalCard = document.createElement('div');
             professionalCard.className = 'plumber-card';
+            // Add a class for premium professionals for styling
+            if (professional.isPremium) {
+                professionalCard.classList.add('premium-professional');
+            }
+
             professionalCard.innerHTML = `
                 <div class="plumber-header">
                     <img src="${professional.avatar}" alt="Professional ${professional.name} Profile" class="plumber-avatar">
                     <h3>${professional.name}</h3>
+                    ${professional.isPremium ? '<span class="premium-badge"><i class="fas fa-star"></i> Premium</span>' : ''}
                 </div>
                 <p class="plumber-specialty">${professional.specialty}</p>
                 <div class="plumber-rating">
@@ -528,6 +720,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (sortBy === 'highestRated') {
             filtered.sort((a, b) => b.rating - a.rating);
         }
+        // No explicit "default" sort logic for now, relies on initial data order or a secondary sort after filters.
+        // The displayProfessionals function now handles a more complex sort including premium status.
 
         displayProfessionals(filtered);
     }
@@ -612,11 +806,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Functions for Professional Account Page (professional-account.html) ---
 
-    // Function to find a professional by username
+    // Function to find a professional by username (which is stored as ID for professionals)
     function findProfessionalByUsername(username) {
         for (const serviceType in tradespeopleData) {
             const professionals = tradespeopleData[serviceType];
-            const foundPro = professionals.find(pro => pro.name.toLowerCase().includes(username.toLowerCase()));
+            const foundPro = professionals.find(pro => pro.id === username); // Match by ID
             if (foundPro) {
                 return foundPro;
             }
@@ -624,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    // Function to find a professional by ID (used for messaging)
+    // Function to find a professional by ID (used for messaging and bookings display)
     function findProfessionalById(proId) {
         for (const serviceType in tradespeopleData) {
             const professionals = tradespeopleData[serviceType];
@@ -642,10 +836,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         profFirstNameInput.value = professional.name.split(' ')[0] || '';
         profLastNameInput.value = professional.name.split(' ').slice(-1)[0] || '';
-        // Assuming email is part of the professional object if we were fetching from backend
-        // For now, it's just a placeholder as we don't store email in tradespeopleData
-        profEmailInput.value = professional.email || 'not-available@example.com'; // Placeholder
-        profMobileNumberInput.value = professional.mobileNumber || ''; // Placeholder
+        profEmailInput.value = professional.email || 'not-available@example.com';
+
+        // Populate country dial code dropdown
+        if (profCountryCodeSelect) {
+            populateCountryDialCodes(profCountryCodeSelect, professional.mobileNumber);
+        }
+        // Populate mobile number input (without dial code)
+        if (profMobileNumberInput && professional.mobileNumber) {
+             const dialCode = Object.values(countryDialCodes).find(code => professional.mobileNumber.startsWith(code));
+             if (dialCode) {
+                 profMobileNumberInput.value = professional.mobileNumber.substring(dialCode.length);
+             } else {
+                 profMobileNumberInput.value = professional.mobileNumber;
+             }
+        } else {
+            profMobileNumberInput.value = '';
+        }
         
         // Populate Countries and Localities for profile form
         populateProfCountries(professional.country);
@@ -656,17 +863,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         profilePhotoPreview.src = professional.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
-        profSpecialtyInput.value = professional.specialty || '';
-        profDescriptionTextarea.value = professional.description || '';
+        // profSpecialtyInput.value = professional.specialty || ''; // This line is now removed
 
         // Handle main service checkboxes
         Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]')).forEach(checkbox => {
-            // Assuming specialty or another field dictates main service, or it was saved
-            // For now, let's assume if 'plumbing' is in specialty, check plumbing etc.
-            // A more robust solution would save selected main services with the professional data.
-            const isChecked = professional.specialty.toLowerCase().includes(checkbox.value); // Simple check
-            checkbox.checked = isChecked;
+            // Check if the professional's specific services array contains any service from this category
+            const categoryServices = servicesData[checkbox.value] || [];
+            const isCategorySelected = professional.specificServices && professional.specificServices.some(service => categoryServices.includes(service));
+            checkbox.checked = isCategorySelected;
         });
+
 
         // Dynamically update specific services checkboxes based on selected main services
         // Pass the actual checkboxes container and also indicate it's for profile edit
@@ -711,6 +917,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Populate country dial codes dropdown
+    function populateCountryDialCodes(selectElement, currentMobileNumber = '') {
+        if (!selectElement) return;
+
+        selectElement.innerHTML = ''; // Clear existing options
+        let defaultCode = '';
+
+        // Add a default empty option or a common one like Malta
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.textContent = "--";
+        selectElement.appendChild(defaultOption);
+
+
+        const sortedCountryNames = Object.keys(countryDialCodes).sort();
+        sortedCountryNames.forEach(country => {
+            const code = countryDialCodes[country];
+            const option = document.createElement('option');
+            option.value = code;
+            option.textContent = `${country} (${code})`;
+            selectElement.appendChild(option);
+
+            // Set selected option based on currentMobileNumber
+            if (currentMobileNumber.startsWith(code) && (defaultCode === '' || code.length > defaultCode.length)) {
+                defaultCode = code;
+            }
+        });
+
+        if (defaultCode) {
+            selectElement.value = defaultCode;
+        } else if (countryDialCodes["Malta"]) { // Fallback to Malta if no match
+            selectElement.value = countryDialCodes["Malta"];
+        } else {
+            selectElement.value = ''; // Ensure no code is pre-selected if no match and no Malta
+        }
+    }
 
     // --- Functions for Customer Account Page (customer-account.html) ---
 
@@ -874,7 +1116,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             const professional = findProfessionalById(activeProfessionalId);
             if (professional) {
-                const replyText = `Thanks for your message, I'll get back to you shortly, I'm just ${professional.specialty.split(',')[0].toLowerCase()} right now!`;
+                // Adjust the reply to use specific services if available, otherwise general specialty
+                const replySpecialty = professional.specificServices && professional.specificServices.length > 0
+                    ? professional.specificServices[0].toLowerCase() // Use first specific service
+                    : professional.specialty.split(',')[0].toLowerCase(); // Fallback to main specialty
+                
+                const replyText = `Thanks for your message, I'll get back to you shortly, I'm just busy with a ${replySpecialty} job right now!`;
                 const replyMessage = {
                     id: 'msg-' + (Date.now() + 1),
                     from: professional.id, // Professional's ID
@@ -893,6 +1140,243 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    // --- Functions for Bookings Page (professional-bookings.html) ---
+
+    // Function to save bookings to localStorage
+    function saveBookings() {
+        localStorage.setItem('bookingsData', JSON.stringify(bookingsData));
+    }
+
+    // Function to load and display professional's bookings
+    function loadProfessionalBookings() {
+        if (!unconfirmedBookingsList || !confirmedBookingsList) return;
+
+        const loggedInUser = localStorage.getItem('loggedInUser'); // This is the professional's username
+        const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+        if (!loggedInUser || loggedInUserType !== 'professional') {
+            unconfirmedBookingsList.innerHTML = '<p class="loading-message">Please log in as a professional to view bookings.</p>';
+            confirmedBookingsList.innerHTML = ''; // Clear content if not logged in as professional
+            noUnconfirmedBookingsMessage.style.display = 'none';
+            noConfirmedBookingsMessage.style.display = 'none';
+            return;
+        }
+
+        const currentProfessional = findProfessionalByUsername(loggedInUser);
+        if (!currentProfessional) {
+            unconfirmedBookingsList.innerHTML = '<p class="loading-message">Professional data not found.</p>';
+            confirmedBookingsList.innerHTML = '';
+            noUnconfirmedBookingsMessage.style.display = 'none';
+            noConfirmedBookingsMessage.style.display = 'none';
+            return;
+        }
+
+        unconfirmedBookingsList.innerHTML = '';
+        confirmedBookingsList.innerHTML = '';
+        let hasUnconfirmed = false;
+        let hasConfirmed = false;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize today to start of day for comparison
+
+        bookingsData.filter(booking => booking.professionalId === currentProfessional.id)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date
+                    .forEach(booking => {
+            const bookingDate = new Date(booking.date);
+            bookingDate.setHours(0, 0, 0, 0); // Normalize booking date
+
+            // Date validation: only show bookings for today or later
+            if (bookingDate < today) {
+                // Optionally handle past pending bookings (e.g., mark as 'missed' or 'expired')
+                return; // Skip past bookings for display
+            }
+
+            const bookingCard = document.createElement('div');
+            bookingCard.className = 'booking-card';
+            bookingCard.innerHTML = `
+                <div class="booking-card-header">
+                    <h4>${booking.description}</h4>
+                    <span class="booking-card-date-time">${booking.date} at ${booking.time.split('-')[0]}</span>
+                </div>
+                <div class="booking-detail-item"><strong>Customer:</strong> ${booking.customerName}</div>
+                <div class="booking-detail-item"><strong>Contact:</strong> ${booking.customerPhone || 'N/A'}</div>
+                <div class="booking-actions">
+                    ${booking.status === 'Pending' ? `
+                        <button class="button-confirm" data-booking-id="${booking.id}">Confirm</button>
+                        <button class="button-reject" data-booking-id="${booking.id}">Reject</button>
+                    ` : `
+                        <span class="booking-status-badge">${booking.status}</span>
+                    `}
+                </div>
+            `;
+
+            if (booking.status === 'Pending') {
+                unconfirmedBookingsList.appendChild(bookingCard);
+                hasUnconfirmed = true;
+            } else if (booking.status === 'Confirmed') {
+                confirmedBookingsList.appendChild(bookingCard);
+                hasConfirmed = true;
+            }
+        });
+
+        if (!hasUnconfirmed) {
+            noUnconfirmedBookingsMessage.style.display = 'block';
+        } else {
+            noUnconfirmedBookingsMessage.style.display = 'none';
+        }
+
+        if (!hasConfirmed) {
+            noConfirmedBookingsMessage.style.display = 'block';
+        } else {
+            noConfirmedBookingsMessage.style.display = 'none';
+        }
+
+        // Attach event listeners for Confirm/Reject buttons
+        unconfirmedBookingsList.querySelectorAll('.button-confirm').forEach(button => {
+            button.addEventListener('click', (event) => confirmAppointment(event.target.dataset.bookingId));
+        });
+        unconfirmedBookingsList.querySelectorAll('.button-reject').forEach(button => {
+            button.addEventListener('click', (event) => rejectAppointment(event.target.dataset.bookingId));
+        });
+    }
+
+    function confirmAppointment(bookingId) {
+        const bookingIndex = bookingsData.findIndex(b => b.id === bookingId);
+        if (bookingIndex !== -1) {
+            bookingsData[bookingIndex].status = 'Confirmed';
+            saveBookings();
+            loadProfessionalBookings(); // Reload to update sections
+            showTemporaryMessage('Appointment confirmed!', 'success');
+        }
+    }
+
+    function rejectAppointment(bookingId) {
+        const bookingIndex = bookingsData.findIndex(b => b.id === bookingId);
+        if (bookingIndex !== -1) {
+            bookingsData[bookingIndex].status = 'Rejected';
+            saveBookings();
+            loadProfessionalBookings(); // Reload to update sections
+            showTemporaryMessage('Appointment rejected.', 'info');
+        }
+    }
+
+    // --- Functions for Customer Bookings Page (customer-bookings.html) ---
+
+    // Function to load and display customer's bookings
+    function loadCustomerBookings() {
+        if (!customerUpcomingBookingsList || !customerPastBookingsList) return;
+
+        const loggedInUser = localStorage.getItem('loggedInUser'); // This is the customer's username
+        const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+        if (!loggedInUser || loggedInUserType !== 'customer') {
+            customerUpcomingBookingsList.innerHTML = '<p class="loading-message">Please log in as a customer to view your bookings.</p>';
+            customerPastBookingsList.innerHTML = '';
+            noCustomerUpcomingBookingsMessage.style.display = 'none';
+            noCustomerPastBookingsMessage.style.display = 'none';
+            return;
+        }
+
+        const currentCustomer = findCustomerByUsername(loggedInUser);
+        if (!currentCustomer) {
+            customerUpcomingBookingsList.innerHTML = '<p class="loading-message">Customer data not found.</p>';
+            customerPastBookingsList.innerHTML = '';
+            noCustomerUpcomingBookingsMessage.style.display = 'none';
+            noCustomerPastBookingsMessage.style.display = 'none';
+            return;
+        }
+
+        customerUpcomingBookingsList.innerHTML = '';
+        customerPastBookingsList.innerHTML = '';
+        let hasUpcoming = false;
+        let hasPast = false;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize today to start of day for comparison
+
+        bookingsData.filter(booking => booking.customerId === currentCustomer.id)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sort by date
+                    .forEach(booking => {
+            const bookingDate = new Date(booking.date);
+            bookingDate.setHours(0, 0, 0, 0); // Normalize booking date
+
+            const bookingCard = document.createElement('div');
+            bookingCard.className = 'booking-card';
+            bookingCard.innerHTML = `
+                <div class="booking-card-header">
+                    <h4>${booking.description}</h4>
+                    <span class="booking-card-date-time">${booking.date} at ${booking.time.split('-')[0]}</span>
+                </div>
+                <div class="booking-detail-item"><strong>Professional:</strong> ${booking.professionalName}</div>
+                <div class="booking-detail-item"><strong>Status:</strong> <span class="booking-status-badge">${booking.status}</span></div>
+                ${(booking.status === 'Pending' || booking.status === 'Confirmed') && bookingDate >= today ? `
+                    <div class="booking-actions">
+                        <button class="button-delete button-cancel" data-booking-id="${booking.id}">Cancel Booking</button>
+                    </div>
+                ` : ''}
+            `;
+
+            if ((booking.status === 'Pending' || booking.status === 'Confirmed') && bookingDate >= today) {
+                customerUpcomingBookingsList.appendChild(bookingCard);
+                hasUpcoming = true;
+            } else {
+                customerPastBookingsList.appendChild(bookingCard);
+                hasPast = true;
+            }
+        });
+
+        if (!hasUpcoming) {
+            noCustomerUpcomingBookingsMessage.style.display = 'block';
+        } else {
+            noCustomerUpcomingBookingsMessage.style.display = 'none';
+        }
+
+        if (!hasPast) {
+            noCustomerPastBookingsMessage.style.display = 'block';
+        } else {
+            noCustomerPastBookingsMessage.style.display = 'none';
+        }
+
+        // Attach event listeners for Cancel buttons
+        customerUpcomingBookingsList.querySelectorAll('.button-cancel').forEach(button => {
+            button.addEventListener('click', (event) => cancelCustomerAppointment(event.target.dataset.bookingId));
+        });
+    }
+
+    function cancelCustomerAppointment(bookingId) {
+        // Use a custom modal for confirmation instead of window.confirm
+        const confirmModal = document.createElement('div');
+        confirmModal.className = 'modal-overlay';
+        confirmModal.innerHTML = `
+            <div class="modal-content">
+                <h3>Confirm Cancellation</h3>
+                <p>Are you sure you want to cancel this booking? This action cannot be undone.</p>
+                <div class="modal-buttons">
+                    <button id="confirmCancelYes" class="button-delete">Yes, Cancel</button>
+                    <button id="confirmCancelNo" class="button-primary">No, Keep Booking</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(confirmModal);
+
+        document.getElementById('confirmCancelYes').addEventListener('click', () => {
+            confirmModal.remove(); // Close modal
+            const bookingIndex = bookingsData.findIndex(b => b.id === bookingId);
+            if (bookingIndex !== -1) {
+                bookingsData[bookingIndex].status = 'Cancelled';
+                saveBookings();
+                loadCustomerBookings(); // Reload to update sections
+                showTemporaryMessage('Booking cancelled successfully!', 'success');
+            }
+        });
+
+        document.getElementById('confirmCancelNo').addEventListener('click', () => {
+            confirmModal.remove(); // Close modal
+            showTemporaryMessage('Cancellation aborted.', 'info');
+        });
+    }
+
+
     // --- Main Initialization Logic ---
 
     // Initialize header buttons on all pages
@@ -902,8 +1386,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (professionalApplicationForm) {
         populateApplyCountries();
         countrySelectApply.addEventListener('change', updateApplyLocalities);
-        updateSpecificServices();
-        mainServiceCheckboxesContainer.addEventListener('change', updateSpecificServices);
+        // This event listener is already correctly set up to call updateSpecificServices
+        mainServiceCheckboxesContainer.addEventListener('change', () => {
+            updateSpecificServices(specificServicesCheckboxesDiv, mainServiceCheckboxesContainer, false, []);
+        });
+
 
         professionalApplicationForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -961,6 +1448,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 formMessage.style.display = 'block';
                 return;
             }
+            if (!mobileNumber.match(/^\d{8,}$/)) { // Changed to require at least 8 digits
+                 formMessage.textContent = 'Mobile number must be at least 8 digits long.';
+                 formMessage.className = 'form-message error';
+                 formMessage.style.display = 'block';
+                 return;
+            }
+
 
             formMessage.textContent = 'Application submitted! Please check your email for a confirmation link to activate your account.';
             formMessage.className = 'form-message success';
@@ -1118,7 +1612,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('loggedInUserType', 'customer'); // Set user type
 
                     setTimeout(() => {
-                        window.location.href = 'customer-account-page.html'; // Redirect customers to customer account page
+                        window.location.href = 'customer-account.html'; // Redirect customers to customer account page
                     }, 1500);
                 }
                 else {
@@ -1185,6 +1679,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     populateProfLocalities(profCountrySelect.value, professional.locality);
                 });
 
+                // Add event listener for "Manage All Bookings" button
+                if (manageAllBookingsButton) {
+                    manageAllBookingsButton.addEventListener('click', () => {
+                        // Corrected path to professional-bookings.html
+                        window.location.href = 'professional-bookings.html'; 
+                    });
+                }
+
             } else {
                 console.error('Professional data not found for logged in user:', loggedInUser);
                 professionalProfileForm.innerHTML = '<p class="form-message error">Professional profile could not be loaded. Please log in again.</p>';
@@ -1215,7 +1717,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let professionalIndex = -1;
 
             for (const serviceType in tradespeopleData) {
-                const index = tradespeopleData[serviceType].findIndex(pro => pro.name.toLowerCase().includes(loggedInUsername.toLowerCase()));
+                const index = tradespeopleData[serviceType].findIndex(pro => pro.id === loggedInUsername); // Match by ID
                 if (index !== -1) {
                     professionalToUpdate = tradespeopleData[serviceType][index];
                     professionalServiceType = serviceType;
@@ -1234,24 +1736,27 @@ document.addEventListener('DOMContentLoaded', () => {
             // Gather updated data from the form
             const newFirstName = profFirstNameInput.value;
             const newLastName = profLastNameInput.value;
-            const newMobileNumber = profMobileNumberInput.value;
+            const newCountryCode = profCountryCodeSelect ? profCountryCodeSelect.value : '';
+            const newMobileNumberRaw = profMobileNumberInput.value;
+            const newMobileNumber = newCountryCode + newMobileNumberRaw; // Combine dial code and number
             const newCountry = profCountrySelect.value;
             const newLocality = profLocalitySelect.value;
-            const newSpecialty = profSpecialtyInput.value;
+            // const newSpecialty = profSpecialtyInput.value; // This element is removed
             const newDescription = profDescriptionTextarea.value;
             const newMainServices = Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]:checked')).map(cb => cb.value);
             const newSpecificServices = Array.from(profSpecificServicesCheckboxesDiv.querySelectorAll('input[name="profServicesOffered"]:checked')).map(cb => cb.value);
 
 
             // Validate inputs (similar to signup form but focused on profile fields)
-            if (newFirstName.trim() === '' || newLastName.trim() === '' || newMobileNumber.trim() === '' || newCountry === '' || newLocality === '') {
+            if (newFirstName.trim() === '' || newLastName.trim() === '' || newMobileNumberRaw.trim() === '' || newCountry === '' || newLocality === '') {
                  profileUpdateMessage.textContent = 'Please fill in all required personal information fields.';
                  profileUpdateMessage.className = 'form-message error';
                  profileUpdateMessage.style.display = 'block';
                  return;
             }
-             if (!newMobileNumber.match(/^[0-9]{8,}$/)) {
-                profileUpdateMessage.textContent = 'Please enter a valid mobile number (at least 8 digits).';
+             // Validate mobile number to be exactly 8 digits after the dial code
+             if (!newMobileNumberRaw.match(/^\d{8}$/)) { // Changed regex to exactly 8 digits
+                profileUpdateMessage.textContent = 'Please enter a valid 8-digit mobile number (excluding country code).';
                 profileUpdateMessage.className = 'form-message error';
                 profileUpdateMessage.style.display = 'block';
                 return;
@@ -1273,7 +1778,9 @@ document.addEventListener('DOMContentLoaded', () => {
             professionalToUpdate.country = newCountry;
             professionalToUpdate.locality = newLocality;
             professionalToUpdate.avatar = newAvatarUrl;
-            professionalToUpdate.specialty = newSpecialty;
+            // professionalToUpdate.specialty = newSpecialty; // This line is now removed
+            // Update specialty based on selected specific services
+            professionalToUpdate.specialty = newSpecificServices.length > 0 ? newSpecificServices.join(', ') : newMainServices.join(', ');
             professionalToUpdate.description = newDescription;
             professionalToUpdate.mainServices = newMainServices; // Store selected main services
             professionalToUpdate.specificServices = newSpecificServices; // Store selected specific services
@@ -1320,7 +1827,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         for (const serviceType in tradespeopleData) {
                             const initialLength = tradespeopleData[serviceType].length;
                             tradespeopleData[serviceType] = tradespeopleData[serviceType].filter(pro =>
-                                !pro.name.toLowerCase().includes(loggedInUsername.toLowerCase())
+                                !pro.id.toLowerCase().includes(loggedInUsername.toLowerCase()) // Match by ID not name
                             );
                             if (tradespeopleData[serviceType].length < initialLength) {
                                 foundAndRemoved = true;
@@ -1391,6 +1898,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
                 
+                // Add event listener for "View My Bookings" button for customers
+                if (viewMyBookingsButton) {
+                    viewMyBookingsButton.addEventListener('click', () => {
+                        window.location.href = 'customer-bookings.html';
+                    });
+                }
+
             } else {
                 console.error('Customer data not found for logged in user:', loggedInUser);
                 customerProfileForm.innerHTML = '<p class="form-message error">Customer profile could not be loaded. Please log in again.</p>';
@@ -1433,7 +1947,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  customerProfileUpdateMessage.style.display = 'block';
                  return;
             }
-            if (newMobileNumber.trim() !== '' && !newMobileNumber.match(/^[0-9]{8,}$/)) {
+            if (newMobileNumber.trim() !== '' && !newMobileNumber.match(/^\d{8,}$/)) {
                 customerProfileUpdateMessage.textContent = 'Please enter a valid mobile number (at least 8 digits) or leave it empty.';
                 customerProfileUpdateMessage.className = 'form-message error';
                 customerProfileUpdateMessage.style.display = 'block';
@@ -1481,7 +1995,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p>Are you sure you want to permanently delete your customer account? This action cannot be undone.</p>
                         <div class="modal-buttons">
                             <button id="confirmCustDeleteYes" class="button-delete">Yes, Delete</button>
-                            <button id="confirmCustDeleteNo" class="button-primary">No, Cancel</button>
+                            <button id="confirmCustDeleteNo" class="button-primary">No, Keep Booking</button>
                         </div>
                     </div>
                 `;
@@ -1518,7 +2032,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         deleteCustomerAccountMessage.textContent = 'You are not logged in.';
                         deleteCustomerAccountMessage.className = 'form-message error';
-                        deleteCustomerAccountMessage.style.display = 'block';
+                        deleteAccountMessage.style.display = 'block';
                     }
                 });
 
@@ -1577,7 +2091,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 showTemporaryMessage('You need to be logged in as a customer to use messaging features.', 'error');
                 setTimeout(() => {
-                    window.location.href = 'customer-sign-up.html';
+                    window.location.href = 'customer-signup.html';
                 }, 2000); // Redirect after 2 seconds
             }
         });
@@ -1599,11 +2113,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Show error message using the temporary message function
                 showTemporaryMessage('You need to be a customer to book an appointment. Please sign up or log in as a customer.', 'error');
                 setTimeout(() => {
-                    window.location.href = 'customer-sign-up.html';
+                    window.location.href = 'customer-signup.html';
                 }, 2000); // Redirect after 2 seconds
             }
         });
     }
+
+    // Logic for book-appointment.html (Date validation)
+    const bookingDateInput = document.getElementById('bookingDate');
+    if (bookingDateInput) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        const minDate = `${year}-${month}-${day}`;
+        bookingDateInput.setAttribute('min', minDate);
+    }
+
 
     // Global function to show temporary messages (replaces alert/confirm)
     function showTemporaryMessage(message, type = 'info', duration = 3000) {

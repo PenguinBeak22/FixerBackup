@@ -59,6 +59,15 @@
             </div>
 
             <div class="form-group">
+                <label for="mobileNumber">Mobile Number (Optional):</label>
+                <div class="mobile-input-group">
+                    <select id="custSignupCountryCode" name="custSignupCountryCode" class="country-code-select"></select>
+                    <input type="tel" id="mobileNumber" name="mobileNumber" pattern="[0-9]{8}" title="Please enter an 8-digit mobile number" value="">
+                </div>
+                <p class="form-hint">Please enter an 8-digit mobile number.</p>
+            </div>
+
+            <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" minlength="5" required>
                 <p class="form-hint">Minimum 5 characters.</p>

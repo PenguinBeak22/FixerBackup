@@ -62,7 +62,10 @@
                 </div>
                 <div class="form-group">
                     <label for="custMobileNumber">Mobile Number (Optional):</label>
-                    <input type="tel" id="custMobileNumber" name="custMobileNumber" pattern="[0-9]{8,}" title="Please enter a valid mobile number (at least 8 digits)" value="">
+                    <div class="mobile-input-group">
+                        <select id="custCountryCode" name="custCountryCode" class="country-code-select"></select>
+                        <input type="tel" id="custMobileNumber" name="custMobileNumber" pattern="[0-9]{8,}" title="Please enter a valid mobile number (at least 8 digits)" value="">
+                    </div>
                 </div>
                 <!-- You could add address fields here if customer address is relevant for bookings -->
                 <!-- <div class="form-group">
@@ -92,7 +95,7 @@
                     <li><strong>July 15, 2025 - 10:00 AM:</strong> Leak Repair (Professional: John Paul) <button class="button-small">View Details</button></li>
                     <li><strong>July 28, 2025 - 09:00 AM:</strong> Deep Cleaning (Professional: Chris Green) <button class="button-small">View Details</button></li>
                 </ul>
-                <button class="button-primary">View All Bookings</button>
+                <button class="button-primary" id="viewMyBookingsButton">View All Bookings</button>
             </div>
             <div class="dashboard-card">
                 <h4>Past Bookings</h4>

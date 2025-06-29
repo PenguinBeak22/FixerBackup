@@ -1819,3 +1819,79 @@ footer {
         font-size: 15px;
     }
 }
+
+/* --- Book Appointment Page Specific Styles --- */
+
+.form-container h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 30px;
+    color: var(--secondary-charcoal);
+}
+
+.form-container h3 span {
+    margin-right: 10px;
+}
+
+.professional-form h4 {
+    font-size: 20px;
+    color: var(--accent-lime);
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed var(--border-light-grey);
+}
+
+.submit-application-button {
+    background-color: var(--accent-lime);
+    color: var(--text-light);
+    padding: 15px 25px;
+    border-radius: 8px;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.submit-application-button:hover {
+    background-color: #92B824;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.submit-application-button .fas {
+    margin-right: 10px;
+}
+
+/* Responsive adjustments for Booking Form */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 20px;
+        margin: 30px auto;
+    }
+    .form-container h3 {
+        font-size: 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+    .form-container h3 span {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    .profile-avatar-small {
+        margin-left: 0;
+    }
+    .professional-form h4 {
+        font-size: 18px;
+    }
+    .submit-application-button {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}
