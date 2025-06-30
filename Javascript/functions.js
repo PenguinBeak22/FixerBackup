@@ -546,6 +546,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Functions for Header Buttons (Login/Logout, Account/Sign Up) ---
     function handleAuthButtons() {
+        // Debugging: Check if buttons are found
+        if (loginHeaderButton) {
+            console.log("Login button found:", loginHeaderButton);
+        } else {
+            console.error("Login button with ID 'loginHeaderButton' NOT found.");
+        }
+        if (signUpHeaderButton) {
+            console.log("Sign Up button found:", signUpHeaderButton);
+        } else {
+            console.error("Sign Up button with ID 'signUpHeaderButton' NOT found.");
+        }
+
         if (loginHeaderButton && signUpHeaderButton) {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const loggedInUser = localStorage.getItem('loggedInUser'); // Stores username
@@ -555,6 +567,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // If user is logged in, change buttons to "Account" and "Logout"
                 loginHeaderButton.textContent = 'Account';
                 loginHeaderButton.onclick = () => {
+                    console.log("Redirecting to account page...");
                     if (loggedInUserType === 'professional') {
                         window.location.href = 'professional-account-page.html';
                     } else if (loggedInUserType === 'customer') {
@@ -573,6 +586,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 signUpHeaderButton.style.color = 'var(--text-light)';
                 signUpHeaderButton.className = 'cta-button';
                 signUpHeaderButton.onclick = async () => { // Made async for signOut
+                    console.log("Logging out...");
                     if (auth) {
                         try {
                             await auth.signOut();
@@ -593,6 +607,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 loginHeaderButton.style.backgroundColor = '';
                 loginHeaderButton.style.color = '';
                 loginHeaderButton.onclick = () => {
+                    console.log("Redirecting to login.html...");
                     window.location.href = 'login.html'; // Redirect to login page
                 };
 
@@ -601,6 +616,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 signUpHeaderButton.style.backgroundColor = '';
                 signUpHeaderButton.style.color = '';
                 signUpHeaderButton.onclick = () => {
+                    console.log("Redirecting to signup.html...");
                     window.location.href = 'signup.html'; // Redirect to the signup choice page
                 };
             }
@@ -658,8 +674,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         document.title = title;
+        const pageBanner = document.querySelector('.page-banner'); // Ensure this is defined
         if (serviceTitleElement) {
-            pageBanner.style.backgroundImage = `linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=${encodeURIComponent(bannerImageText)}')`;
+            if (pageBanner) {
+                pageBanner.style.backgroundImage = `linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=${encodeURIComponent(bannerImageText)}')`;
+            }
             serviceTitleElement.textContent = title.replace('Fixalo – ', '');
         }
         if (serviceDescriptionElement) {
@@ -1014,7 +1033,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         defaultOption.value = "";
         defaultOption.textContent = "--";
         selectElement.appendChild(defaultOption);
-
 
         const sortedCountryNames = Object.keys(countryDialCodes).sort();
         sortedCountryNames.forEach(country => {
