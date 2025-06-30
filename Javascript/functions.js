@@ -357,66 +357,28 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     }
 ];
 
-// Firebase Imports and Initialization
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+// Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Global variables provided by Canvas environment
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyABazepGHmdDtJ3qfgBPbZgLTEhsD8i8ks",
+    authDomain: "fixerupper-d3d19.firebaseapp.com",
+    projectId: "fixerupper-d3d19",
+    storageBucket: "fixerupper-d3d19.firebasestorage.app",
+    messagingSenderId: "536236224510",
+    appId: "1:536236224510:web:72e5d1b4ae35d9368edaaf",
+    measurementId: "G-78WR2HXYTZ"
+  };
 
-let app;
-let db;
-let auth;
-let currentUserId = null; // To store the authenticated user's ID
-
-// Initialize Firebase only once
-if (Object.keys(firebaseConfig).length > 0) {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            currentUserId = user.uid;
-            console.log("Firebase Auth State Changed: User Logged In", currentUserId);
-            // After successful login/signup, fetch customer data (if user is customer)
-            // or professional data (if user is professional)
-            if (localStorage.getItem('loggedInUserType') === 'customer') {
-                loadCustomerDataFromFirestore();
-            }
-            // You might need a similar function to load professional data from Firestore
-            // based on currentUserId if the app expects to manage it like customerData
-        } else {
-            currentUserId = null;
-            console.log("Firebase Auth State Changed: User Logged Out");
-        }
-    });
-} else {
-    console.error("Firebase config not found. Firebase will not be initialized.");
-}
-
-
-document.addEventListener('DOMContentLoaded', async () => {
-    // Attempt to sign in with custom token provided by Canvas, or anonymously
-    if (auth) { // Only attempt if auth is initialized
-        if (typeof __initial_auth_token !== 'undefined') {
-            try {
-                await signInWithCustomToken(auth, __initial_auth_token);
-                console.log('Signed in with custom token from Canvas.');
-            } catch (error) {
-                console.error('Error signing in with custom token:', error);
-                await signInAnonymously(auth); // Fallback to anonymous if custom token fails
-                console.log('Signed in anonymously after custom token failure.');
-            }
-        } else {
-            await signInAnonymously(auth); // Sign in anonymously if no custom token
-            console.log('Signed in anonymously.');
-        }
-    }
-
-
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  
     // Elements from professional-apply-page.html (professional application form)
     const mainServiceCheckboxesContainer = document.getElementById('mainServiceCheckboxes');
     const specificServicesCheckboxesDiv = document.getElementById('specificServicesCheckboxes');
