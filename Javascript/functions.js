@@ -260,18 +260,7 @@ const countryDialCodes = {
 
 
 // Global array to store customer data (for demonstration purposes, typically this would be a backend)
-const customerData = [
-    {
-        id: 'jane-doe-123',
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        username: 'customer123', // Example username for demo login
-        mobileNumber: '+35699112233', // Example mobile number
-        avatar: 'https://placehold.co/150x150/FFD700/36454F?text=JD',
-        joinDate: '2023-01-01'
-    }
-];
-
+let customerData = []; // Will be populated from Firestore
 // Global array to store message data (simulated for demonstration)
 // Structure: { id: string, from: string (customer username), to: string (professional ID), text: string, timestamp: number, isRead: boolean }
 let messagesData = JSON.parse(localStorage.getItem('messagesData')) || [];
@@ -368,8 +357,66 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     }
 ];
 
+// Firebase Imports and Initialization
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+// Global variables provided by Canvas environment
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+
+let app;
+let db;
+let auth;
+let currentUserId = null; // To store the authenticated user's ID
+
+// Initialize Firebase only once
+if (Object.keys(firebaseConfig).length > 0) {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUserId = user.uid;
+            console.log("Firebase Auth State Changed: User Logged In", currentUserId);
+            // After successful login/signup, fetch customer data (if user is customer)
+            // or professional data (if user is professional)
+            if (localStorage.getItem('loggedInUserType') === 'customer') {
+                loadCustomerDataFromFirestore();
+            }
+            // You might need a similar function to load professional data from Firestore
+            // based on currentUserId if the app expects to manage it like customerData
+        } else {
+            currentUserId = null;
+            console.log("Firebase Auth State Changed: User Logged Out");
+        }
+    });
+} else {
+    console.error("Firebase config not found. Firebase will not be initialized.");
+}
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Attempt to sign in with custom token provided by Canvas, or anonymously
+    if (auth) { // Only attempt if auth is initialized
+        if (typeof __initial_auth_token !== 'undefined') {
+            try {
+                await signInWithCustomToken(auth, __initial_auth_token);
+                console.log('Signed in with custom token from Canvas.');
+            } catch (error) {
+                console.error('Error signing in with custom token:', error);
+                await signInAnonymously(auth); // Fallback to anonymous if custom token fails
+                console.log('Signed in anonymously after custom token failure.');
+            }
+        } else {
+            await signInAnonymously(auth); // Sign in anonymously if no custom token
+            console.log('Signed in anonymously.');
+        }
+    }
+
+
     // Elements from professional-apply-page.html (professional application form)
     const mainServiceCheckboxesContainer = document.getElementById('mainServiceCheckboxes');
     const specificServicesCheckboxesDiv = document.getElementById('specificServicesCheckboxes');
@@ -377,6 +424,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const formMessage = document.getElementById('formMessage'); // Generic form message div
     const countrySelectApply = document.getElementById('country'); // For professional apply page
     const localitySelectApply = document.getElementById('locality'); // For professional apply page
+    const profSignupCountryCodeSelect = document.getElementById('profSignupCountryCode'); // For professional signup page mobile
+    const profSignupMobileNumberInput = document.getElementById('mobileNumber'); // For professional signup page mobile
 
     // Elements for login.html
     const loginForm = document.getElementById('loginForm');
@@ -386,6 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Elements for customer-signup.html
     const customerSignupForm = document.getElementById('customerSignupForm');
+    const custSignupCountryCodeSelect = document.getElementById('custSignupCountryCode'); // For customer signup mobile
+    const custSignupMobileNumberInput = document.getElementById('mobileNumber'); // For customer signup mobile
     // Reusing formMessage for customer signup page
 
 
@@ -428,6 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const custFirstNameInput = document.getElementById('custFirstName');
     const custLastNameInput = document.getElementById('custLastName');
     const custEmailInput = document.getElementById('custEmail');
+    const custCountryCodeSelect = document.getElementById('custCountryCode'); // New element for country code
     const custMobileNumberInput = document.getElementById('custMobileNumber');
     const custProfilePhotoPreview = document.getElementById('custProfilePhotoPreview');
     const uploadCustPhotoInput = document.getElementById('uploadCustPhoto');
@@ -465,6 +517,32 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentProfessionalsData = []; // The array of professionals for the current service
     let activeProfessionalId = null; // Stores the ID of the professional in the active conversation
 
+    // Function to load customer data from Firestore
+    async function loadCustomerDataFromFirestore() {
+        if (!db || !currentUserId) {
+            console.log("Firestore or currentUserId not available to load customer data.");
+            return;
+        }
+        const customersCol = collection(db, `artifacts/${appId}/public/data/customers`);
+        const q = query(customersCol, where('authUid', '==', currentUserId)); // Assuming you store Firebase Auth UID
+        try {
+            const querySnapshot = await getDocs(q);
+            customerData = []; // Clear existing in-memory data
+            querySnapshot.forEach(doc => {
+                customerData.push({ id: doc.id, ...doc.data() });
+            });
+            console.log("Customer data loaded from Firestore:", customerData);
+            // If on a customer-specific page, re-render with loaded data
+            if (customerProfileForm && localStorage.getItem('loggedInUserType') === 'customer') {
+                const loggedInUser = localStorage.getItem('loggedInUser');
+                const customer = findCustomerByUsername(loggedInUser);
+                if (customer) loadCustomerProfile(customer);
+            }
+        } catch (error) {
+            console.error("Error loading customer data from Firestore:", error);
+        }
+    }
+
 
     // --- Functions for Header Buttons (Login/Logout, Account/Sign Up) ---
     function handleAuthButtons() {
@@ -493,7 +571,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 signUpHeaderButton.style.backgroundColor = 'var(--secondary-charcoal)';
                 signUpHeaderButton.style.color = 'var(--text-light)';
                 signUpHeaderButton.className = 'cta-button';
-                signUpHeaderButton.onclick = () => {
+                signUpHeaderButton.onclick = async () => { // Made async for signOut
+                    if (auth) {
+                        try {
+                            await auth.signOut();
+                            console.log("User signed out from Firebase Auth.");
+                        } catch (error) {
+                            console.error("Error signing out:", error);
+                        }
+                    }
                     localStorage.removeItem('isLoggedIn');
                     localStorage.removeItem('loggedInUser');
                     localStorage.removeItem('loggedInUserType'); // Clear user type on logout
@@ -968,7 +1054,23 @@ document.addEventListener('DOMContentLoaded', () => {
         custFirstNameInput.value = customer.name.split(' ')[0] || '';
         custLastNameInput.value = customer.name.split(' ').slice(-1)[0] || '';
         custEmailInput.value = customer.email || 'not-available@example.com';
-        custMobileNumberInput.value = customer.mobileNumber || '';
+        
+        // Populate country dial code dropdown for customer profile
+        if (custCountryCodeSelect) {
+            populateCountryDialCodes(custCountryCodeSelect, customer.mobileNumber);
+        }
+        // Populate mobile number input (without dial code)
+        if (custMobileNumberInput && customer.mobileNumber) {
+            const dialCode = Object.values(countryDialCodes).find(code => customer.mobileNumber.startsWith(code));
+            if (dialCode) {
+                custMobileNumberInput.value = customer.mobileNumber.substring(dialCode.length);
+            } else {
+                custMobileNumberInput.value = customer.mobileNumber;
+            }
+        } else {
+            custMobileNumberInput.value = '';
+        }
+
         custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
     }
 
@@ -1386,13 +1488,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (professionalApplicationForm) {
         populateApplyCountries();
         countrySelectApply.addEventListener('change', updateApplyLocalities);
-        // This event listener is already correctly set up to call updateSpecificServices
+        // Populate country dial codes for professional signup page
+        if (profSignupCountryCodeSelect) {
+            populateCountryDialCodes(profSignupCountryCodeSelect, ""); // Pass empty string to default to no selection
+        }
+        
         mainServiceCheckboxesContainer.addEventListener('change', () => {
             updateSpecificServices(specificServicesCheckboxesDiv, mainServiceCheckboxesContainer, false, []);
         });
 
 
-        professionalApplicationForm.addEventListener('submit', function(event) {
+        professionalApplicationForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
             formMessage.style.display = 'none';
             formMessage.className = 'form-message';
@@ -1400,7 +1506,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
-            const mobileNumber = document.getElementById('mobileNumber').value;
+            const countryCode = profSignupCountryCodeSelect ? profSignupCountryCodeSelect.value : '';
+            const mobileNumberRaw = profSignupMobileNumberInput.value;
+            const mobileNumber = countryCode + mobileNumberRaw; // Combine dial code and number
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
@@ -1448,23 +1556,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 formMessage.style.display = 'block';
                 return;
             }
-            if (!mobileNumber.match(/^\d{8,}$/)) { // Changed to require at least 8 digits
-                 formMessage.textContent = 'Mobile number must be at least 8 digits long.';
+            if (!mobileNumberRaw.match(/^\d{8}$/)) { // Regex to ensure exactly 8 digits
+                 formMessage.textContent = 'Mobile number must be an 8-digit number.';
                  formMessage.className = 'form-message error';
                  formMessage.style.display = 'block';
                  return;
             }
 
+            // Firebase Authentication for professional signup
+            let authUid = null;
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                authUid = userCredential.user.uid;
+                console.log("Professional Firebase Auth registered:", authUid);
+            } catch (error) {
+                console.error("Error registering professional with Firebase Auth:", error);
+                formMessage.textContent = `Error creating account: ${error.message}`;
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
 
-            formMessage.textContent = 'Application submitted! Please check your email for a confirmation link to activate your account.';
-            formMessage.className = 'form-message success';
-            formMessage.style.display = 'block';
 
             const newProfessional = {
-                id: username.toLowerCase().replace(/\s/g, '-') + '-' + Date.now(),
+                id: username.toLowerCase().replace(/\s/g, '-'), // Use username as ID for easy lookup
+                authUid: authUid, // Store Firebase Auth UID
                 name: `${firstName} "${username}" ${lastName}`,
                 email: email, // Store email with professional data
-                mobileNumber: mobileNumber, // Store mobile number
+                mobileNumber: mobileNumber, // Store mobile number (with dial code)
                 specialty: selectedSpecificServices.length > 0 ? selectedSpecificServices.join(', ') : selectedMainServices.join(', '),
                 rating: 0,
                 reviews: 0,
@@ -1476,33 +1595,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 specificServices: selectedSpecificServices // Store specific services
             };
 
-            console.log('Simulating email sent to:', email);
-            console.log('New Professional Data (ready for confirmation and database storage):', newProfessional);
+            // Store new professional in Firestore
+            try {
+                const professionalsCollection = collection(db, `artifacts/${appId}/public/data/professionals`);
+                await setDoc(doc(professionalsCollection, newProfessional.id), newProfessional); // Use setDoc with custom ID
+                console.log("Professional data added to Firestore:", newProfessional.id);
 
-            setTimeout(() => {
-                // Add new professional to the relevant service data array
-                selectedMainServices.forEach(service => {
-                    if (tradespeopleData[service]) {
-                        tradespeopleData[service].push(newProfessional);
-                        console.log(`Simulated: New professional added to ${service} data (temporary for this session):`, newProfessional);
-                    }
-                });
+                formMessage.textContent = 'Application submitted! You are now logged in. Redirecting...';
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
 
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('loggedInUser', username);
+                localStorage.setItem('loggedInUser', newProfessional.id); // Store the professional's ID
                 localStorage.setItem('loggedInUserType', 'professional'); // Set user type
                 handleAuthButtons();
                 professionalApplicationForm.reset();
                 updateSpecificServices();
                 populateApplyCountries();
                 updateApplyLocalities();
-            }, 3000);
+
+                setTimeout(() => {
+                    window.location.href = 'professional-account-page.html'; // Redirect to professional account page
+                }, 1500);
+
+            } catch (e) {
+                console.error("Error adding professional to Firestore:", e);
+                formMessage.textContent = 'Error saving professional data. Please try again.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            }
         });
     }
 
     // Logic for customer-signup.html
     if (customerSignupForm) {
-        customerSignupForm.addEventListener('submit', function(event) {
+        // Populate country dial codes for customer signup page
+        if (custSignupCountryCodeSelect) {
+            populateCountryDialCodes(custSignupCountryCodeSelect, ""); // Pass empty string to default to no selection
+        }
+
+        customerSignupForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
             formMessage.style.display = 'none';
             formMessage.className = 'form-message';
@@ -1510,6 +1642,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
+            const countryCode = custSignupCountryCodeSelect ? custSignupCountryCodeSelect.value : '';
+            const mobileNumberRaw = custSignupMobileNumberInput.value;
+            const mobileNumber = mobileNumberRaw ? (countryCode + mobileNumberRaw) : ''; // Combine dial code and number, or empty if no raw number
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
@@ -1533,47 +1668,70 @@ document.addEventListener('DOMContentLoaded', () => {
                 formMessage.style.display = 'block';
                 return;
             }
+            if (mobileNumberRaw.trim() !== '' && !mobileNumberRaw.match(/^\d{8}$/)) { // Validate if not empty
+                formMessage.textContent = 'Mobile number must be an 8-digit number if provided.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
 
-            formMessage.textContent = 'Registration successful! Redirecting to homepage...';
-            formMessage.className = 'form-message success';
-            formMessage.style.display = 'block';
+            // Firebase Authentication for customer signup
+            let authUid = null;
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                authUid = userCredential.user.uid;
+                console.log("Customer Firebase Auth registered:", authUid);
+            } catch (error) {
+                console.error("Error registering customer with Firebase Auth:", error);
+                formMessage.textContent = `Error creating account: ${error.message}`;
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
 
             const newCustomer = {
-                id: username.toLowerCase().replace(/\s/g, '-') + '-' + Date.now(),
+                id: username.toLowerCase().replace(/\s/g, '-'), // Use username as ID for easy lookup
+                authUid: authUid, // Store Firebase Auth UID
                 name: `${firstName} ${lastName}`,
                 email: email,
                 username: username,
-                mobileNumber: '', // Initialize mobile number for new customer
+                mobileNumber: mobileNumber, // Store mobile number with dial code
                 avatar: `https://placehold.co/150x150/FFD700/36454F?text=${firstName.substring(0,1).toUpperCase()}${lastName.substring(0,1).toUpperCase()}`, // Generate initial avatar
                 joinDate: new Date().toISOString().split('T')[0]
             };
 
-            console.log('New Customer Data:', newCustomer);
-            customerData.push(newCustomer); // Add to global customerData array
+            // Store new customer in Firestore
+            try {
+                const customersCollection = collection(db, `artifacts/${appId}/public/data/customers`);
+                await setDoc(doc(customersCollection, newCustomer.id), newCustomer); // Use setDoc with custom ID
+                console.log("Customer data added to Firestore:", newCustomer.id);
 
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('loggedInUser', username);
-            localStorage.setItem('loggedInUserType', 'customer'); // Set user type
-            handleAuthButtons();
+                formMessage.textContent = 'Registration successful! Redirecting to homepage...';
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
 
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1500);
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loggedInUser', newCustomer.id); // Store customer ID
+                localStorage.setItem('loggedInUserType', 'customer'); // Set user type
+                handleAuthButtons();
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+
+            } catch (e) {
+                console.error("Error adding customer to Firestore:", e);
+                formMessage.textContent = 'Error saving customer data. Please try again.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            }
         });
     }
 
 
     // Logic for login page (login.html)
     if (loginForm) {
-        // For demonstration, these can be either a professional or a customer
-        // In a real app, you'd check against stored users
-        const VALID_PROF_USERNAME = 'john-paul'; // Example professional username
-        const VALID_PROF_PASSWORD = 'password123';
-
-        const VALID_CUST_USERNAME = 'customer123'; // Example customer username
-        const VALID_CUST_PASSWORD = 'password123';
-
-        loginForm.addEventListener('submit', function(event) {
+        loginForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
 
             formMessage.style.display = 'none'; // Use the generic formMessage
@@ -1589,38 +1747,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            setTimeout(() => {
-                if (username === VALID_PROF_USERNAME && password === VALID_PROF_PASSWORD) {
-                    formMessage.textContent = 'Login successful as Professional! Redirecting...';
-                    formMessage.className = 'form-message success';
-                    formMessage.style.display = 'block';
+            // Determine if logging in as professional or customer based on provided username (for demo purposes)
+            // In a real app, you might have separate login forms or a more robust way to distinguish.
+            let userType = null;
+            let targetEmail = '';
 
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('loggedInUser', username);
-                    localStorage.setItem('loggedInUserType', 'professional'); // Set user type
-
-                    setTimeout(() => {
-                        window.location.href = 'professional-account-page.html'; // Redirect to professional account page
-                    }, 1500);
-                } else if (username === VALID_CUST_USERNAME && password === VALID_CUST_PASSWORD) {
-                    formMessage.textContent = 'Login successful as Customer! Redirecting...';
-                    formMessage.className = 'form-message success';
-                    formMessage.style.display = 'block';
-
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('loggedInUser', username);
-                    localStorage.setItem('loggedInUserType', 'customer'); // Set user type
-
-                    setTimeout(() => {
-                        window.location.href = 'customer-account.html'; // Redirect customers to customer account page
-                    }, 1500);
+            // Try to find in professionals (assuming their 'id' is their username for login)
+            let foundPro = null;
+            for (const serviceType in tradespeopleData) {
+                foundPro = tradespeopleData[serviceType].find(pro => pro.id === username);
+                if (foundPro) {
+                    userType = 'professional';
+                    targetEmail = foundPro.email;
+                    break;
                 }
-                else {
-                    formMessage.textContent = 'Invalid username or password.';
-                    formMessage.className = 'form-message error';
-                    formMessage.style.display = 'block';
+            }
+
+            // If not found as professional, try to find as customer
+            if (!userType) {
+                const foundCust = customerData.find(cust => cust.username === username);
+                if (foundCust) {
+                    userType = 'customer';
+                    targetEmail = foundCust.email;
                 }
-            }, 1000);
+            }
+
+            if (!targetEmail) {
+                formMessage.textContent = 'Invalid username or password.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                await signInWithEmailAndPassword(auth, targetEmail, password);
+                
+                formMessage.textContent = `Login successful as ${userType}! Redirecting...`;
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
+
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loggedInUser', username); // Store username/ID
+                localStorage.setItem('loggedInUserType', userType); // Set user type
+
+                setTimeout(() => {
+                    if (userType === 'professional') {
+                        window.location.href = 'professional-account-page.html';
+                    } else {
+                        window.location.href = 'customer-account.html';
+                    }
+                }, 1500);
+
+            } catch (error) {
+                console.error("Firebase Auth Login Error:", error);
+                formMessage.textContent = 'Invalid username or password.'; // Generic message for security
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            }
         });
     }
 
@@ -1667,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (loggedInUser && loggedInUserType === 'professional') {
             const professional = findProfessionalByUsername(loggedInUser); // Find the professional's data
             if (professional) {
-                loadProfessionalProfile(professional); // Load existing data into the form
+                loadProfessionalProfile(professional);
 
                 // Event listener for main service checkboxes on profile page to update specific services
                 profMainServiceCheckboxesContainer.addEventListener('change', () => {
@@ -1698,7 +1881,7 @@ document.addEventListener('DOMContentLoaded', () => {
             professionalProfileForm.style.textAlign = 'center';
         }
 
-        professionalProfileForm.addEventListener('submit', function(event) {
+        professionalProfileForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
             profileUpdateMessage.style.display = 'none';
             profileUpdateMessage.className = 'form-message';
@@ -1711,27 +1894,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Find the professional to update
+            // Find the professional to update in Firestore
+            const professionalRef = doc(db, `artifacts/${appId}/public/data/professionals`, loggedInUsername);
             let professionalToUpdate = null;
-            let professionalServiceType = null;
-            let professionalIndex = -1;
-
-            for (const serviceType in tradespeopleData) {
-                const index = tradespeopleData[serviceType].findIndex(pro => pro.id === loggedInUsername); // Match by ID
-                if (index !== -1) {
-                    professionalToUpdate = tradespeopleData[serviceType][index];
-                    professionalServiceType = serviceType;
-                    professionalIndex = index;
-                    break;
+            try {
+                const docSnap = await getDoc(professionalRef);
+                if (docSnap.exists()) {
+                    professionalToUpdate = { id: docSnap.id, ...docSnap.data() };
+                } else {
+                    profileUpdateMessage.textContent = 'Could not find your professional profile.';
+                    profileUpdateMessage.className = 'form-message error';
+                    profileUpdateMessage.style.display = 'block';
+                    return;
                 }
-            }
-
-            if (!professionalToUpdate) {
-                profileUpdateMessage.textContent = 'Could not find your professional profile.';
+            } catch (error) {
+                console.error("Error fetching professional data for update:", error);
+                profileUpdateMessage.textContent = 'Error fetching profile data. Please try again.';
                 profileUpdateMessage.className = 'form-message error';
                 profileUpdateMessage.style.display = 'block';
                 return;
             }
+
 
             // Gather updated data from the form
             const newFirstName = profFirstNameInput.value;
@@ -1741,7 +1924,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const newMobileNumber = newCountryCode + newMobileNumberRaw; // Combine dial code and number
             const newCountry = profCountrySelect.value;
             const newLocality = profLocalitySelect.value;
-            // const newSpecialty = profSpecialtyInput.value; // This element is removed
             const newDescription = profDescriptionTextarea.value;
             const newMainServices = Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]:checked')).map(cb => cb.value);
             const newSpecificServices = Array.from(profSpecificServicesCheckboxesDiv.querySelectorAll('input[name="profServicesOffered"]:checked')).map(cb => cb.value);
@@ -1766,36 +1948,41 @@ document.addEventListener('DOMContentLoaded', () => {
             const photoFile = uploadPhotoInput.files[0];
             let newAvatarUrl = professionalToUpdate.avatar;
             if (photoFile) {
-                // For demonstration, use a placeholder URL or a Data URL (not for production)
-                // In a real app, you'd upload this and get a persistent URL.
                 newAvatarUrl = URL.createObjectURL(photoFile); // Temporary URL for preview
                 console.log('Simulating photo upload:', photoFile.name);
             }
 
-            // Update the professional's data
-            professionalToUpdate.name = `${newFirstName} "${loggedInUsername}" ${newLastName}`; // Keep username in name
-            professionalToUpdate.mobileNumber = newMobileNumber;
-            professionalToUpdate.country = newCountry;
-            professionalToUpdate.locality = newLocality;
-            professionalToUpdate.avatar = newAvatarUrl;
-            // professionalToUpdate.specialty = newSpecialty; // This line is now removed
-            // Update specialty based on selected specific services
-            professionalToUpdate.specialty = newSpecificServices.length > 0 ? newSpecificServices.join(', ') : newMainServices.join(', ');
-            professionalToUpdate.description = newDescription;
-            professionalToUpdate.mainServices = newMainServices; // Store selected main services
-            professionalToUpdate.specificServices = newSpecificServices; // Store selected specific services
-
+            // Update the professional's data in Firestore
+            try {
+                await updateDoc(professionalRef, {
+                    name: `${newFirstName} "${loggedInUsername}" ${newLastName}`,
+                    mobileNumber: newMobileNumber,
+                    country: newCountry,
+                    locality: newLocality,
+                    avatar: newAvatarUrl,
+                    specialty: newSpecificServices.length > 0 ? newSpecificServices.join(', ') : newMainServices.join(', '),
+                    description: newDescription,
+                    mainServices: newMainServices,
+                    specificServices: newSpecificServices
+                });
+                profileUpdateMessage.textContent = 'Profile updated successfully!';
+                profileUpdateMessage.className = 'form-message success';
+                profileUpdateMessage.style.display = 'block';
+                // Also update in-memory data if needed for immediate UI reflection without re-fetch
+                // Object.assign(professionalToUpdate, { ...updated fields... });
+            } catch (e) {
+                console.error("Error updating professional document:", e);
+                profileUpdateMessage.textContent = 'Error updating profile. Please try again.';
+                profileUpdateMessage.className = 'form-message error';
+                profileUpdateMessage.style.display = 'block';
+                return;
+            }
 
             // Update preview image immediately
             profilePhotoPreview.src = newAvatarUrl;
 
 
-            profileUpdateMessage.textContent = 'Profile updated successfully!';
-            profileUpdateMessage.className = 'form-message success';
-            profileUpdateMessage.style.display = 'block';
-
             console.log('Updated Professional Data:', professionalToUpdate);
-            // In a real application, you would send this updated data to your backend database.
         });
 
         // Delete Account functionality
@@ -1819,23 +2006,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 document.body.appendChild(confirmModal);
 
-                document.getElementById('confirmDeleteYes').addEventListener('click', () => {
+                document.getElementById('confirmDeleteYes').addEventListener('click', async () => { // Made async
                     confirmModal.remove(); // Close modal
                     const loggedInUsername = localStorage.getItem('loggedInUser');
-                    if (loggedInUsername) {
-                        let foundAndRemoved = false;
-                        for (const serviceType in tradespeopleData) {
-                            const initialLength = tradespeopleData[serviceType].length;
-                            tradespeopleData[serviceType] = tradespeopleData[serviceType].filter(pro =>
-                                !pro.id.toLowerCase().includes(loggedInUsername.toLowerCase()) // Match by ID not name
-                            );
-                            if (tradespeopleData[serviceType].length < initialLength) {
-                                foundAndRemoved = true;
-                                break;
-                            }
-                        }
+                    if (loggedInUsername && db && auth && auth.currentUser) {
+                        try {
+                            const professionalDocRef = doc(db, `artifacts/${appId}/public/data/professionals`, loggedInUsername);
+                            await deleteDoc(professionalDocRef);
+                            console.log("Professional document deleted from Firestore.");
 
-                        if (foundAndRemoved) {
+                            // Also delete the Firebase Auth user
+                            await auth.currentUser.delete();
+                            console.log("Firebase Auth user deleted.");
+
                             localStorage.removeItem('isLoggedIn');
                             localStorage.removeItem('loggedInUser');
                             localStorage.removeItem('loggedInUserType');
@@ -1845,13 +2028,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             setTimeout(() => {
                                 window.location.href = 'index.html';
                             }, 2000);
-                        } else {
-                            deleteAccountMessage.textContent = 'Error: Could not find your account to delete.';
+                        } catch (error) {
+                            console.error("Error deleting professional account:", error);
+                            deleteAccountMessage.textContent = `Error: Could not delete your account. ${error.message}`;
                             deleteAccountMessage.className = 'form-message error';
                             deleteAccountMessage.style.display = 'block';
                         }
                     } else {
-                        deleteAccountMessage.textContent = 'You are not logged in.';
+                        deleteAccountMessage.textContent = 'You are not logged in or cannot perform this action.';
                         deleteAccountMessage.className = 'form-message error';
                         deleteAccountMessage.style.display = 'block';
                     }
@@ -1915,7 +2099,7 @@ document.addEventListener('DOMContentLoaded', () => {
             customerProfileForm.style.textAlign = 'center';
         }
 
-        customerProfileForm.addEventListener('submit', function(event) {
+        customerProfileForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
             customerProfileUpdateMessage.style.display = 'none';
             customerProfileUpdateMessage.className = 'form-message';
@@ -1928,17 +2112,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            let customerToUpdate = findCustomerByUsername(loggedInUsername);
-            if (!customerToUpdate) {
-                customerProfileUpdateMessage.textContent = 'Could not find your customer profile.';
+            // Find the customer to update in Firestore
+            const customerRef = doc(db, `artifacts/${appId}/public/data/customers`, loggedInUsername);
+            let customerToUpdate = null;
+            try {
+                const docSnap = await getDoc(customerRef);
+                if (docSnap.exists()) {
+                    customerToUpdate = { id: docSnap.id, ...docSnap.data() };
+                } else {
+                    customerProfileUpdateMessage.textContent = 'Could not find your customer profile.';
+                    customerProfileUpdateMessage.className = 'form-message error';
+                    customerProfileUpdateMessage.style.display = 'block';
+                    return;
+                }
+            } catch (error) {
+                console.error("Error fetching customer data for update:", error);
+                customerProfileUpdateMessage.textContent = 'Error fetching profile data. Please try again.';
                 customerProfileUpdateMessage.className = 'form-message error';
                 customerProfileUpdateMessage.style.display = 'block';
                 return;
             }
 
+
             const newFirstName = custFirstNameInput.value;
             const newLastName = custLastNameInput.value;
-            const newMobileNumber = custMobileNumberInput.value;
+            const newCountryCode = custCountryCodeSelect ? custCountryCodeSelect.value : '';
+            const newMobileNumberRaw = custMobileNumberInput.value;
+            const newMobileNumber = newMobileNumberRaw ? (newCountryCode + newMobileNumberRaw) : ''; // Combine dial code and number, or empty if no raw number
             
             // Validate inputs
             if (newFirstName.trim() === '' || newLastName.trim() === '') {
@@ -1947,8 +2147,8 @@ document.addEventListener('DOMContentLoaded', () => {
                  customerProfileUpdateMessage.style.display = 'block';
                  return;
             }
-            if (newMobileNumber.trim() !== '' && !newMobileNumber.match(/^\d{8,}$/)) {
-                customerProfileUpdateMessage.textContent = 'Please enter a valid mobile number (at least 8 digits) or leave it empty.';
+            if (newMobileNumberRaw.trim() !== '' && !newMobileNumberRaw.match(/^\d{8}$/)) { // Validate if not empty
+                customerProfileUpdateMessage.textContent = 'Please enter an 8-digit mobile number if provided.';
                 customerProfileUpdateMessage.className = 'form-message error';
                 customerProfileUpdateMessage.style.display = 'block';
                 return;
@@ -1962,24 +2162,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Simulating customer photo upload:', photoFile.name);
             }
 
-            // Update customer's data
-            customerToUpdate.name = `${newFirstName} ${newLastName}`;
-            customerToUpdate.mobileNumber = newMobileNumber;
-            customerToUpdate.avatar = newAvatarUrl;
+            // Update customer's data in Firestore
+            try {
+                await updateDoc(customerRef, {
+                    name: `${newFirstName} ${newLastName}`,
+                    mobileNumber: newMobileNumber,
+                    avatar: newAvatarUrl
+                });
+                customerProfileUpdateMessage.textContent = 'Profile updated successfully!';
+                customerProfileUpdateMessage.className = 'form-message success';
+                customerProfileUpdateMessage.style.display = 'block';
+                // Also update in-memory data if needed for immediate UI reflection without re-fetch
+                // Object.assign(customerToUpdate, { ...updated fields... });
+            } catch (e) {
+                console.error("Error updating customer document:", e);
+                customerProfileUpdateMessage.textContent = 'Error updating profile. Please try again.';
+                customerProfileUpdateMessage.className = 'form-message error';
+                customerProfileUpdateMessage.style.display = 'block';
+                return;
+            }
 
             // Update preview image immediately
             if (custProfilePhotoPreview) {
                 custProfilePhotoPreview.src = newAvatarUrl;
             }
-
-            customerProfileUpdateMessage.textContent = 'Profile updated successfully!';
-            customerProfileUpdateMessage.className = 'form-message success';
-            customerProfileUpdateMessage.style.display = 'block';
-
             console.log('Updated Customer Data:', customerToUpdate);
-            // In a real application, you would send this updated data to your backend database.
         });
-
         // Delete Customer Account functionality
         if (deleteCustomerAccountButton) {
             deleteCustomerAccountButton.addEventListener('click', () => {
@@ -2001,20 +2209,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 document.body.appendChild(confirmModal);
 
-                document.getElementById('confirmCustDeleteYes').addEventListener('click', () => {
+                document.getElementById('confirmCustDeleteYes').addEventListener('click', async () => { // Made async
                     confirmModal.remove(); // Close modal
                     const loggedInUsername = localStorage.getItem('loggedInUser');
-                    if (loggedInUsername) {
-                        const initialLength = customerData.length;
-                        // Remove the customer from the global array
-                        const updatedCustomerData = customerData.filter(cust =>
-                            cust.username.toLowerCase() !== loggedInUsername.toLowerCase()
-                        );
-                        // This effectively replaces the old array with the filtered one
-                        customerData.splice(0, customerData.length, ...updatedCustomerData);
+                    if (loggedInUsername && db && auth && auth.currentUser) {
+                        try {
+                            const customerDocRef = doc(db, `artifacts/${appId}/public/data/customers`, loggedInUsername);
+                            await deleteDoc(customerDocRef);
+                            console.log("Customer document deleted from Firestore.");
 
+                            // Also delete the Firebase Auth user
+                            await auth.currentUser.delete();
+                            console.log("Firebase Auth user deleted.");
 
-                        if (customerData.length < initialLength) { // If a customer was removed
                             localStorage.removeItem('isLoggedIn');
                             localStorage.removeItem('loggedInUser');
                             localStorage.removeItem('loggedInUserType');
@@ -2024,15 +2231,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             setTimeout(() => {
                                 window.location.href = 'index.html';
                             }, 2000);
-                        } else {
-                            deleteCustomerAccountMessage.textContent = 'Error: Could not find your account to delete.';
+                        } catch (error) {
+                            console.error("Error deleting customer account:", error);
+                            deleteCustomerAccountMessage.textContent = `Error: Could not delete your account. ${error.message}`;
                             deleteCustomerAccountMessage.className = 'form-message error';
                             deleteCustomerAccountMessage.style.display = 'block';
                         }
                     } else {
-                        deleteCustomerAccountMessage.textContent = 'You are not logged in.';
+                        deleteCustomerAccountMessage.textContent = 'You are not logged in or cannot perform this action.';
                         deleteCustomerAccountMessage.className = 'form-message error';
-                        deleteAccountMessage.style.display = 'block';
+                        deleteCustomerAccountMessage.style.display = 'block';
                     }
                 });
 
