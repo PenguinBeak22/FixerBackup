@@ -552,6 +552,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const loggedInUserType = localStorage.getItem('loggedInUserType'); // 'customer' or 'professional'
 
             if (isLoggedIn) {
+                // If user is logged in, change buttons to "Account" and "Logout"
                 loginHeaderButton.textContent = 'Account';
                 loginHeaderButton.onclick = () => {
                     if (loggedInUserType === 'professional') {
@@ -586,12 +587,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     window.location.href = 'index.html';
                 };
             } else {
+                // If user is NOT logged in, show "Login" and "Sign Up" buttons
                 loginHeaderButton.textContent = 'Login';
                 loginHeaderButton.className = 'login-button';
                 loginHeaderButton.style.backgroundColor = '';
                 loginHeaderButton.style.color = '';
                 loginHeaderButton.onclick = () => {
-                    window.location.href = 'login.html';
+                    window.location.href = 'login.html'; // Redirect to login page
                 };
 
                 signUpHeaderButton.textContent = 'Sign Up';
@@ -599,7 +601,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 signUpHeaderButton.style.backgroundColor = '';
                 signUpHeaderButton.style.color = '';
                 signUpHeaderButton.onclick = () => {
-                    window.location.href = 'signup.html'; // Direct to the choice page
+                    window.location.href = 'signup.html'; // Redirect to the signup choice page
                 };
             }
         }
@@ -657,11 +659,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.title = title;
         if (serviceTitleElement) {
+            pageBanner.style.backgroundImage = `linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=${encodeURIComponent(bannerImageText)}')`;
             serviceTitleElement.textContent = title.replace('Fixalo – ', '');
-            const pageBanner = document.querySelector('.page-banner');
-            if (pageBanner) {
-                pageBanner.style.backgroundImage = `linear-gradient(rgba(54, 69, 79, 0.7), rgba(54, 69, 79, 0.7)), url('https://placehold.co/1600x600/36454F/FFFFFF?text=${encodeURIComponent(bannerImageText)}')`;
-            }
         }
         if (serviceDescriptionElement) {
             serviceDescriptionElement.textContent = description;
