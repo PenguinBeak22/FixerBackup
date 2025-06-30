@@ -376,9 +376,9 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
   };
 
   // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+  const appId = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-  
+
     // Elements from professional-apply-page.html (professional application form)
     const mainServiceCheckboxesContainer = document.getElementById('mainServiceCheckboxes');
     const specificServicesCheckboxesDiv = document.getElementById('specificServicesCheckboxes');
