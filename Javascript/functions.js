@@ -1654,59 +1654,6 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
                 return;
             }
 
-            // Firebase Authentication for customer signup
-            let authUid = null;
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                authUid = userCredential.user.uid;
-                console.log("Customer Firebase Auth registered:", authUid);
-            } catch (error) {
-                console.error("Error registering customer with Firebase Auth:", error);
-                formMessage.textContent = `Error creating account: ${error.message}`;
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                return;
-            }
-
-            const newCustomer = {
-                id: username.toLowerCase().replace(/\s/g, '-'), // Use username as ID for easy lookup
-                authUid: authUid, // Store Firebase Auth UID
-                name: `${firstName} ${lastName}`,
-                email: email,
-                username: username,
-                mobileNumber: mobileNumber, // Store mobile number with dial code
-                avatar: `https://placehold.co/150x150/FFD700/36454F?text=${firstName.substring(0,1).toUpperCase()}${lastName.substring(0,1).toUpperCase()}`, // Generate initial avatar
-                joinDate: new Date().toISOString().split('T')[0]
-            };
-
-            // Store new customer in Firestore
-            try {
-                const customersCollection = collection(db, `artifacts/${appId}/public/data/customers`);
-                await setDoc(doc(customersCollection, newCustomer.id), newCustomer); // Use setDoc with custom ID
-                console.log("Customer data added to Firestore:", newCustomer.id);
-
-                formMessage.textContent = 'Registration successful! Redirecting to homepage...';
-                formMessage.className = 'form-message success';
-                formMessage.style.display = 'block';
-
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('loggedInUser', newCustomer.id); // Store customer ID
-                localStorage.setItem('loggedInUserType', 'customer'); // Set user type
-                handleAuthButtons();
-
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-
-            } catch (e) {
-                console.error("Error adding customer to Firestore:", e);
-                formMessage.textContent = 'Error saving customer data. Please try again.';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-            }
-        });
-    }
-
 
     // Logic for login page (login.html)
     if (loginForm) {
