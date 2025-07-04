@@ -357,11 +357,11 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     }
 ];
 
-// Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    // Firebase Imports and Initialization
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
 
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -375,9 +375,37 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     measurementId: "G-78WR2HXYTZ"
   };
 
-  // Initialize Firebase
-  const appId = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(appId);
+  // Add this line to log the firebaseConfig and check its content
+console.log("Firebase Config (from functions.js):", firebaseConfig);
+
+let app;
+let db;
+let auth;
+let currentUserId = null; // To store the authenticated user's ID
+
+// Always attempt to initialize Firebase app
+try {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUserId = user.uid;
+            console.log("Firebase Auth State Changed: User Logged In", currentUserId);
+            if (localStorage.getItem('loggedInUserType') === 'customer') {
+                loadCustomerDataFromFirestore();
+            }
+        } else {
+            currentUserId = null;
+            console.log("Firebase Auth State Changed: User Logged Out");
+        }
+    });
+} catch (error) {
+    console.error("Error initializing Firebase:", error);
+    // If initialization fails, app, db, auth will remain undefined,
+    // and subsequent checks will prevent their use.
+}
 
     // Elements from professional-apply-page.html (professional application form)
     const mainServiceCheckboxesContainer = document.getElementById('mainServiceCheckboxes');
@@ -479,31 +507,6 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     let currentProfessionalsData = []; // The array of professionals for the current service
     let activeProfessionalId = null; // Stores the ID of the professional in the active conversation
 
-    // Function to load customer data from Firestore
-    async function loadCustomerDataFromFirestore() {
-        if (!db || !currentUserId) {
-            console.log("Firestore or currentUserId not available to load customer data.");
-            return;
-        }
-        const customersCol = collection(db, `artifacts/${appId}/public/data/customers`);
-        const q = query(customersCol, where('authUid', '==', currentUserId)); // Assuming you store Firebase Auth UID
-        try {
-            const querySnapshot = await getDocs(q);
-            customerData = []; // Clear existing in-memory data
-            querySnapshot.forEach(doc => {
-                customerData.push({ id: doc.id, ...doc.data() });
-            });
-            console.log("Customer data loaded from Firestore:", customerData);
-            // If on a customer-specific page, re-render with loaded data
-            if (customerProfileForm && localStorage.getItem('loggedInUserType') === 'customer') {
-                const loggedInUser = localStorage.getItem('loggedInUser');
-                const customer = findCustomerByUsername(loggedInUser);
-                if (customer) loadCustomerProfile(customer);
-            }
-        } catch (error) {
-            console.error("Error loading customer data from Firestore:", error);
-        }
-    }
 
 
     // --- Functions for Header Buttons (Login/Logout, Account/Sign Up) ---
@@ -2388,4 +2391,4 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     document.head.appendChild(styleTag);
 });
 
-    };
+    }
