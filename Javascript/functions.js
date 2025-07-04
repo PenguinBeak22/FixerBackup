@@ -1091,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const customerUpcomingBookingsList = document.getElementById('customerUpcomingBookingsList');
     const customerPastBookingsList = document.getElementById('customerPastBookingsList');
     const noCustomerUpcomingBookingsMessage = document.getElementById('noCustomerUpcomingBookings');
-    const noCustomerPastBookingsMessage = document = document.getElementById('noCustomerPastBookings');
+    const noCustomerPastBookingsMessage = document.getElementById('noCustomerPastBookings');
 
 
     let currentServiceType = null; // Will store 'plumbing', 'carpentry', etc.
