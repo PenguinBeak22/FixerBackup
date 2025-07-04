@@ -221,34 +221,161 @@ const servicesData = {
 
 // Data for countries and localities
 const countriesAndLocalities = {
-    "Malta": ["Birkirkara", "Bormla (Cospicua)", "Fgura", "Floriana", "Fontana", "Għajnsielem", "Għarb", "Għargħur", "Għasri", "Għaxaq", "Gudja", "Gżira", "Ħamrun", "Iklin", "Isla (Senglea)", "Kalkara", "Kerċem", "Kirkop", "Lija", "Luqa", "Marsa", "Marsaskala", "Marsaxlokk", "Mdina", "Mellieħa", "Mosta", "Mqabba", "Msida", "Mtarfa", "Munxar", "Nadur", "Naxxar", "Paola", "Pembroke", "Pietà", "Qala", "Qormi", "Qrendi", "Rabat (Gozo)", "Rabat (Malta)", "Safi", "San Ġiljan (St. Julian's)", "San Lawrenz", "San Pawl il-Baħar (St. Paul's Bay)", "Sannat", "Santa Luċija", "Santa Venera", "Siġġiewi", "Sliema", "Swieqi", "Ta' Xbiex", "Tarxien", "Valletta", "Xagħra", "Xewkija", "Xgħajra", "Żabbar", "Żebbuġ (Gozo)", "Żebbuġ (Malta)", "Żejtun", "Żurrieq"],
+    "Malta": ["Birkirkara", "Bormla (Cospicua)", "Fgura", "Floriana", "Fontana", "Għajnsielem", "Għarb", "Għargħur", "Għasri", "Għaxaq", "Gudja", "Gżira", "Ħamrun", "Iklin", "Isla (Senglea)", "Kalkara", "Kerċem", "Kirkop", "Lija", "Luqa", "Marsa", "Marsaskala", "Marsaxlokk", "Mdina", "Mellieħa", "Mosta", "Mqabba", "Msida", "Mtarfa", "Munxar", "Nadur", "Naxxar", "Paola", "Pembroke", "Pietà", "Qala", "Qormi", "Qrendi", "Rabat (Gozo)", "Rabat (Malta)", "Safi", "San Ġiljan (St. Julian's)", "San Pawl il-Baħar (St. Paul's Bay)", "Sannat", "Santa Luċija", "Santa Venera", "Siġġiewi", "Sliema", "Swieqi", "Ta' Xbiex", "Tarxien", "Valletta", "Victoria (Rabat, Gozo)", "Xagħra", "Xewkija", "Xgħajra", "Żabbar", "Żebbuġ (Gozo)", "Żebbuġ (Malta)", "Żejtun", "Żurrieq"],
     "Italy": ["Rome", "Milan", "Naples", "Turin", "Palermo", "Genoa", "Bologna", "Florence", "Bari", "Catania"],
-    "United Kingdom": ["London", "Manchester", "Birmingham", "Glasgow", "Liverpool", "Bristol", "Edinburgh", "Leeds", "Sheffield", "Newcastle"]
+    "United Kingdom": ["London", "Manchester", "Birmingham", "Glasgow", "Liverpool", "Bristol", "Edinburgh", "Leeds", "Sheffield", "Newcastle"],
+    "Germany": ["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt", "Stuttgart", "Düsseldorf", "Leipzig", "Dortmund", "Essen"],
+    "France": ["Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg", "Montpellier", "Bordeaux", "Lille"],
+    "Spain": ["Madrid", "Barcelona", "Valencia", "Seville", "Zaragoza", "Malaga", "Murcia", "Palma", "Las Palmas", "Bilbao"]
 };
 
-// Firebase Imports and Initialization
+// Common international dial codes
+const countryDialCodes = {
+    "Afghanistan": "+93", "Albania": "+355", "Algeria": "+213", "Andorra": "+376", "Angola": "+244",
+    "Argentina": "+54", "Armenia": "+374", "Australia": "+61", "Austria": "+43", "Azerbaijan": "+994",
+    "Bahrain": "+973", "Bangladesh": "+880", "Belarus": "+375", "Belgium": "+32", "Bolivia": "+591",
+    "Bosnia & Herzegovina": "+387", "Brazil": "+55", "Bulgaria": "+359", "Cambodia": "+855",
+    "Cameroon": "+237", "Canada": "+1", "Chile": "+56", "China": "+86", "Colombia": "+57",
+    "Costa Rica": "+506", "Croatia": "+385", "Cuba": "+53", "Cyprus": "+357", "Czech Republic": "+420",
+    "Denmark": "+45", "Dominican Republic": "+1", "Ecuador": "+593", "Egypt": "+20",
+    "El Salvador": "+503", "Estonia": "+372", "Ethiopia": "+251", "Finland": "+358", "France": "+33",
+    "Georgia": "+995", "Germany": "+49", "Ghana": "+233", "Greece": "+30", "Guatemala": "+502",
+    "Honduras": "+504", "Hong Kong": "+852", "Hungary": "+36", "Iceland": "+354", "India": "+91",
+    "Indonesia": "+62", "Iran": "+98", "Iraq": "+964", "Ireland": "+353", "Israel": "+972",
+    "Italy": "+39", "Jamaica": "+1", "Japan": "+81", "Jordan": "+962", "Kazakhstan": "+7",
+    "Kenya": "+254", "Kuwait": "+965", "Latvia": "+371", "Lebanon": "+961", "Libya": "+218",
+    "Lithuania": "+370", "Luxembourg": "+352", "Malaysia": "+60", "Malta": "+356", "Mexico": "+52",
+    "Moldova": "+373", "Monaco": "+377", "Morocco": "+212", "Netherlands": "+31", "New Zealand": "+64",
+    "Nicaragua": "+505", "Nigeria": "+234", "North Macedonia": "+389", "Norway": "+47", "Oman": "+968",
+    "Pakistan": "+92", "Panama": "+507", "Paraguay": "+595", "Peru": "+51", "Philippines": "+63",
+    "Poland": "+48", "Portugal": "+351", "Qatar": "+974", "Romania": "+40", "Russia": "+7",
+    "San Marino": "+378", "Saudi Arabia": "+966", "Serbia": "+381", "Singapore": "+65",
+    "Slovakia": "+421", "Slovenia": "+386", "South Africa": "+27", "South Korea": "+82", "Spain": "+34",
+    "Sri Lanka": "+94", "Sweden": "+46", "Switzerland": "+41", "Syria": "+963", "Taiwan": "+886",
+    "Tanzania": "+255", "Thailand": "+66", "Tunisia": "+216", "Turkey": "+90", "Ukraine": "+380",
+    "United Arab Emirates": "+971", "United Kingdom": "+44", "United States": "+1", "Uruguay": "+598",
+    "Uzbekistan": "+998", "Venezuela": "+58", "Vietnam": "+84", "Yemen": "+967", "Zambia": "+260",
+    "Zimbabwe": "+263"
+};
+
+
+// Global array to store customer data (for demonstration purposes, typically this would be a backend)
+let customerData = []; // Will be populated from Firestore
+// Global array to store message data (simulated for demonstration)
+// Structure: { id: string, from: string (customer username), to: string (professional ID), text: string, timestamp: number, isRead: boolean }
+let messagesData = JSON.parse(localStorage.getItem('messagesData')) || [];
+
+// Global array to store booking data (simulated for demonstration)
+// Structure: { id: string, professionalId: string, professionalName: string, customerId: string, customerName: string, date: string (YYYY-MM-DD), time: string (HH:MM-HH:MM), description: string, customerPhone: string, status: 'Pending' | 'Confirmed' | 'Rejected' | 'Cancelled' }
+let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
+    // Sample bookings for John "The Pipe" Paul
+    {
+        id: 'booking-1',
+        professionalId: 'john-paul',
+        professionalName: 'John "The Pipe" Paul',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-07-15',
+        time: '10:00-11:00',
+        description: 'Leaky faucet in kitchen sink. Drips constantly.',
+        customerPhone: '+35699112233',
+        status: 'Pending'
+    },
+    {
+        id: 'booking-2',
+        professionalId: 'john-paul',
+        professionalName: 'John "The Pipe" Paul',
+        customerId: 'another-cust-456',
+        customerName: 'Mark Smith',
+        date: '2025-07-20',
+        time: '14:00-15:00',
+        description: 'Annual boiler servicing and check-up.',
+        customerPhone: '+35677889900',
+        status: 'Confirmed'
+    },
+    {
+        id: 'booking-3',
+        professionalId: 'john-paul',
+        professionalName: 'John "The Pipe" Paul',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-06-28', // Today's date (if running on June 28, 2025) or a past date for testing
+        time: '09:00-10:00',
+        description: 'Blocked drain in bathroom.',
+        customerPhone: '+35699112233',
+        status: 'Pending'
+    },
+    // Sample bookings for Mary "The Fixer" Evans
+    {
+        id: 'booking-4',
+        professionalId: 'mary-evans',
+        professionalName: 'Mary "The Fixer" Evans',
+        customerId: 'some-cust-789',
+        customerName: 'Alice Brown',
+        date: '2025-07-01',
+        time: '08:00-09:00',
+        description: 'Installation of new bathroom vanity and sink.',
+        customerPhone: '+35655443322',
+        status: 'Pending'
+    },
+    {
+        id: 'booking-5',
+        professionalId: 'mary-evans',
+        professionalName: 'Mary "The Fixer" Evans',
+        customerId: 'another-cust-456',
+        customerName: 'Mark Smith',
+        date: '2025-07-05',
+        time: '11:00-12:00',
+        description: 'Pipe repair in utility room.',
+        customerPhone: '+35677889900',
+        status: 'Confirmed'
+    },
+    // Sample booking for jane-doe-123 as customer
+    {
+        id: 'booking-cust-1',
+        professionalId: 'mark-spark',
+        professionalName: 'Mark "Sparky" Davis',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-08-10',
+        time: '13:00-14:00',
+        description: 'Light fixture installation in living room.',
+        customerPhone: '+35699112233',
+        status: 'Pending'
+    },
+    {
+        id: 'booking-cust-2',
+        professionalId: 'lisa-brush',
+        professionalName: 'Lisa "The Brush" White',
+        customerId: 'jane-doe-123',
+        customerName: 'Jane Doe',
+        date: '2025-07-01', // Past booking for testing past bookings display
+        time: '09:00-11:00',
+        description: 'Bedroom repainting.',
+        customerPhone: '+35699112233',
+        status: 'Confirmed'
+    }
+];
+
+    // Firebase Imports and Initialization
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- IMPORTANT: YOU MUST REPLACE THESE PLACEHOLDER VALUES WITH YOUR ACTUAL FIREBASE CONFIG ---
-// 1. Go to your Firebase Console: https://console.firebase.google.com/
-// 2. Select your project.
-// 3. In the left menu, click "Project settings" (gear icon ⚙️).
-// 4. Scroll down to "Your apps" and select your Web App (or add one if you haven't).
-// 5. Copy the 'firebaseConfig' object provided there and paste it below, replacing this entire block.
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY", // <-- PASTE YOUR API KEY HERE (e.g., "AIzaSyC...")
-    authDomain: "YOUR_AUTH_DOMAIN", // <-- PASTE YOUR AUTH DOMAIN HERE (e.g., "your-project-id.firebaseapp.com")
-    projectId: "YOUR_PROJECT_ID", // <-- PASTE YOUR PROJECT ID HERE (e.g., "your-project-id")
-    storageBucket: "YOUR_STORAGE_BUCKET", // <-- PASTE YOUR STORAGE BUCKET HERE (e.g., "your-project-id.appspot.com")
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // <-- PASTE YOUR MESSAGING SENDER ID HERE (e.g., "1234567890")
-    appId: "YOUR_APP_ID", // <-- PASTE YOUR APP ID HERE (e.g., "1:1234567890:web:abcdef1234567890abcdef")
-    // measurementId: "G-XXXXXXXXXX" // <-- UNCOMMENT AND PASTE IF YOU USE GOOGLE ANALYTICS
-};
-// --- END OF FIREBASE CONFIGURATION ---
 
-// Add this line to log the firebaseConfig and check its content
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyABazepGHmdDtJ3qfgBPbZgLTEhsD8i8ks",
+    authDomain: "fixerupper-d3d19.firebaseapp.com",
+    projectId: "fixerupper-d3d19",
+    storageBucket: "fixerupper-d3d19.firebasestorage.app",
+    messagingSenderId: "536236224510",
+    appId: "1:536236224510:web:72e5d1b4ae35d9368edaaf",
+    measurementId: "G-78WR2HXYTZ"
+  };
+
+  // Add this line to log the firebaseConfig and check its content
 console.log("Firebase Config (from functions.js):", firebaseConfig);
 
 let app;
@@ -265,13 +392,13 @@ try {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUserId = user.uid;
-            console.log("Firebase Auth State Changed: User Logged In. UID:", currentUserId); // Added UID logging
+            console.log("Firebase Auth State Changed: User Logged In", currentUserId);
             if (localStorage.getItem('loggedInUserType') === 'customer') {
                 loadCustomerDataFromFirestore();
             }
         } else {
             currentUserId = null;
-            console.log("Firebase Auth State Changed: User Logged Out.");
+            console.log("Firebase Auth State Changed: User Logged Out");
         }
     });
 } catch (error) {
@@ -279,642 +406,6 @@ try {
     // If initialization fails, app, db, auth will remain undefined,
     // and subsequent checks will prevent their use.
 }
-
-
-// --- Utility Functions ---
-
-/**
- * Navigates to a specified URL.
- * @param {string} url The URL to navigate to.
- */
-function navigateTo(url) {
-    window.location.href = url;
-}
-
-/**
- * Shows a modal dialog.
- * @param {string} title The title of the modal.
- * @param {string} message The message content of the modal.
- * @param {boolean} showButtons Whether to show confirmation/cancel buttons.
- * @param {function} onConfirm Callback function for confirm button.
- * @param {function} onCancel Callback function for cancel button.
- * @param {string} confirmText Text for the confirm button.
- * @param {string} cancelText Text for the cancel button.
- * @param {string} confirmClass CSS class for the confirm button (e.g., 'button-delete').
- */
-function showModal(title, message, showButtons = false, onConfirm = null, onCancel = null, confirmText = 'Confirm', cancelText = 'Cancel', confirmClass = 'button-confirm') {
-    let modal = document.getElementById('myModal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'myModal';
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h3 id="modalTitle"></h3>
-                <p id="modalMessage"></p>
-                <div class="modal-buttons" id="modalButtons">
-                    <button id="confirmButton"></button>
-                    <button id="cancelButton"></button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalMessage').textContent = message;
-
-    const modalButtons = document.getElementById('modalButtons');
-    const confirmButton = document.getElementById('confirmButton');
-    const cancelButton = document.getElementById('cancelButton');
-
-    if (showButtons) {
-        modalButtons.style.display = 'flex';
-        confirmButton.textContent = confirmText;
-        confirmButton.className = confirmClass; // Apply the class
-        cancelButton.textContent = cancelText;
-        cancelButton.className = 'button-cancel'; // Default class for cancel
-        confirmButton.onclick = () => {
-            if (onConfirm) onConfirm();
-            hideModal();
-        };
-        cancelButton.onclick = () => {
-            if (onCancel) onCancel();
-            hideModal();
-        };
-    } else {
-        modalButtons.style.display = 'none';
-    }
-
-    modal.style.display = 'block';
-
-    const closeButton = modal.querySelector('.close-button');
-    if (closeButton) {
-        closeButton.onclick = hideModal;
-    }
-
-    window.onclick = (event) => {
-        if (event.target == modal) {
-            hideModal();
-        }
-    };
-}
-
-/**
- * Hides the modal dialog.
- */
-function hideModal() {
-    const modal = document.getElementById('myModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
-
-// --- Authentication Functions ---
-
-/**
- * Handles user sign-up.
- * @param {string} email User's email.
- * @param {string} password User's password.
- * @param {string} userType Type of user ('customer' or 'tradesperson').
- * @param {object} userData Additional user data to store in Firestore.
- */
-async function signUp(email, password, userType, userData = {}) {
-    console.log("Attempting to sign up with email:", email, "userType:", userType); // Added debug log
-    if (!auth) {
-        showModal("Error", "Firebase authentication not initialized. Please ensure Firebase configuration is correct.", false);
-        console.error("Firebase Auth is undefined. Cannot sign up.");
-        return;
-    }
-
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        console.log("User signed up:", user.uid);
-
-        // Store user data in Firestore
-        const userRef = doc(db, "users", user.uid);
-        await setDoc(userRef, {
-            email: email,
-            userType: userType,
-            ...userData,
-            createdAt: new Date()
-        });
-
-        localStorage.setItem('loggedInUserId', user.uid);
-        localStorage.setItem('loggedInUserType', userType);
-        showModal("Success", "Account created successfully!", false);
-
-        if (userType === 'customer') {
-            navigateTo('main-index-page.html');
-        } else if (userType === 'tradesperson') {
-            navigateTo('plumber-profile-page.html'); // Navigate to a default profile page for tradespeople
-        }
-    } catch (error) {
-        console.error("Error creating account:", error);
-        showModal("Sign Up Error", `Failed to create account: ${error.message}`, false);
-    }
-}
-
-/**
- * Handles user login.
- * @param {string} email User's email.
- * @param {string} password User's password.
- * @returns {Promise<void>}
- */
-async function logIn(email, password) {
-    if (!auth) {
-        showModal("Error", "Firebase authentication not initialized. Please ensure Firebase configuration is correct.", false);
-        console.error("Firebase Auth is undefined. Cannot log in.");
-        return;
-    }
-
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        console.log("User logged in:", user.uid);
-
-        // Fetch user type from Firestore
-        const userDocRef = doc(db, "users", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-            const userData = userDocSnap.data();
-            const userType = userData.userType;
-
-            localStorage.setItem('loggedInUserId', user.uid);
-            localStorage.setItem('loggedInUserType', userType); // Store user type in local storage
-            showModal("Success", "Logged in successfully!", false);
-
-            if (userType === 'customer') {
-                navigateTo('main-index-page.html');
-            } else if (userType === 'tradesperson') {
-                navigateTo('plumber-profile-page.html'); // Navigate to tradesperson specific page
-            }
-        } else {
-            console.warn("User data not found in Firestore for:", user.uid);
-            // Optionally, sign out if user data is missing to prevent inconsistencies
-            await auth.signOut();
-            showModal("Login Error", "User profile incomplete. Please contact support.", false);
-        }
-
-    } catch (error) {
-        console.error("Error logging in:", error);
-        showModal("Login Error", `Failed to log in: ${error.message}`, false);
-    }
-}
-
-/**
- * Handles user logout.
- */
-async function logOut() {
-    if (!auth) {
-        showModal("Error", "Firebase authentication not initialized.", false);
-        console.error("Firebase Auth is undefined. Cannot log out.");
-        return;
-    }
-    try {
-        await auth.signOut();
-        localStorage.removeItem('loggedInUserId');
-        localStorage.removeItem('loggedInUserType');
-        showModal("Success", "Logged out successfully.", false);
-        navigateTo('login-page.html');
-    } catch (error) {
-        console.error("Error logging out:", error);
-        showModal("Logout Error", `Failed to log out: ${error.message}`, false);
-    }
-}
-
-/**
- * Checks if a user is currently logged in.
- * @returns {boolean}
- */
-function isLoggedIn() {
-    // This function can be used to quickly check if a user is logged in
-    // based on local storage, but the onAuthStateChanged listener is the
-    // definitive source for Firebase auth state.
-    return localStorage.getItem('loggedInUserId') !== null;
-}
-
-/**
- * Retrieves the currently logged-in user's ID.
- * @returns {string|null} The user ID if logged in, otherwise null.
- */
-function getLoggedInUserId() {
-    return localStorage.getItem('loggedInUserId');
-}
-
-/**
- * Retrieves the currently logged-in user's type.
- * @returns {string|null} The user type ('customer' or 'tradesperson') if logged in, otherwise null.
- */
-function getLoggedInUserType() {
-    return localStorage.getItem('loggedInUserType');
-}
-
-
-// --- Firestore Data Operations ---
-
-/**
- * Saves or updates customer data in Firestore.
- * @param {string} userId The ID of the user.
- * @param {object} customerData The customer data to save.
- */
-async function saveCustomerDataToFirestore(userId, customerData) {
-    if (!db) {
-        console.error("Firestore is undefined. Cannot save customer data.");
-        showModal("Error", "Database not initialized. Please ensure Firebase configuration is correct.", false);
-        return;
-    }
-    try {
-        const customerRef = doc(db, "users", userId); // Assuming 'users' collection for all user types
-        await updateDoc(customerRef, customerData); // Use updateDoc if doc exists, setDoc for new or overwrite
-        console.log("Customer data saved to Firestore for user:", userId);
-        showModal("Success", "Profile updated successfully!", false);
-    } catch (error) {
-        console.error("Error saving customer data to Firestore:", error);
-        showModal("Error", `Failed to save profile: ${error.message}`, false);
-    }
-}
-
-/**
- * Loads customer data from Firestore.
- * @returns {Promise<object|null>} The customer data or null if not found/error.
- */
-async function loadCustomerDataFromFirestore() {
-    const userId = getLoggedInUserId();
-    if (!userId || !db) {
-        console.log("No user ID or Firestore not initialized. Cannot load customer data.");
-        return null;
-    }
-
-    try {
-        const userDocRef = doc(db, "users", userId);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-            const customerData = userDocSnap.data();
-            console.log("Customer data loaded:", customerData);
-            return customerData;
-        } else {
-            console.log("No customer data found for user:", userId);
-            return null;
-        }
-    } catch (error) {
-        console.error("Error loading customer data from Firestore:", error);
-        showModal("Error", `Failed to load profile data: ${error.message}`, false);
-        return null;
-    }
-}
-
-/**
- * Saves or updates tradesperson data in Firestore.
- * @param {string} userId The ID of the tradesperson.
- * @param {object} tradespersonData The tradesperson data to save.
- */
-async function saveTradespersonDataToFirestore(userId, tradespersonData) {
-    if (!db) {
-        console.error("Firestore is undefined. Cannot save tradesperson data.");
-        showModal("Error", "Database not initialized. Please ensure Firebase configuration is correct.", false);
-        return;
-    }
-    try {
-        const tradespersonRef = doc(db, "users", userId); // Assuming 'users' collection for all user types
-        await updateDoc(tradespersonRef, tradespersonData); // Use updateDoc if doc exists, setDoc for new or overwrite
-        console.log("Tradesperson data saved to Firestore for user:", userId);
-        showModal("Success", "Profile updated successfully!", false);
-    } catch (error) {
-        console.error("Error saving tradesperson data to Firestore:", error);
-        showModal("Error", `Failed to save profile: ${error.message}`, false);
-    }
-}
-
-
-/**
- * Loads tradesperson data from Firestore.
- * @param {string} userId The ID of the tradesperson.
- * @returns {Promise<object|null>} The tradesperson data or null if not found/error.
- */
-async function loadTradespersonDataFromFirestore(userId) {
-    if (!userId || !db) {
-        console.log("No user ID or Firestore not initialized. Cannot load tradesperson data.");
-        return null;
-    }
-
-    try {
-        const userDocRef = doc(db, "users", userId);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-            const tradespersonData = userDocSnap.data();
-            console.log("Tradesperson data loaded:", tradespersonData);
-            return tradespersonData;
-        } else {
-            console.log("No tradesperson data found for user:", userId);
-            return null;
-        }
-    } catch (error) {
-        console.error("Error loading tradesperson data from Firestore:", error);
-        showModal("Error", `Failed to load profile data: ${error.message}`, false);
-        return null;
-    }
-}
-
-/**
- * Fetches all tradespeople of a specific category from Firestore.
- * @param {string} category The category of tradespeople to fetch (e.g., 'plumbing').
- * @returns {Promise<Array<object>>} A promise that resolves to an array of tradesperson data.
- */
-async function getTradespeopleByCategory(category) {
-    if (!db) {
-        console.error("Firestore is undefined. Cannot fetch tradespeople.");
-        return [];
-    }
-
-    try {
-        // Query users collection for tradespeople of the given category
-        const q = query(collection(db, "users"),
-            where("userType", "==", "tradesperson"),
-            where("trade", "==", category)); // Assuming 'trade' field exists for tradespeople
-
-        const querySnapshot = await getDocs(q);
-        const tradespeople = [];
-        querySnapshot.forEach((doc) => {
-            tradespeople.push({ id: doc.id, ...doc.data() });
-        });
-        console.log(`Fetched ${tradespeople.length} tradespeople for category: ${category}`);
-        return tradespeople;
-    } catch (error) {
-        console.error(`Error fetching tradespeople for category ${category}:`, error);
-        showModal("Error", `Failed to load tradespeople: ${error.message}`, false);
-        return [];
-    }
-}
-
-
-// --- Booking and Job Management ---
-
-/**
- * Creates a new job request/booking in Firestore.
- * @param {string} customerId The ID of the customer making the request.
- * @param {string} tradespersonId The ID of the tradesperson being requested.
- * @param {object} jobDetails Details of the job (e.g., serviceType, description, date, time, status).
- * @returns {Promise<string>} A promise that resolves with the ID of the newly created job.
- */
-async function createJobRequest(customerId, tradespersonId, jobDetails) {
-    if (!db) {
-        console.error("Firestore is undefined. Cannot create job request.");
-        showModal("Error", "Database not initialized. Please ensure Firebase configuration is correct.", false);
-        return null;
-    }
-    try {
-        const jobsCollectionRef = collection(db, "jobs");
-        const newJobRef = await addDoc(jobsCollectionRef, {
-            customerId: customerId,
-            tradespersonId: tradespersonId,
-            ...jobDetails,
-            createdAt: new Date(),
-            status: jobDetails.status || "pending" // Default status
-        });
-        console.log("New job request created with ID:", newJobRef.id);
-        showModal("Success", "Job request submitted successfully!", false);
-        return newJobRef.id;
-    } catch (error) {
-        console.error("Error creating job request:", error);
-        showModal("Error", `Failed to submit job request: ${error.message}`, false);
-        return null;
-    }
-}
-
-/**
- * Updates the status or details of an existing job.
- * @param {string} jobId The ID of the job to update.
- * @param {object} updates An object containing the fields to update.
- */
-async function updateJobStatus(jobId, updates) {
-    if (!db) {
-        console.error("Firestore is undefined. Cannot update job status.");
-        showModal("Error", "Database not initialized. Please ensure Firebase configuration is correct.", false);
-        return;
-    }
-    try {
-        const jobRef = doc(db, "jobs", jobId);
-        await updateDoc(jobRef, {
-            ...updates,
-            updatedAt: new Date()
-        });
-        console.log("Job updated successfully:", jobId);
-        showModal("Success", "Job status updated!", false);
-    } catch (error) {
-        console.error("Error updating job:", error);
-        showModal("Error", `Failed to update job: ${error.message}`, false);
-    }
-}
-
-/**
- * Fetches jobs related to a specific user (customer or tradesperson).
- * @param {string} userId The ID of the customer or tradesperson.
- * @param {string} userType The type of user ('customer' or 'tradesperson').
- * @returns {Promise<Array<object>>} A promise that resolves to an array of job data.
- */
-async function getJobsForUser(userId, userType) {
-    if (!db) {
-        console.error("Firestore is undefined. Cannot fetch jobs.");
-        return [];
-    }
-
-    try {
-        let q;
-        if (userType === 'customer') {
-            q = query(collection(db, "jobs"), where("customerId", "==", userId));
-        } else if (userType === 'tradesperson') {
-            q = query(collection(db, "jobs"), where("tradespersonId", "==", userId));
-        } else {
-            console.error("Invalid user type for fetching jobs:", userType);
-            return [];
-        }
-
-        const querySnapshot = await getDocs(q);
-        const jobs = [];
-        querySnapshot.forEach((doc) => {
-            jobs.push({ id: doc.id, ...doc.data() });
-        });
-        console.log(`Fetched ${jobs.length} jobs for ${userType}: ${userId}`);
-        return jobs;
-    } catch (error) {
-        console.error(`Error fetching jobs for ${userType} ${userId}:`, error);
-        showModal("Error", `Failed to load jobs: ${error.message}`, false);
-        return [];
-    }
-}
-
-
-// --- Search and Filter Functions ---
-
-/**
- * Filters tradespeople based on criteria like specialty and locality.
- * @param {string} category The main category (e.g., 'plumbing').
- * @param {string} searchTerm Search term for name or specialty.
- * @param {string} locality Filter by locality.
- * @param {boolean} showPremium Filter by premium status.
- * @returns {Array<object>} Filtered list of tradespeople.
- */
-function filterTradespeople(category, searchTerm = '', locality = '', showPremium = false) {
-    let filtered = tradespeopleData[category] || [];
-
-    if (searchTerm) {
-        const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        filtered = filtered.filter(person =>
-            person.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-            person.specialty.toLowerCase().includes(lowerCaseSearchTerm) ||
-            (person.description && person.description.toLowerCase().includes(lowerCaseSearchTerm))
-        );
-    }
-
-    if (locality) {
-        filtered = filtered.filter(person => person.locality === locality);
-    }
-
-    if (showPremium) {
-        filtered = filtered.filter(person => person.isPremium);
-    }
-
-    return filtered;
-}
-
-/**
- * Sorts tradespeople based on a specific criterion.
- * @param {Array<object>} tradespeople List of tradespeople to sort.
- * @param {string} sortBy The criterion to sort by ('rating', 'reviews', 'joinDate', 'promotionRank').
- * @param {string} sortOrder 'asc' for ascending, 'desc' for descending.
- * @returns {Array<object>} Sorted list of tradespeople.
- */
-function sortTradespeople(tradespeople, sortBy, sortOrder = 'desc') {
-    return [...tradespeople].sort((a, b) => {
-        let valA, valB;
-
-        switch (sortBy) {
-            case 'rating':
-                valA = a.rating || 0;
-                valB = b.rating || 0;
-                break;
-            case 'reviews':
-                valA = a.reviews || 0;
-                valB = b.reviews || 0;
-                break;
-            case 'joinDate':
-                valA = new Date(a.joinDate).getTime();
-                valB = new Date(b.joinDate).getTime();
-                break;
-            case 'promotionRank':
-                valA = a.promotionRank || Infinity; // Lower rank is higher priority
-                valB = b.promotionRank || Infinity;
-                break;
-            default:
-                return 0;
-        }
-
-        if (sortOrder === 'asc') {
-            return valA - valB;
-        } else {
-            return valB - valA;
-        }
-    });
-}
-
-
-// --- Data Provisioning Functions ---
-
-/**
- * Returns all available tradespeople data by category.
- * @returns {object} The entire tradespeopleData object.
- */
-function getAllTradespeopleData() {
-    return tradespeopleData;
-}
-
-/**
- * Returns data for specific service types.
- * @returns {object} The entire servicesData object.
- */
-function getServicesData() {
-    return servicesData;
-}
-
-/**
- * Returns data for countries and localities.
- * @returns {object} The entire countriesAndLocalities object.
- */
-function getCountriesAndLocalities() {
-    return countriesAndLocalities;
-}
-
-/**
- * Fetches a single tradesperson's data by their ID.
- * @param {string} tradespersonId The ID of the tradesperson.
- * @returns {object|null} The tradesperson object or null if not found.
- */
-function getTradespersonById(tradespersonId) {
-    for (const category in tradespeopleData) {
-        const tradesperson = tradespeopleData[category].find(p => p.id === tradespersonId);
-        if (tradesperson) {
-            return tradesperson;
-        }
-    }
-    return null;
-}
-
-// Export functions if running in a module environment
-// This allows other scripts to import and use these functions
-export {
-    navigateTo,
-    showModal,
-    hideModal,
-    signUp,
-    logIn,
-    logOut,
-    isLoggedIn,
-    getLoggedInUserId,
-    getLoggedInUserType,
-    saveCustomerDataToFirestore,
-    loadCustomerDataFromFirestore,
-    saveTradespersonDataToFirestore,
-    loadTradespersonDataFromFirestore,
-    createJobRequest,
-    updateJobStatus,
-    getJobsForUser,
-    filterTradespeople,
-    sortTradespeople,
-    getAllTradespeopleData,
-    getServicesData,
-    getCountriesAndLocalities,
-    getTradespersonById,
-    tradespeopleData // Exporting for direct access if needed, though functions are preferred
-};
-
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log("functions.js script loaded and DOMContentLoaded fired."); // Added this log
-
-    // Attempt to sign in with custom token provided by Canvas, or anonymously
-    // This part is for Canvas environment, might not be relevant for GitHub Pages
-    // if (auth) { // Only attempt if auth is initialized
-    //     if (typeof __initial_auth_token !== 'undefined') {
-    //         try {
-    //             await signInWithCustomToken(auth, __initial_auth_token);
-    //             console.log('Signed in with custom token from Canvas.');
-    //         } catch (error) {
-    //             console.error('Error signing in with custom token:', error);
-    //             await signInAnonymously(auth); // Fallback to anonymous if custom token fails
-    //             console.log('Signed in anonymously after custom token failure.');
-    //         }
-    //     } else {
-    //         await signInAnonymously(auth); // Sign in anonymously if no custom token
-    //         console.log('Signed in anonymously.');
-    //     }
-    // }
-
 
     // Elements from professional-apply-page.html (professional application form)
     const mainServiceCheckboxesContainer = document.getElementById('mainServiceCheckboxes');
@@ -964,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profLocalitySelect = document.getElementById('profLocality');
     const profilePhotoPreview = document.getElementById('profilePhotoPreview');
     const uploadPhotoInput = document.getElementById('uploadPhoto');
-    const profSpecialtyInput = document.getElementById('profSpecialty'); // This element is present in the HTML
+    // const profSpecialtyInput = document.getElementById('profSpecialty'); // This element is removed from HTML
     const profMainServiceCheckboxesContainer = document.getElementById('profMainServiceCheckboxes');
     const profSpecificServicesCheckboxesDiv = document.getElementById('profSpecificServicesCheckboxes');
     const profDescriptionTextarea = document.getElementById('profDescription');
@@ -1009,50 +500,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const customerUpcomingBookingsList = document.getElementById('customerUpcomingBookingsList');
     const customerPastBookingsList = document.getElementById('customerPastBookingsList');
     const noCustomerUpcomingBookingsMessage = document.getElementById('noCustomerUpcomingBookings');
-    const noCustomerPastBookingsMessage = document = document.getElementById('noCustomerPastBookings');
+    const noCustomerPastBookingsMessage = document.getElementById('noCustomerPastBookings');
 
 
     let currentServiceType = null; // Will store 'plumbing', 'carpentry', etc.
     let currentProfessionalsData = []; // The array of professionals for the current service
     let activeProfessionalId = null; // Stores the ID of the professional in the active conversation
 
-    // Function to load customer data from Firestore
-    async function loadCustomerDataFromFirestore() {
-        if (!db || !currentUserId) {
-            console.log("Firestore or currentUserId not available to load customer data.");
-            return;
-        }
-        const customersCol = collection(db, `users`); // Changed to 'users' collection
-        const q = query(customersCol, where('authUid', '==', currentUserId)); // Assuming you store Firebase Auth UID
-        try {
-            const querySnapshot = await getDocs(q);
-            customerData = []; // Clear existing in-memory data
-            querySnapshot.forEach(doc => {
-                customerData.push({ id: doc.id, ...doc.data() });
-            });
-            console.log("Customer data loaded from Firestore:", customerData);
-            // If on a customer-specific page, re-render with loaded data
-            if (customerProfileForm && localStorage.getItem('loggedInUserType') === 'customer') {
-                const loggedInUser = localStorage.getItem('loggedInUser');
-                const customer = findCustomerByUsername(loggedInUser);
-                if (customer) loadCustomerProfile(customer);
-            }
-        } catch (error) {
-            console.error("Error loading customer data from Firestore:", error);
-        }
-    }
 
 
     // --- Functions for Header Buttons (Login/Logout, Account/Sign Up) ---
     function handleAuthButtons() {
         // Debugging: Check if buttons are found
         if (loginHeaderButton) {
-            console.log("Login button with ID 'loginHeaderButton' found.");
+            console.log("Login button found:", loginHeaderButton);
         } else {
             console.error("Login button with ID 'loginHeaderButton' NOT found.");
         }
         if (signUpHeaderButton) {
-            console.log("Sign Up button with ID 'signUpHeaderButton' found.");
+            console.log("Sign Up button found:", signUpHeaderButton);
         } else {
             console.error("Sign Up button with ID 'signUpHeaderButton' NOT found.");
         }
@@ -1066,8 +532,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // If user is logged in, change buttons to "Account" and "Logout"
                 loginHeaderButton.textContent = 'Account';
                 loginHeaderButton.onclick = () => {
-                    console.log("Login button clicked: Redirecting to account page...");
-                    if (loggedInUserType === 'tradesperson') { // Changed to 'tradesperson'
+                    console.log("Redirecting to account page...");
+                    if (loggedInUserType === 'professional') {
                         window.location.href = 'professional-account-page.html';
                     } else if (loggedInUserType === 'customer') {
                         window.location.href = 'customer-account.html'; // Corrected to customer-account.html
@@ -1085,7 +551,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 signUpHeaderButton.style.color = 'var(--text-light)';
                 signUpHeaderButton.className = 'cta-button';
                 signUpHeaderButton.onclick = async () => { // Made async for signOut
-                    console.log("Sign Up button clicked: Logging out...");
+                    console.log("Logging out...");
                     if (auth) {
                         try {
                             await auth.signOut();
@@ -1106,7 +572,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 loginHeaderButton.style.backgroundColor = '';
                 loginHeaderButton.style.color = '';
                 loginHeaderButton.onclick = () => {
-                    console.log("Login button clicked: Redirecting to login.html...");
+                    console.log("Redirecting to login.html...");
                     window.location.href = 'login.html'; // Redirect to login page
                 };
 
@@ -1115,7 +581,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 signUpHeaderButton.style.backgroundColor = '';
                 signUpHeaderButton.style.color = '';
                 signUpHeaderButton.onclick = () => {
-                    console.log("Sign Up button clicked: Redirecting to signup.html...");
+                    console.log("Redirecting to signup.html...");
                     window.location.href = 'signup.html'; // Redirect to the signup choice page
                 };
             }
@@ -1466,7 +932,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
         profilePhotoPreview.src = professional.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
-        profSpecialtyInput.value = professional.specialty || ''; // This line is now re-enabled
+        // profSpecialtyInput.value = professional.specialty || ''; // This line is now removed
 
         // Handle main service checkboxes
         Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]')).forEach(checkbox => {
@@ -1772,7 +1238,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const loggedInUser = localStorage.getItem('loggedInUser'); // This is the professional's username
         const loggedInUserType = localStorage.getItem('loggedInUserType');
 
-        if (!loggedInUser || loggedInUserType !== 'tradesperson') { // Changed to 'tradesperson'
+        if (!loggedInUser || loggedInUserType !== 'professional') {
             unconfirmedBookingsList.innerHTML = '<p class="loading-message">Please log in as a professional to view bookings.</p>';
             confirmedBookingsList.innerHTML = ''; // Clear content if not logged in as professional
             noUnconfirmedBookingsMessage.style.display = 'none';
@@ -1968,7 +1434,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         confirmModal.innerHTML = `
             <div class="modal-content">
                 <h3>Confirm Cancellation</h3>
-                <p>Are you sure you want to permanently cancel this booking? This action cannot be undone.</p>
+                <p>Are you sure you want to cancel this booking? This action cannot be undone.</p>
                 <div class="modal-buttons">
                     <button id="confirmCancelYes" class="button-delete">Yes, Cancel</button>
                     <button id="confirmCancelNo" class="button-primary">No, Keep Booking</button>
@@ -2016,7 +1482,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         professionalApplicationForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
-            console.log("Professional Application Form submitted."); // Debugging log
             formMessage.style.display = 'none';
             formMessage.className = 'form-message';
 
@@ -2080,11 +1545,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                  return;
             }
 
-            console.log("Calling signUp for professional:", { email, password, userType: 'tradesperson' }); // Debugging log
-            // Call the shared signUp function
-            await signUp(email, password, 'tradesperson', {
+            // Firebase Authentication for professional signup
+            let authUid = null;
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                authUid = userCredential.user.uid;
+                console.log("Professional Firebase Auth registered:", authUid);
+            } catch (error) {
+                console.error("Error registering professional with Firebase Auth:", error);
+                formMessage.textContent = `Error creating account: ${error.message}`;
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+                return;
+            }
+
+
+            const newProfessional = {
+                id: username.toLowerCase().replace(/\s/g, '-'), // Use username as ID for easy lookup
+                authUid: authUid, // Store Firebase Auth UID
                 name: `${firstName} "${username}" ${lastName}`,
-                mobileNumber: mobileNumber,
+                email: email, // Store email with professional data
+                mobileNumber: mobileNumber, // Store mobile number (with dial code)
                 specialty: selectedSpecificServices.length > 0 ? selectedSpecificServices.join(', ') : selectedMainServices.join(', '),
                 rating: 0,
                 reviews: 0,
@@ -2093,17 +1574,38 @@ document.addEventListener('DOMContentLoaded', async () => {
                 country: country,
                 locality: locality,
                 joinDate: new Date().toISOString().split('T')[0],
-                specificServices: selectedSpecificServices,
-                id: username.toLowerCase().replace(/\s/g, '-') // Ensure ID is part of userData for Firestore doc
-            });
+                specificServices: selectedSpecificServices // Store specific services
+            };
 
-            // The showModal and navigateTo are now handled by the signUp function
-            // No need for redundant localStorage updates here, as signUp handles it.
-            // You might want to reset the form here if signUp doesn't navigate away
-            // professionalApplicationForm.reset();
-            // updateSpecificServices();
-            // populateApplyCountries();
-            // updateApplyLocalities();
+            // Store new professional in Firestore
+            try {
+                const professionalsCollection = collection(db, `artifacts/${appId}/public/data/professionals`);
+                await setDoc(doc(professionalsCollection, newProfessional.id), newProfessional); // Use setDoc with custom ID
+                console.log("Professional data added to Firestore:", newProfessional.id);
+
+                formMessage.textContent = 'Application submitted! You are now logged in. Redirecting...';
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
+
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loggedInUser', newProfessional.id); // Store the professional's ID
+                localStorage.setItem('loggedInUserType', 'professional'); // Set user type
+                handleAuthButtons();
+                professionalApplicationForm.reset();
+                updateSpecificServices();
+                populateApplyCountries();
+                updateApplyLocalities();
+
+                setTimeout(() => {
+                    window.location.href = 'professional-account-page.html'; // Redirect to professional account page
+                }, 1500);
+
+            } catch (e) {
+                console.error("Error adding professional to Firestore:", e);
+                formMessage.textContent = 'Error saving professional data. Please try again.';
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            }
         });
     }
 
@@ -2116,7 +1618,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         customerSignupForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
-            console.log("Customer Signup Form submitted."); // Debugging log
             formMessage.style.display = 'none';
             formMessage.className = 'form-message';
 
@@ -2156,21 +1657,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            console.log("Calling signUp for customer:", { email, password, userType: 'customer' }); // Debugging log
-            // Call the shared signUp function
-            await signUp(email, password, 'customer', {
-                name: `${firstName} ${lastName}`,
-                username: username,
-                mobileNumber: mobileNumber, // Store mobile number with dial code
-                avatar: `https://placehold.co/150x150/FFD700/36454F?text=${firstName.substring(0,1).toUpperCase()}${lastName.substring(0,1).toUpperCase()}`, // Generate initial avatar
-                joinDate: new Date().toISOString().split('T')[0],
-                id: username.toLowerCase().replace(/\s/g, '-') // Ensure ID is part of userData for Firestore doc
-            });
-
-            // The showModal and navigateTo are now handled by the signUp function
-        });
-    }
-
 
     // Logic for login page (login.html)
     if (loginForm) {
@@ -2190,31 +1676,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // In a real app, you would fetch user data from Firestore based on username
-            // to get their associated email for Firebase Auth login.
-            // For this demo, we'll simulate finding the email.
+            // Determine if logging in as professional or customer based on provided username (for demo purposes)
+            // In a real app, you might have separate login forms or a more robust way to distinguish.
+            let userType = null;
             let targetEmail = '';
-            let userType = '';
-            let foundUser = null;
 
-            // Attempt to find user in tradespeopleData (simulated)
-            for (const serviceCategory in tradespeopleData) {
-                const pro = tradespeopleData[serviceCategory].find(p => p.id === username);
-                if (pro) {
-                    foundUser = pro;
-                    targetEmail = pro.email; // Assuming professionals have an email field
-                    userType = 'tradesperson';
+            // Try to find in professionals (assuming their 'id' is their username for login)
+            let foundPro = null;
+            for (const serviceType in tradespeopleData) {
+                foundPro = tradespeopleData[serviceType].find(pro => pro.id === username);
+                if (foundPro) {
+                    userType = 'professional';
+                    targetEmail = foundPro.email;
                     break;
                 }
             }
 
-            // If not found in tradespeople, try to find in customerData (simulated)
-            if (!foundUser) {
-                const cust = customerData.find(c => c.username === username);
-                if (cust) {
-                    foundUser = cust;
-                    targetEmail = cust.email; // Assuming customers have an email field
+            // If not found as professional, try to find as customer
+            if (!userType) {
+                const foundCust = customerData.find(cust => cust.username === username);
+                if (foundCust) {
                     userType = 'customer';
+                    targetEmail = foundCust.email;
                 }
             }
 
@@ -2225,10 +1708,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
-            // Call the shared logIn function
-            await logIn(targetEmail, password);
+            try {
+                await signInWithEmailAndPassword(auth, targetEmail, password);
+                
+                formMessage.textContent = `Login successful as ${userType}! Redirecting...`;
+                formMessage.className = 'form-message success';
+                formMessage.style.display = 'block';
 
-            // The showModal and navigateTo are now handled by the logIn function
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loggedInUser', username); // Store username/ID
+                localStorage.setItem('loggedInUserType', userType); // Set user type
+
+                setTimeout(() => {
+                    if (userType === 'professional') {
+                        window.location.href = 'professional-account-page.html';
+                    } else {
+                        window.location.href = 'customer-account.html';
+                    }
+                }, 1500);
+
+            } catch (error) {
+                console.error("Firebase Auth Login Error:", error);
+                formMessage.textContent = 'Invalid username or password.'; // Generic message for security
+                formMessage.className = 'form-message error';
+                formMessage.style.display = 'block';
+            }
         });
     }
 
@@ -2269,10 +1773,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Logic specifically for professional account page (professional-account.html)
     if (professionalProfileForm) {
-        const loggedInUser = localStorage.getItem('loggedInUser'); // This is the username/ID
+        const loggedInUser = localStorage.getItem('loggedInUser');
         const loggedInUserType = localStorage.getItem('loggedInUserType');
 
-        if (loggedInUser && loggedInUserType === 'tradesperson') { // Changed to 'tradesperson'
+        if (loggedInUser && loggedInUserType === 'professional') {
             const professional = findProfessionalByUsername(loggedInUser); // Find the professional's data
             if (professional) {
                 loadProfessionalProfile(professional);
@@ -2320,7 +1824,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // Find the professional to update in Firestore
-            const professionalRef = doc(db, `users`, loggedInUsername); // Changed to 'users' collection
+            const professionalRef = doc(db, `artifacts/${appId}/public/data/professionals`, loggedInUsername);
             let professionalToUpdate = null;
             try {
                 const docSnap = await getDoc(professionalRef);
@@ -2332,8 +1836,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     profileUpdateMessage.style.display = 'block';
                     return;
                 }
-            } catch (e) {
-                console.error("Error fetching professional data for update:", e);
+            } catch (error) {
+                console.error("Error fetching professional data for update:", error);
                 profileUpdateMessage.textContent = 'Error fetching profile data. Please try again.';
                 profileUpdateMessage.className = 'form-message error';
                 profileUpdateMessage.style.display = 'block';
@@ -2350,7 +1854,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const newCountry = profCountrySelect.value;
             const newLocality = profLocalitySelect.value;
             const newDescription = profDescriptionTextarea.value;
-            const newSpecialty = profSpecialtyInput.value; // Get value from specialty input
             const newMainServices = Array.from(profMainServiceCheckboxesContainer.querySelectorAll('input[name="profMainService"]:checked')).map(cb => cb.value);
             const newSpecificServices = Array.from(profSpecificServicesCheckboxesDiv.querySelectorAll('input[name="profServicesOffered"]:checked')).map(cb => cb.value);
 
@@ -2386,7 +1889,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     country: newCountry,
                     locality: newLocality,
                     avatar: newAvatarUrl,
-                    specialty: newSpecialty, // Use the value from the input field
+                    specialty: newSpecificServices.length > 0 ? newSpecificServices.join(', ') : newMainServices.join(', '),
                     description: newDescription,
                     mainServices: newMainServices,
                     specificServices: newSpecificServices
@@ -2432,42 +1935,36 @@ document.addEventListener('DOMContentLoaded', async () => {
                 `;
                 document.body.appendChild(confirmModal);
 
-                document.getElementById('confirmDeleteYes').addEventListener('click', async () => {
+                document.getElementById('confirmDeleteYes').addEventListener('click', async () => { // Made async
                     confirmModal.remove(); // Close modal
-                    const userIdToDelete = getLoggedInUserId();
-                    if (!userIdToDelete || !auth || !db) {
-                        deleteAccountMessage.textContent = 'Cannot delete account: User not logged in or Firebase not initialized.';
-                        deleteAccountMessage.className = 'form-message error';
-                        deleteAccountMessage.style.display = 'block';
-                        return;
-                    }
+                    const loggedInUsername = localStorage.getItem('loggedInUser');
+                    if (loggedInUsername && db && auth && auth.currentUser) {
+                        try {
+                            const professionalDocRef = doc(db, `artifacts/${appId}/public/data/professionals`, loggedInUsername);
+                            await deleteDoc(professionalDocRef);
+                            console.log("Professional document deleted from Firestore.");
 
-                    try {
-                        // Delete user document from Firestore
-                        await deleteDoc(doc(db, "users", userIdToDelete));
+                            // Also delete the Firebase Auth user
+                            await auth.currentUser.delete();
+                            console.log("Firebase Auth user deleted.");
 
-                        // Delete user from Firebase Authentication
-                        // NOTE: This operation can only be performed on the server-side for security reasons
-                        // or if the user has recently re-authenticated. For a client-side app,
-                        // this will likely fail with 'auth/requires-recent-login' if not re-authenticated.
-                        // For a full solution, you'd need a Firebase Cloud Function or similar backend.
-                        // For this client-side demo, we'll simulate it but acknowledge the limitation.
-                        // await auth.currentUser.delete(); // This line would be problematic client-side
-
-                        // Simulate successful deletion for the demo
-                        localStorage.removeItem('isLoggedIn');
-                        localStorage.removeItem('loggedInUser');
-                        localStorage.removeItem('loggedInUserType');
-                        localStorage.removeItem('loggedInUserId');
-
-                        deleteAccountMessage.textContent = 'Account deleted successfully. Redirecting...';
-                        deleteAccountMessage.className = 'form-message success';
-                        deleteAccountMessage.style.display = 'block';
-                        setTimeout(() => navigateTo('index.html'), 2000);
-
-                    } catch (error) {
-                        console.error("Error deleting account:", error);
-                        deleteAccountMessage.textContent = `Error deleting account: ${error.message}. Please log out and log in again, then try deleting.`;
+                            localStorage.removeItem('isLoggedIn');
+                            localStorage.removeItem('loggedInUser');
+                            localStorage.removeItem('loggedInUserType');
+                            deleteAccountMessage.textContent = 'Your account has been successfully deleted. Redirecting...';
+                            deleteAccountMessage.className = 'form-message success';
+                            deleteAccountMessage.style.display = 'block';
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 2000);
+                        } catch (error) {
+                            console.error("Error deleting professional account:", error);
+                            deleteAccountMessage.textContent = `Error: Could not delete your account. ${error.message}`;
+                            deleteAccountMessage.className = 'form-message error';
+                            deleteAccountMessage.style.display = 'block';
+                        }
+                    } else {
+                        deleteAccountMessage.textContent = 'You are not logged in or cannot perform this action.';
                         deleteAccountMessage.className = 'form-message error';
                         deleteAccountMessage.style.display = 'block';
                     }
@@ -2476,73 +1973,76 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('confirmDeleteNo').addEventListener('click', () => {
                     confirmModal.remove(); // Close modal
                     deleteAccountMessage.textContent = 'Account deletion cancelled.';
-                    deleteAccountMessage.className = 'form-message info';
+                    deleteAccountMessage.className = 'form-message'; // Clear status
                     deleteAccountMessage.style.display = 'block';
                 });
             });
         }
     }
 
+
     // Logic specifically for customer account page (customer-account.html)
     if (customerProfileForm) {
-        const loggedInUser = localStorage.getItem('loggedInUser'); // This is the username
+        const loggedInUser = localStorage.getItem('loggedInUser');
         const loggedInUserType = localStorage.getItem('loggedInUserType');
 
         if (loggedInUser && loggedInUserType === 'customer') {
-            // Load customer data from Firestore
-            loadCustomerDataFromFirestore().then(customer => {
-                if (customer) {
-                    // Populate country dial code dropdown for customer profile
-                    if (custCountryCodeSelect) {
-                        populateCountryDialCodes(custCountryCodeSelect, customer.mobileNumber);
-                    }
-                    // Populate mobile number input (without dial code)
-                    if (custMobileNumberInput && customer.mobileNumber) {
-                        const dialCode = Object.values(countryDialCodes).find(code => customer.mobileNumber.startsWith(code));
-                        if (dialCode) {
-                            custMobileNumberInput.value = customer.mobileNumber.substring(dialCode.length);
+            const customer = findCustomerByUsername(loggedInUser);
+            if (customer) {
+                loadCustomerProfile(customer);
+
+                // Handle photo upload preview for customer
+                if (uploadCustPhotoInput) {
+                    uploadCustPhotoInput.addEventListener('change', function(event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                if (custProfilePhotoPreview) {
+                                    custProfilePhotoPreview.src = e.target.result;
+                                }
+                            };
+                            reader.readAsDataURL(file);
                         } else {
-                            custMobileNumberInput.value = customer.mobileNumber;
+                            if (custProfilePhotoPreview) {
+                                custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
+                            }
                         }
-                    } else {
-                        custMobileNumberInput.value = '';
-                    }
-                    custFirstNameInput.value = customer.name.split(' ')[0] || '';
-                    custLastNameInput.value = customer.name.split(' ').slice(-1)[0] || '';
-                    custEmailInput.value = customer.email || 'not-available@example.com';
-                    custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
-                } else {
-                    console.error('Customer data not found for logged in user:', loggedInUser);
-                    customerProfileForm.innerHTML = '<p class="form-message error">Customer profile could not be loaded. Please log in again.</p>';
+                    });
                 }
-            });
+                
+                // Add event listener for "View My Bookings" button for customers
+                if (viewMyBookingsButton) {
+                    viewMyBookingsButton.addEventListener('click', () => {
+                        window.location.href = 'customer-bookings.html';
+                    });
+                }
 
-            // Add event listener for "View My Bookings" button
-            if (viewMyBookingsButton) {
-                viewMyBookingsButton.addEventListener('click', () => {
-                    window.location.href = 'customer-bookings.html';
-                });
+            } else {
+                console.error('Customer data not found for logged in user:', loggedInUser);
+                customerProfileForm.innerHTML = '<p class="form-message error">Customer profile could not be loaded. Please log in again.</p>';
+                customerProfileForm.style.textAlign = 'center';
             }
-
         } else {
             customerProfileForm.innerHTML = '<p class="form-message error">You must be logged in as a customer to view this page. <a href="login.html">Login here</a></p>';
             customerProfileForm.style.textAlign = 'center';
         }
 
-        customerProfileForm.addEventListener('submit', async function(event) {
+        customerProfileForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
             customerProfileUpdateMessage.style.display = 'none';
             customerProfileUpdateMessage.className = 'form-message';
 
-            const loggedInUserId = getLoggedInUserId();
-            if (!loggedInUserId) {
+            const loggedInUsername = localStorage.getItem('loggedInUser');
+            if (!loggedInUsername) {
                 customerProfileUpdateMessage.textContent = 'You are not logged in.';
                 customerProfileUpdateMessage.className = 'form-message error';
                 customerProfileUpdateMessage.style.display = 'block';
                 return;
             }
 
-            const customerRef = doc(db, "users", loggedInUserId); // Changed to 'users' collection
+            // Find the customer to update in Firestore
+            const customerRef = doc(db, `artifacts/${appId}/public/data/customers`, loggedInUsername);
             let customerToUpdate = null;
             try {
                 const docSnap = await getDoc(customerRef);
@@ -2562,25 +2062,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
+
             const newFirstName = custFirstNameInput.value;
             const newLastName = custLastNameInput.value;
             const newCountryCode = custCountryCodeSelect ? custCountryCodeSelect.value : '';
             const newMobileNumberRaw = custMobileNumberInput.value;
-            const newMobileNumber = newCountryCode + newMobileNumberRaw;
-
+            const newMobileNumber = newMobileNumberRaw ? (newCountryCode + newMobileNumberRaw) : ''; // Combine dial code and number, or empty if no raw number
+            
+            // Validate inputs
             if (newFirstName.trim() === '' || newLastName.trim() === '') {
-                customerProfileUpdateMessage.textContent = 'Please enter your first and last name.';
-                customerProfileUpdateMessage.className = 'form-message error';
-                customerProfileUpdateMessage.style.display = 'block';
-                return;
+                 customerProfileUpdateMessage.textContent = 'First name and last name are required.';
+                 customerProfileUpdateMessage.className = 'form-message error';
+                 customerProfileUpdateMessage.style.display = 'block';
+                 return;
             }
-            if (newMobileNumberRaw.trim() !== '' && !newMobileNumberRaw.match(/^\d{8}$/)) {
-                customerProfileUpdateMessage.textContent = 'Mobile number must be an 8-digit number if provided.';
+            if (newMobileNumberRaw.trim() !== '' && !newMobileNumberRaw.match(/^\d{8}$/)) { // Validate if not empty
+                customerProfileUpdateMessage.textContent = 'Please enter an 8-digit mobile number if provided.';
                 customerProfileUpdateMessage.className = 'form-message error';
                 customerProfileUpdateMessage.style.display = 'block';
                 return;
             }
 
+            // Simulate file upload for customer photo
             const photoFile = uploadCustPhotoInput.files[0];
             let newAvatarUrl = customerToUpdate.avatar;
             if (photoFile) {
@@ -2588,6 +2091,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.log('Simulating customer photo upload:', photoFile.name);
             }
 
+            // Update customer's data in Firestore
             try {
                 await updateDoc(customerRef, {
                     name: `${newFirstName} ${newLastName}`,
@@ -2597,481 +2101,294 @@ document.addEventListener('DOMContentLoaded', async () => {
                 customerProfileUpdateMessage.textContent = 'Profile updated successfully!';
                 customerProfileUpdateMessage.className = 'form-message success';
                 customerProfileUpdateMessage.style.display = 'block';
-                custProfilePhotoPreview.src = newAvatarUrl; // Update preview
+                // Also update in-memory data if needed for immediate UI reflection without re-fetch
+                // Object.assign(customerToUpdate, { ...updated fields... });
             } catch (e) {
                 console.error("Error updating customer document:", e);
                 customerProfileUpdateMessage.textContent = 'Error updating profile. Please try again.';
                 customerProfileUpdateMessage.className = 'form-message error';
                 customerProfileUpdateMessage.style.display = 'block';
+                return;
             }
-        });
 
+            // Update preview image immediately
+            if (custProfilePhotoPreview) {
+                custProfilePhotoPreview.src = newAvatarUrl;
+            }
+            console.log('Updated Customer Data:', customerToUpdate);
+        });
         // Delete Customer Account functionality
         if (deleteCustomerAccountButton) {
             deleteCustomerAccountButton.addEventListener('click', () => {
                 deleteCustomerAccountMessage.style.display = 'none';
                 deleteCustomerAccountMessage.className = 'form-message';
 
+                // Custom modal for confirmation
                 const confirmModal = document.createElement('div');
-                confirmModal.className = 'modal-overlay';
+                confirmModal.className = 'modal-overlay'; // Use modal-overlay for styling
                 confirmModal.innerHTML = `
                     <div class="modal-content">
                         <h3>Confirm Account Deletion</h3>
                         <p>Are you sure you want to permanently delete your customer account? This action cannot be undone.</p>
                         <div class="modal-buttons">
-                            <button id="confirmDeleteYes" class="button-delete">Yes, Delete</button>
-                            <button id="confirmDeleteNo" class="button-primary">No, Cancel</button>
+                            <button id="confirmCustDeleteYes" class="button-delete">Yes, Delete</button>
+                            <button id="confirmCustDeleteNo" class="button-primary">No, Keep Booking</button>
                         </div>
                     </div>
                 `;
                 document.body.appendChild(confirmModal);
 
-                document.getElementById('confirmDeleteYes').addEventListener('click', async () => {
-                    confirmModal.remove();
-                    const userIdToDelete = getLoggedInUserId();
-                    if (!userIdToDelete || !auth || !db) {
-                        deleteCustomerAccountMessage.textContent = 'Cannot delete account: User not logged in or Firebase not initialized.';
-                        deleteCustomerAccountMessage.className = 'form-message error';
-                        deleteCustomerAccountMessage.style.display = 'block';
-                        return;
-                    }
+                document.getElementById('confirmCustDeleteYes').addEventListener('click', async () => { // Made async
+                    confirmModal.remove(); // Close modal
+                    const loggedInUsername = localStorage.getItem('loggedInUser');
+                    if (loggedInUsername && db && auth && auth.currentUser) {
+                        try {
+                            const customerDocRef = doc(db, `artifacts/${appId}/public/data/customers`, loggedInUsername);
+                            await deleteDoc(customerDocRef);
+                            console.log("Customer document deleted from Firestore.");
 
-                    try {
-                        await deleteDoc(doc(db, "users", userIdToDelete));
-                        // await auth.currentUser.delete(); // Client-side deletion of auth user is problematic without recent re-auth
+                            // Also delete the Firebase Auth user
+                            await auth.currentUser.delete();
+                            console.log("Firebase Auth user deleted.");
 
-                        localStorage.removeItem('isLoggedIn');
-                        localStorage.removeItem('loggedInUser');
-                        localStorage.removeItem('loggedInUserType');
-                        localStorage.removeItem('loggedInUserId');
-
-                        deleteCustomerAccountMessage.textContent = 'Account deleted successfully. Redirecting...';
-                        deleteCustomerAccountMessage.className = 'form-message success';
-                        deleteCustomerAccountMessage.style.display = 'block';
-                        setTimeout(() => navigateTo('index.html'), 2000);
-
-                    } catch (error) {
-                        console.error("Error deleting account:", error);
-                        deleteCustomerAccountMessage.textContent = `Error deleting account: ${error.message}. Please log out and log in again, then try deleting.`;
+                            localStorage.removeItem('isLoggedIn');
+                            localStorage.removeItem('loggedInUser');
+                            localStorage.removeItem('loggedInUserType');
+                            deleteCustomerAccountMessage.textContent = 'Your account has been successfully deleted. Redirecting...';
+                            deleteCustomerAccountMessage.className = 'form-message success';
+                            deleteCustomerAccountMessage.style.display = 'block';
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 2000);
+                        } catch (error) {
+                            console.error("Error deleting customer account:", error);
+                            deleteCustomerAccountMessage.textContent = `Error: Could not delete your account. ${error.message}`;
+                            deleteCustomerAccountMessage.className = 'form-message error';
+                            deleteCustomerAccountMessage.style.display = 'block';
+                        }
+                    } else {
+                        deleteCustomerAccountMessage.textContent = 'You are not logged in or cannot perform this action.';
                         deleteCustomerAccountMessage.className = 'form-message error';
                         deleteCustomerAccountMessage.style.display = 'block';
                     }
                 });
 
-                document.getElementById('confirmDeleteNo').addEventListener('click', () => {
-                    confirmModal.remove();
+                document.getElementById('confirmCustDeleteNo').addEventListener('click', () => {
+                    confirmModal.remove(); // Close modal
                     deleteCustomerAccountMessage.textContent = 'Account deletion cancelled.';
-                    deleteCustomerAccountMessage.className = 'form-message info';
+                    deleteCustomerAccountMessage.className = 'form-message'; // Clear status
                     deleteCustomerAccountMessage.style.display = 'block';
                 });
             });
         }
     }
 
-    // Logic for plumber-profile.html (dynamic loading of professional data)
-    if (document.body.classList.contains('plumber-profile-page')) { // Check for a specific body class
-        const urlParams = new URLSearchParams(window.location.search);
-        const professionalId = urlParams.get('id');
-
-        if (professionalId) {
-            const professional = getTradespersonById(professionalId);
-            if (professional) {
-                document.title = `Fixalo – ${professional.name}'s Profile`;
-                document.querySelector('.profile-avatar').src = professional.avatar;
-                document.querySelector('.profile-name').textContent = professional.name;
-                document.querySelector('.profile-specialty').textContent = professional.specialty;
-                document.querySelector('.profile-rating').innerHTML = `${generateStarRating(professional.rating)} ${professional.rating} (${professional.reviews} reviews)`;
-                document.querySelector('.profile-description-section p').textContent = professional.description;
-                document.querySelector('.info-box p a[href^="tel:"]').textContent = professional.mobileNumber || '+356 1234 5678';
-                document.querySelector('.info-box p a[href^="tel:"]').href = `tel:${professional.mobileNumber}`;
-                document.querySelector('.info-box p a[href^="mailto:"]').textContent = professional.email || 'not-available@example.com';
-                document.querySelector('.info-box p a[href^="mailto:"]').href = `mailto:${professional.email}`;
-
-                // Dynamically populate services offered
-                const servicesList = document.querySelector('.services-list');
-                if (servicesList) {
-                    servicesList.innerHTML = ''; // Clear existing
-                    (professional.specificServices || []).forEach(service => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `<i class="fas fa-check-circle"></i> ${service}`;
-                        servicesList.appendChild(li);
-                    });
-                     if (professional.specificServices && professional.specificServices.length === 0) {
-                        servicesList.innerHTML = '<li><p class="select-hint">No specific services listed. See description for details.</p></li>';
-                    }
-                }
-
-                // Update "Back to Plumbers List" link
-                const backLink = document.querySelector('.back-link');
-                if (backLink) {
-                    // Assuming you want to go back to the service listing page for their main service
-                    // This is a simplification; a real app might store the original service category
-                    const mainServiceCategory = Object.keys(tradespeopleData).find(cat =>
-                        tradespeopleData[cat].some(p => p.id === professionalId)
-                    );
-                    if (mainServiceCategory) {
-                        backLink.href = `service-listing.html?service=${mainServiceCategory}`;
-                    } else {
-                        backLink.href = 'services.html'; // Fallback to general services page
-                    }
-                }
-
-                // Message John button logic
-                const messageJohnButton = document.getElementById('messageJohnButton');
-                if (messageJohnButton) {
-                    messageJohnButton.addEventListener('click', function() {
-                        const loggedInUserType = localStorage.getItem('loggedInUserType');
-                        if (loggedInUserType === 'customer') {
-                            // Redirect to messages page, potentially pre-selecting this professional
-                            navigateTo(`messaging-page.html?professionalId=${professionalId}`);
-                        } else if (loggedInUserType === 'tradesperson') {
-                            showModal('Action Not Allowed', 'You are logged in as a professional. You cannot message other professionals from their public profile.', false);
-                        } else {
-                            // Not logged in, prompt to sign up as customer
-                            showModal('Sign Up to Message', 'Please sign up or log in as a customer to message professionals.', true,
-                                () => navigateTo('customer-signup.html'), // On confirm, go to customer signup
-                                null, // No specific cancel action
-                                'Sign Up as Customer',
-                                'Cancel'
-                            );
-                        }
-                    });
-                }
-
-                // Book Appointment button logic
-                const bookAppointmentButton = document.querySelector('.profile-book-button');
-                if (bookAppointmentButton) {
-                    bookAppointmentButton.addEventListener('click', function() {
-                        const loggedInUserType = localStorage.getItem('loggedInUserType');
-                        if (loggedInUserType === 'customer') {
-                            // Redirect to booking page, passing professional ID
-                            navigateTo(`book-appointment.html?professionalId=${professionalId}`);
-                        } else if (loggedInUserType === 'tradesperson') {
-                            showModal('Action Not Allowed', 'You are logged in as a professional. You cannot book appointments for yourself or other professionals from this page.', false);
-                        } else {
-                            // Not logged in, prompt to sign up as customer
-                            showModal('Sign Up to Book', 'Please sign up or log in as a customer to book appointments.', true,
-                                () => navigateTo('customer-signup.html'), // On confirm, go to customer signup
-                                null, // No specific cancel action
-                                'Sign Up as Customer',
-                                'Cancel'
-                            );
-                        }
-                    });
-                }
-
-
-            } else {
-                // Professional not found
-                document.title = "Fixalo – Professional Not Found";
-                document.querySelector('.page-banner .banner-content').innerHTML = `
-                    <h1 class="profile-name">Professional Not Found 😔</h1>
-                    <p class="profile-specialty">The professional you are looking for does not exist.</p>
-                    <a href="services.html" class="back-link">← Back to Services</a>
-                `;
-                document.querySelector('.plumber-profile-container').innerHTML = `
-                    <p class="no-results-message">Please check the URL or browse our <a href="services.html">services</a> to find a professional.</p>
-                `;
-            }
-        } else {
-            // No professional ID in URL
-            document.title = "Fixalo – Professional Not Found";
-            document.querySelector('.page-banner .banner-content').innerHTML = `
-                <h1 class="profile-name">Professional Not Found 😔</h1>
-                <p class="profile-specialty">No professional ID provided in the URL.</p>
-                <a href="services.html" class="back-link">← Back to Services</a>
-            `;
-            document.querySelector('.plumber-profile-container').innerHTML = `
-                <p class="no-results-message">Please check the URL or browse our <a href="services.html">services</a> to find a professional.</p>
-            `;
-        }
-    }
-
-    // Logic for messaging-page.html
-    if (messageThreadsList) {
+    // Logic specifically for messaging-page.html
+    if (messageThreadsList && conversationDisplay) {
         loadMessageThreads();
-        // If a professionalId is in the URL, load that specific conversation
+
+        // Event listener for sending messages
+        if (sendMessageButton) {
+            sendMessageButton.addEventListener('click', sendMessage);
+            messageTextarea.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault(); // Prevent new line
+                    sendMessage();
+                }
+            });
+        }
+
+        // Check if there's a professional ID in the URL to pre-load a conversation
         const urlParams = new URLSearchParams(window.location.search);
-        const professionalIdFromUrl = urlParams.get('professionalId');
-        if (professionalIdFromUrl) {
-            loadConversation(professionalIdFromUrl);
-            // Highlight the corresponding thread item if it exists
-            const threadItem = document.querySelector(`.message-thread-item[data-professional-id="${professionalIdFromUrl}"]`);
-            if (threadItem) {
+        const proIdFromUrl = urlParams.get('proId');
+        if (proIdFromUrl) {
+            loadConversation(proIdFromUrl);
+            // Highlight the corresponding thread if it exists
+            const threadItemToHighlight = document.querySelector(`.message-thread-item[data-professional-id="${proIdFromUrl}"]`);
+            if (threadItemToHighlight) {
                 Array.from(messageThreadsList.children).forEach(item => item.classList.remove('active'));
-                threadItem.classList.add('active');
+                threadItemToHighlight.classList.add('active');
             }
         }
     }
 
-    if (sendMessageButton) {
-        sendMessageButton.addEventListener('click', sendMessage);
-        messageTextarea.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Prevent new line
-                sendMessage();
+    // Logic for the message button on plumber-profile.html
+    if (messageJohnButton) {
+        messageJohnButton.addEventListener('click', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+            if (isLoggedIn && loggedInUserType === 'customer') {
+                // Get the professional's ID from the URL or a data attribute on the button/page
+                const urlParams = new URLSearchParams(window.location.search);
+                const professionalId = urlParams.get('id'); // Assuming the ID is passed in the URL
+                window.location.href = `messaging-page.html?proId=${professionalId}`;
+            } else if (isLoggedIn && loggedInUserType === 'professional') {
+                showTemporaryMessage('Professionals cannot message other professionals directly from this profile page.', 'error');
+            } else {
+                showTemporaryMessage('You need to be logged in as a customer to use messaging features.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'customer-signup.html';
+                }, 2000); // Redirect after 2 seconds
             }
         });
     }
 
-    // Logic for professional-bookings.html
-    if (unconfirmedBookingsList && confirmedBookingsList) {
-        loadProfessionalBookings();
+    // Logic for the book appointment button on plumber-profile.html
+    // Assuming this button exists on a profile page and needs to pass the proId
+    if (bookAppointmentButton) {
+        bookAppointmentButton.addEventListener('click', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const loggedInUserType = localStorage.getItem('loggedInUserType');
+
+            if (isLoggedIn && loggedInUserType === 'customer') {
+                // Get the professional's ID from the URL or a data attribute on the button/page
+                const urlParams = new URLSearchParams(window.location.search);
+                const professionalId = urlParams.get('id'); // Assuming the ID is passed in the URL
+                window.location.href = `book-appointment.html?proId=${professionalId}`;
+            } else {
+                // Show error message using the temporary message function
+                showTemporaryMessage('You need to be a customer to book an appointment. Please sign up or log in as a customer.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'customer-signup.html';
+                }, 2000); // Redirect after 2 seconds
+            }
+        });
     }
 
-    // Logic for customer-bookings.html
-    if (customerUpcomingBookingsList && customerPastBookingsList) {
-        loadCustomerBookings();
+    // Logic for book-appointment.html (Date validation)
+    const bookingDateInput = document.getElementById('bookingDate');
+    if (bookingDateInput) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        const minDate = `${year}-${month}-${day}`;
+        bookingDateInput.setAttribute('min', minDate);
     }
+
+
+    // Global function to show temporary messages (replaces alert/confirm)
+    function showTemporaryMessage(message, type = 'info', duration = 3000) {
+        let messageElement = document.getElementById('tempMessageDisplay');
+        if (!messageElement) {
+            messageElement = document.createElement('div');
+            messageElement.id = 'tempMessageDisplay';
+            document.body.appendChild(messageElement);
+
+            // Add basic styling for the temporary message
+            const tempMessageStyle = document.createElement('style');
+            tempMessageStyle.textContent = `
+                #tempMessageDisplay {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 15px 25px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    color: var(--text-light);
+                    z-index: 1001;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    opacity: 0;
+                    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+                    max-width: 90%;
+                    text-align: center;
+                }
+                #tempMessageDisplay.info {
+                    background-color: var(--primary-blue);
+                }
+                #tempMessageDisplay.success {
+                    background-color: var(--accent-lime);
+                }
+                #tempMessageDisplay.error {
+                    background-color: var(--error-red);
+                }
+                #tempMessageDisplay.show {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            `;
+            document.head.appendChild(tempMessageStyle);
+        }
+
+        messageElement.textContent = message;
+        messageElement.className = ''; // Clear previous classes
+        messageElement.classList.add(type);
+        messageElement.classList.add('show');
+
+        setTimeout(() => {
+            messageElement.classList.remove('show');
+        }, duration);
+    }
+
+
+    // Common modal styles for confirmation dialogs (already present, ensuring it's available)
+    const styleTag = document.createElement('style');
+    styleTag.textContent = `
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal-content h3 {
+            color: var(--secondary-charcoal);
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .modal-content p {
+            margin-bottom: 25px;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .modal-buttons button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+        }
+        .modal-buttons .button-delete {
+            background-color: var(--error-red);
+            color: var(--text-light);
+        }
+        .modal-buttons .button-delete:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+        .modal-buttons .button-primary {
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+        }
+        .modal-buttons .button-primary:hover {
+            background-color: #004499;
+            transform: translateY(-2px);
+        }
+    `;
+    document.head.appendChild(styleTag);
 });
 
-// Dummy data for messages and bookings (replace with Firestore in a real app)
-let messagesData = JSON.parse(localStorage.getItem('messagesData')) || [
-    { id: 'msg1', from: 'customer1', to: 'john-paul', text: 'Hi John, are you available for a leak repair next week?', timestamp: 1700000000000, isRead: true },
-    { id: 'msg2', from: 'john-paul', to: 'customer1', text: 'Hi! Yes, I have some slots. What day works for you?', timestamp: 1700000010000, isRead: true },
-    { id: 'msg3', from: 'customer1', to: 'john-paul', text: 'How about Tuesday morning?', timestamp: 1700000020000, isRead: false },
-    { id: 'msg4', from: 'customer2', to: 'anna-wood', text: 'Hi Anna, can you help with a custom cabinet project?', timestamp: 1700000030000, isRead: true }
-];
-
-let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
-    { id: 'book1', customerId: 'customer1', customerName: 'Jane Doe', customerPhone: '+35699112233', professionalId: 'john-paul', professionalName: 'John Paul', serviceType: 'Plumbing', description: 'Emergency Leak Repair', date: '2025-07-20', time: '10:00 AM - 11:00 AM', status: 'Pending' },
-    { id: 'book2', customerId: 'customer2', customerName: 'Mark Smith', customerPhone: '+35677445566', professionalId: 'john-paul', professionalName: 'John Paul', serviceType: 'Plumbing', description: 'Boiler Servicing', date: '2025-07-25', time: '02:00 PM - 03:00 PM', status: 'Confirmed' },
-    { id: 'book3', customerId: 'customer1', customerName: 'Jane Doe', customerPhone: '+35699112233', professionalId: 'alex-pace', professionalName: 'Alex Pace', serviceType: 'Plumbing', description: 'Faucet Installation', date: '2025-06-10', time: '09:00 AM - 10:00 AM', status: 'Completed' }
-];
-
-// Dummy customer data (replace with Firestore in a real app)
-// This is used for login simulation and customer profile loading
-let customerData = JSON.parse(localStorage.getItem('customerData')) || [
-    { id: 'customer1', username: 'jane.doe', email: 'jane.doe@example.com', name: 'Jane Doe', mobileNumber: '+35699112233', avatar: 'https://placehold.co/150x150/FFD700/36454F?text=JD', joinDate: '2024-01-01' },
-    { id: 'customer2', username: 'mark.smith', email: 'mark.smith@example.com', name: 'Mark Smith', mobileNumber: '+35677445566', avatar: 'https://placehold.co/150x150/A7D129/36454F?text=MS', joinDate: '2024-02-15' }
-];
-
-// Country Dial Codes (a more comprehensive list would be needed for a real app)
-const countryDialCodes = {
-    "Malta": "+356",
-    "Italy": "+39",
-    "United Kingdom": "+44",
-    "United States": "+1",
-    "Canada": "+1",
-    "Australia": "+61",
-    "Germany": "+49",
-    "France": "+33",
-    "Spain": "+34",
-    "Netherlands": "+31",
-    "Belgium": "+32",
-    "Sweden": "+46",
-    "Norway": "+47",
-    "Denmark": "+45",
-    "Ireland": "+353",
-    "Switzerland": "+41",
-    "Austria": "+43",
-    "Portugal": "+351",
-    "Greece": "+30",
-    "Cyprus": "+357",
-    "Luxembourg": "+352",
-    "Finland": "+358",
-    "Iceland": "+354",
-    "New Zealand": "+64",
-    "South Africa": "+27",
-    "Brazil": "+55",
-    "Mexico": "+52",
-    "Argentina": "+54",
-    "Chile": "+56",
-    "Colombia": "+57",
-    "Peru": "+51",
-    "Egypt": "+20",
-    "Morocco": "+212",
-    "United Arab Emirates": "+971",
-    "Saudi Arabia": "+966",
-    "Qatar": "+974",
-    "Kuwait": "+965",
-    "Bahrain": "+973",
-    "Oman": "+968",
-    "Turkey": "+90",
-    "India": "+91",
-    "China": "+86",
-    "Japan": "+81",
-    "South Korea": "+82",
-    "Singapore": "+65",
-    "Malaysia": "+60",
-    "Thailand": "+66",
-    "Indonesia": "+62",
-    "Philippines": "+63",
-    "Vietnam": "+84",
-    "Russia": "+7",
-    "Ukraine": "+380",
-    "Poland": "+48",
-    "Czech Republic": "+420",
-    "Hungary": "+36",
-    "Romania": "+40",
-    "Bulgaria": "+359",
-    "Croatia": "+385",
-    "Serbia": "+381",
-    "Bosnia and Herzegovina": "+387",
-    "Slovenia": "+386",
-    "Slovakia": "+421",
-    "Lithuania": "+370",
-    "Latvia": "+371",
-    "Estonia": "+372",
-    "Albania": "+355",
-    "North Macedonia": "+389",
-    "Montenegro": "+382",
-    "Kosovo": "+383",
-    "Moldova": "+373",
-    "Georgia": "+995",
-    "Armenia": "+374",
-    "Azerbaijan": "+994",
-    "Kazakhstan": "+7",
-    "Uzbekistan": "+998",
-    "Kyrgyzstan": "+996",
-    "Tajikistan": "+992",
-    "Turkmenistan": "+993",
-    "Afghanistan": "+93",
-    "Pakistan": "+92",
-    "Bangladesh": "+880",
-    "Sri Lanka": "+94",
-    "Nepal": "+977",
-    "Myanmar": "+95",
-    "Laos": "+856",
-    "Cambodia": "+855",
-    "Mongolia": "+976",
-    "Fiji": "+679",
-    "Papua New Guinea": "+675",
-    "Solomon Islands": "+677",
-    "Vanuatu": "+678",
-    "New Caledonia": "+687",
-    "French Polynesia": "+689",
-    "Egypt": "+20",
-    "Nigeria": "+234",
-    "Kenya": "+254",
-    "Ethiopia": "+251",
-    "Tanzania": "+255",
-    "Uganda": "+256",
-    "Ghana": "+233",
-    "Ivory Coast": "+225",
-    "Cameroon": "+237",
-    "Angola": "+244",
-    "Mozambique": "+258",
-    "Madagascar": "+261",
-    "Zambia": "+260",
-    "Zimbabwe": "+263",
-    "Botswana": "+267",
-    "Namibia": "+264",
-    "Congo (DRC)": "+243",
-    "Sudan": "+249",
-    "Algeria": "+213",
-    "Tunisia": "+216",
-    "Libya": "+218",
-    "Chad": "+235",
-    "Niger": "+227",
-    "Mali": "+223",
-    "Mauritania": "+222",
-    "Senegal": "+221",
-    "Guinea": "+224",
-    "Burkina Faso": "+226",
-    "Benin": "+229",
-    "Togo": "+228",
-    "Sierra Leone": "+232",
-    "Liberia": "+231",
-    "Gambia": "+220",
-    "Cape Verde": "+238",
-    "Sao Tome and Principe": "+239",
-    "Equatorial Guinea": "+240",
-    "Gabon": "+241",
-    "Central African Republic": "+236",
-    "Rwanda": "+250",
-    "Burundi": "+257",
-    "Djibouti": "+253",
-    "Eritrea": "+291",
-    "Somalia": "+252",
-    "Comoros": "+269",
-    "Seychelles": "+248",
-    "Mauritius": "+230",
-    "Malawi": "+265",
-    "Lesotho": "+266",
-    "Eswatini": "+268",
-    "Reunion": "+262",
-    "Mayotte": "+262",
-    "South Sudan": "+211",
-    "Venezuela": "+58",
-    "Colombia": "+57",
-    "Ecuador": "+593",
-    "Bolivia": "+591",
-    "Paraguay": "+595",
-    "Uruguay": "+598",
-    "Guyana": "+592",
-    "Suriname": "+597",
-    "French Guiana": "+594",
-    "Cuba": "+53",
-    "Jamaica": "+1-876",
-    "Haiti": "+509",
-    "Dominican Republic": "+1-809",
-    "Puerto Rico": "+1-787",
-    "Trinidad and Tobago": "+1-868",
-    "Bahamas": "+1-242",
-    "Barbados": "+1-246",
-    "Saint Lucia": "+1-758",
-    "Grenada": "+1-473",
-    "Saint Vincent and the Grenadines": "+1-784",
-    "Antigua and Barbuda": "+1-268",
-    "Dominica": "+1-767",
-    "Saint Kitts and Nevis": "+1-869",
-    "Belize": "+501",
-    "Guatemala": "+502",
-    "El Salvador": "+503",
-    "Honduras": "+504",
-    "Nicaragua": "+505",
-    "Costa Rica": "+506",
-    "Panama": "+507",
-    "Greenland": "+299",
-    "Faroe Islands": "+298",
-    "Gibraltar": "+350",
-    "San Marino": "+378",
-    "Vatican City": "+379",
-    "Monaco": "+377",
-    "Andorra": "+376",
-    "Liechtenstein": "+423",
-    "Maldives": "+960",
-    "Brunei": "+673",
-    "Timor-Leste": "+670",
-    "Palau": "+680",
-    "Micronesia": "+691",
-    "Marshall Islands": "+692",
-    "Nauru": "+674",
-    "Kiribati": "+686",
-    "Tuvalu": "+688",
-    "Samoa": "+685",
-    "Tonga": "+676",
-    "Cook Islands": "+682",
-    "Niue": "+683",
-    "Tokelau": "+690",
-    "Wallis and Futuna": "+681",
-    "American Samoa": "+1-684",
-    "Guam": "+1-671",
-    "Northern Mariana Islands": "+1-670",
-    "US Virgin Islands": "+1-340",
-    "British Virgin Islands": "+1-284",
-    "Anguilla": "+1-264",
-    "Montserrat": "+1-664",
-    "Turks and Caicos Islands": "+1-649",
-    "Cayman Islands": "+1-345",
-    "Bermuda": "+1-441",
-    "Saint Pierre and Miquelon": "+508",
-    "Falkland Islands": "+500",
-    "South Georgia and the South Sandwich Islands": "+500",
-    "Saint Helena, Ascension and Tristan da Cunha": "+290",
-    "Norfolk Island": "+672",
-    "Christmas Island": "+61",
-    "Cocos (Keeling) Islands": "+61",
-    "Pitcairn Islands": "+64",
-    "Tokelau": "+690",
-    "Heard Island and McDonald Islands": "+672",
-    "French Southern and Antarctic Lands": "+262",
-    "Bouvet Island": "+47",
-    "Svalbard and Jan Mayen": "+47",
-    "British Indian Ocean Territory": "+246",
-    "United States Minor Outlying Islands": "+1",
-    "Isle of Man": "+44",
-    "Guernsey": "+44",
-    "Jersey": "+44"
-};
+    }
