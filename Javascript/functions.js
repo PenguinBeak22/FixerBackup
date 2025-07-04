@@ -1038,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Elements for professional-account.html
     const professionalProfileForm = document.getElementById('professionalProfileForm');
     const profFirstNameInput = document.getElementById('profFirstName');
-    const profLastNameInput = document = document.getElementById('profLastName');
+    const profLastNameInput = document.getElementById('profLastName');
     const profEmailInput = document.getElementById('profEmail');
     const profCountryCodeSelect = document.getElementById('profCountryCode'); // New element for country code
     const profMobileNumberInput = document.getElementById('profMobileNumber');
