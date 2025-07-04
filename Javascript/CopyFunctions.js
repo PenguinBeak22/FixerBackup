@@ -15,8 +15,7 @@ const tradespeopleData = {
             joinDate: '2010-03-15',
             isPremium: true, // Added premium flag
             promotionRank: 1, // Added promotion rank
-            specificServices: ['Emergency Leaks', 'Drain Cleaning', 'Water Heater Repair'],
-            email: 'john.paul@example.com' // Added email for login simulation
+            specificServices: ['Emergency Leaks', 'Drain Cleaning', 'Water Heater Repair'] // Example of specific services saved
         },
         {
             id: 'mary-evans',
@@ -31,8 +30,7 @@ const tradespeopleData = {
             joinDate: '2012-07-22',
             isPremium: true, // Added premium flag
             promotionRank: 2, // Added promotion rank
-            specificServices: ['Bathroom Installations', 'Pipe Repair', 'Boiler Servicing'],
-            email: 'mary.evans@example.com' // Added email for login simulation
+            specificServices: ['Bathroom Installations', 'Pipe Repair', 'Boiler Servicing']
         },
         {
             id: 'alex-pace',
@@ -46,8 +44,7 @@ const tradespeopleData = {
             locality: 'Mosta',
             joinDate: '2015-11-01',
             isPremium: false,
-            specificServices: ['General Plumbing', 'Fixture Installation', 'Leak Detection'],
-            email: 'alex.pace@example.com' // Added email for login simulation
+            specificServices: ['General Plumbing', 'Fixture Installation', 'Leak Detection']
         },
         {
             id: 'sarah-camilleri',
@@ -61,8 +58,7 @@ const tradespeopleData = {
             locality: 'Qormi',
             joinDate: '2018-01-10',
             isPremium: false,
-            specificServices: ['Commercial Plumbing', 'Water Conservation', 'Backflow Prevention'],
-            email: 'sarah.camilleri@example.com' // Added email for login simulation
+            specificServices: ['Commercial Plumbing', 'Water Conservation', 'Backflow Prevention']
         },
         {
             id: 'david-rossi',
@@ -76,8 +72,7 @@ const tradespeopleData = {
             locality: 'Rome',
             joinDate: '2008-05-20',
             isPremium: false,
-            specificServices: ['Drainage Systems', 'Septic Tank Maintenance', 'Water Filtration'],
-            email: 'david.rossi@example.com' // Added email for login simulation
+            specificServices: ['Drainage Systems', 'Septic Tank Maintenance', 'Water Filtration']
         },
         {
             id: 'emily-smith',
@@ -91,8 +86,7 @@ const tradespeopleData = {
             locality: 'London',
             joinDate: '2011-09-05',
             isPremium: false,
-            specificServices: ['Residential Plumbing', 'Leak Detection', 'Bathroom Remodels'],
-            email: 'emily.smith@example.com' // Added email for login simulation
+            specificServices: ['Residential Plumbing', 'Leak Detection', 'Bathroom Remodels']
         }
     ],
     carpentry: [
@@ -108,8 +102,7 @@ const tradespeopleData = {
             locality: 'Mosta',
             joinDate: '2013-05-01',
             isPremium: false,
-            specificServices: ['Custom Cabinets', 'Furniture Assembly', 'Deck Building'],
-            email: 'bob.smith@example.com' // Added email for login simulation
+            specificServices: ['Custom Cabinets', 'Furniture Assembly', 'Deck Building']
         },
         {
             id: 'anna-wood',
@@ -123,8 +116,7 @@ const tradespeopleData = {
             locality: 'Naxxar',
             joinDate: '2016-09-10',
             isPremium: false,
-            specificServices: ['Flooring Installation', 'Custom Shelving', 'Door Repair'],
-            email: 'anna.wood@example.com' // Added email for login simulation
+            specificServices: ['Flooring Installation', 'Custom Shelving', 'Door Repair']
         }
     ],
     electrical: [
@@ -140,8 +132,7 @@ const tradespeopleData = {
             locality: 'Birkirkara',
             joinDate: '2011-02-20',
             isPremium: false,
-            specificServices: ['Electrical Wiring', 'Light Fixture Installation', 'Outlet Repair'],
-            email: 'mark.davis@example.com' // Added email for login simulation
+            specificServices: ['Electrical Wiring', 'Light Fixture Installation', 'Outlet Repair']
         }
     ],
     painting: [
@@ -157,8 +148,7 @@ const tradespeopleData = {
             locality: 'Sliema',
             joinDate: '2017-04-05',
             isPremium: false,
-            specificServices: ['Interior Painting', 'Exterior Painting', 'Wallpaper Installation'],
-            email: 'lisa.white@example.com' // Added email for login simulation
+            specificServices: ['Interior Painting', 'Exterior Painting', 'Wallpaper Installation']
         }
     ],
     cleaning: [
@@ -174,8 +164,7 @@ const tradespeopleData = {
             locality: 'Mosta',
             joinDate: '2014-08-12',
             isPremium: false,
-            specificServices: ['Residential Cleaning', 'Deep Cleaning', 'Commercial Cleaning'],
-            email: 'chris.green@example.com' // Added email for login simulation
+            specificServices: ['Residential Cleaning', 'Deep Cleaning', 'Commercial Cleaning']
         }
     ],
     blacksmithing: [
@@ -191,8 +180,7 @@ const tradespeopleData = {
             locality: 'Valletta',
             joinDate: '2010-01-01',
             isPremium: false,
-            specificServices: ['Custom Metalwork', 'Wrought Iron Gates', 'Repairs'],
-            email: 'greg.black@example.com' // Added email for login simulation
+            specificServices: ['Custom Metalwork', 'Wrought Iron Gates', 'Repairs']
         }
     ]
 };
@@ -391,89 +379,42 @@ function hideModal() {
  * @param {string} email User's email.
  * @param {string} password User's password.
  * @param {string} userType Type of user ('customer' or 'tradesperson').
- * @param {object} userData Additional user data to store in Firestore. Must include 'username'.
+ * @param {object} userData Additional user data to store in Firestore.
  */
 async function signUp(email, password, userType, userData = {}) {
-    console.log("Attempting to sign up with email:", email, "userType:", userType, "username:", userData.username); // Added debug log
+    console.log("Attempting to sign up with email:", email, "userType:", userType); // Added debug log
     if (!auth) {
         showModal("Error", "Firebase authentication not initialized. Please ensure Firebase configuration is correct.", false);
         console.error("Firebase Auth is undefined. Cannot sign up.");
         return;
     }
-    if (!db) {
-        showModal("Error", "Firestore database not initialized. Please ensure Firebase configuration is correct.", false);
-        console.error("Firestore DB is undefined. Cannot sign up.");
-        return;
-    }
 
     try {
-        // --- Uniqueness Checks (Email and Username) ---
-        console.log("Checking for existing email and username in Firestore...");
-        const usersRef = collection(db, "users");
-        const emailQuery = query(usersRef, where("email", "==", email));
-        const usernameQuery = query(usersRef, where("username", "==", userData.username)); // Assuming username is passed in userData
-
-        const [emailSnapshot, usernameSnapshot] = await Promise.all([
-            getDocs(emailQuery),
-            getDocs(usernameQuery)
-        ]);
-
-        if (!emailSnapshot.empty) {
-            showModal("Sign Up Error", "This email is already registered. Please use a different email or log in.", false);
-            console.error("Sign Up Failed: Email already in use:", email);
-            return;
-        }
-        if (!usernameSnapshot.empty) {
-            showModal("Sign Up Error", "This username is already taken. Please choose a different username.", false);
-            console.error("Sign Up Failed: Username already taken:", userData.username);
-            return;
-        }
-        console.log("Email and username are unique.");
-
-        // --- Create User in Firebase Authentication ---
-        console.log("Calling createUserWithEmailAndPassword...");
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log("User successfully created in Firebase Auth. UID:", user.uid);
+        console.log("User signed up:", user.uid);
 
-        // --- Store User Data in Firestore ---
-        const userRef = doc(db, "users", user.uid); // Use UID as document ID
-        console.log("Setting user document in Firestore for UID:", user.uid);
+        // Store user data in Firestore
+        const userRef = doc(db, "users", user.uid);
         await setDoc(userRef, {
             email: email,
             userType: userType,
-            authUid: user.uid, // Store the Firebase Auth UID in the document
             ...userData,
             createdAt: new Date()
         });
-        console.log("User document successfully set in Firestore for UID:", user.uid);
 
         localStorage.setItem('loggedInUserId', user.uid);
         localStorage.setItem('loggedInUserType', userType);
-        // Store the username in local storage for consistency with existing dummy data logic
-        localStorage.setItem('loggedInUser', userData.username); 
-        localStorage.setItem('isLoggedIn', 'true'); // Explicitly set isLoggedIn
+        showModal("Success", "Account created successfully!", false);
 
-        showModal("Success", "Account created successfully! Redirecting...", false);
-
-        // Navigate after a short delay to allow user to see the success message
-        setTimeout(() => {
-            if (userType === 'customer') {
-                navigateTo('main-index-page.html');
-            } else if (userType === 'tradesperson') {
-                navigateTo('plumber-profile-page.html'); // Navigate to a default profile page for tradespeople
-            }
-        }, 1500); // 1.5 second delay
-        
-    } catch (error) {
-        console.error("Error during sign-up process:", error);
-        let errorMessage = `Failed to create account: ${error.message}`;
-        if (error.code === 'auth/email-already-in-use') {
-            errorMessage = "This email is already registered. Please use a different email or log in.";
-        } else if (error.code === 'auth/weak-password') {
-            errorMessage = "Password is too weak. Please choose a stronger password.";
+        if (userType === 'customer') {
+            navigateTo('main-index-page.html');
+        } else if (userType === 'tradesperson') {
+            navigateTo('plumber-profile-page.html'); // Navigate to a default profile page for tradespeople
         }
-        showModal("Sign Up Error", errorMessage, false);
+    } catch (error) {
+        console.error("Error creating account:", error);
+        showModal("Sign Up Error", `Failed to create account: ${error.message}`, false);
     }
 }
 
@@ -484,51 +425,36 @@ async function signUp(email, password, userType, userData = {}) {
  * @returns {Promise<void>}
  */
 async function logIn(email, password) {
-    console.log("Attempting to log in with email:", email); // Added debug log
     if (!auth) {
         showModal("Error", "Firebase authentication not initialized. Please ensure Firebase configuration is correct.", false);
         console.error("Firebase Auth is undefined. Cannot log in.");
         return;
     }
-    if (!db) {
-        showModal("Error", "Firestore database not initialized. Please ensure Firebase configuration is correct.", false);
-        console.error("Firestore DB is undefined. Cannot log in.");
-        return;
-    }
 
     try {
-        console.log("Calling signInWithEmailAndPassword..."); // Added debug log
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
         console.log("User logged in:", user.uid);
 
         // Fetch user type from Firestore
         const userDocRef = doc(db, "users", user.uid);
-        console.log("Fetching user document from Firestore for UID:", user.uid); // Added debug log
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
             const userType = userData.userType;
-            const username = userData.username; // Get username from Firestore
-            console.log("User data found in Firestore. User Type:", userType, "Username:", username); // Added debug log
 
             localStorage.setItem('loggedInUserId', user.uid);
             localStorage.setItem('loggedInUserType', userType); // Store user type in local storage
-            localStorage.setItem('loggedInUser', username); // Store username for consistency
-            localStorage.setItem('isLoggedIn', 'true'); // Explicitly set isLoggedIn
+            showModal("Success", "Logged in successfully!", false);
 
-            showModal("Success", "Logged in successfully! Redirecting...", false);
-            setTimeout(() => {
-                if (userType === 'customer') {
-                    navigateTo('main-index-page.html');
-                } else if (userType === 'tradesperson') {
-                    navigateTo('plumber-profile-page.html'); // Navigate to tradesperson specific page
-                }
-            }, 1500); // 1.5 second delay
-
+            if (userType === 'customer') {
+                navigateTo('main-index-page.html');
+            } else if (userType === 'tradesperson') {
+                navigateTo('plumber-profile-page.html'); // Navigate to tradesperson specific page
+            }
         } else {
-            console.warn("User data not found in Firestore for UID:", user.uid);
+            console.warn("User data not found in Firestore for:", user.uid);
             // Optionally, sign out if user data is missing to prevent inconsistencies
             await auth.signOut();
             showModal("Login Error", "User profile incomplete. Please contact support.", false);
@@ -536,13 +462,7 @@ async function logIn(email, password) {
 
     } catch (error) {
         console.error("Error logging in:", error);
-        let errorMessage = `Failed to log in: ${error.message}`;
-        if (error.code === 'auth/invalid-credential') { // Common error for wrong email/password
-            errorMessage = "Invalid email or password. Please try again.";
-        } else if (error.code === 'auth/user-disabled') {
-            errorMessage = "Your account has been disabled. Please contact support.";
-        }
-        showModal("Login Error", errorMessage, false);
+        showModal("Login Error", `Failed to log in: ${error.message}`, false);
     }
 }
 
@@ -559,10 +479,8 @@ async function logOut() {
         await auth.signOut();
         localStorage.removeItem('loggedInUserId');
         localStorage.removeItem('loggedInUserType');
-        localStorage.removeItem('loggedInUser'); // Clear username on logout
-        localStorage.removeItem('isLoggedIn'); // Clear isLoggedIn flag
         showModal("Success", "Logged out successfully.", false);
-        navigateTo('login.html'); // Redirect to login page
+        navigateTo('login-page.html');
     } catch (error) {
         console.error("Error logging out:", error);
         showModal("Logout Error", `Failed to log out: ${error.message}`, false);
@@ -1038,7 +956,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Elements for professional-account.html
     const professionalProfileForm = document.getElementById('professionalProfileForm');
     const profFirstNameInput = document.getElementById('profFirstName');
-    const profLastNameInput = document = document.getElementById('profLastName');
+    const profLastNameInput = document.getElementById('profLastName');
     const profEmailInput = document.getElementById('profEmail');
     const profCountryCodeSelect = document.getElementById('profCountryCode'); // New element for country code
     const profMobileNumberInput = document.getElementById('profMobileNumber');
@@ -1104,27 +1022,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log("Firestore or currentUserId not available to load customer data.");
             return;
         }
-        // Query the 'users' collection where authUid matches currentUserId
-        const usersCol = collection(db, `users`);
-        const q = query(usersCol, where('authUid', '==', currentUserId));
+        const customersCol = collection(db, `users`); // Changed to 'users' collection
+        const q = query(customersCol, where('authUid', '==', currentUserId)); // Assuming you store Firebase Auth UID
         try {
             const querySnapshot = await getDocs(q);
-            // Assuming authUid is unique, there should be at most one document
-            if (!querySnapshot.empty) {
-                const customerDoc = querySnapshot.docs[0];
-                const customerDataLoaded = { id: customerDoc.id, ...customerDoc.data() };
-                console.log("Customer data loaded from Firestore:", customerDataLoaded);
-                // Update the in-memory customerData array if needed, or just use the loaded data
-                // For this demo, we'll just return it and let the calling context handle it
-                return customerDataLoaded;
-            } else {
-                console.log("No customer data found in Firestore for current user UID:", currentUserId);
-                return null;
+            customerData = []; // Clear existing in-memory data
+            querySnapshot.forEach(doc => {
+                customerData.push({ id: doc.id, ...doc.data() });
+            });
+            console.log("Customer data loaded from Firestore:", customerData);
+            // If on a customer-specific page, re-render with loaded data
+            if (customerProfileForm && localStorage.getItem('loggedInUserType') === 'customer') {
+                const loggedInUser = localStorage.getItem('loggedInUser');
+                const customer = findCustomerByUsername(loggedInUser);
+                if (customer) loadCustomerProfile(customer);
             }
         } catch (error) {
             console.error("Error loading customer data from Firestore:", error);
-            showModal("Error", "Failed to load customer data from database.", false);
-            return null;
         }
     }
 
@@ -1172,7 +1086,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 signUpHeaderButton.className = 'cta-button';
                 signUpHeaderButton.onclick = async () => { // Made async for signOut
                     console.log("Sign Up button clicked: Logging out...");
-                    await logOut(); // Use the shared logOut function
+                    if (auth) {
+                        try {
+                            await auth.signOut();
+                            console.log("User signed out from Firebase Auth.");
+                        } catch (error) {
+                            console.error("Error signing out:", error);
+                        }
+                    }
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('loggedInUser');
+                    localStorage.removeItem('loggedInUserType'); // Clear user type on logout
+                    window.location.href = 'index.html';
                 };
             } else {
                 // If user is NOT logged in, show "Login" and "Sign Up" buttons
@@ -1509,16 +1434,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Function to populate professional profile form with data
-    async function loadProfessionalProfile(professionalId) {
-        if (!professionalProfileForm) return;
-
-        const professional = await loadTradespersonDataFromFirestore(professionalId);
-
-        if (!professional) {
-            console.error('Professional data not found for logged in user ID:', professionalId);
-            professionalProfileForm.innerHTML = '<p class="form-message error">Professional profile could not be loaded. Please log in again.</p>';
-            return;
-        }
+    function loadProfessionalProfile(professional) {
+        if (!professionalProfileForm || !professional) return;
 
         profFirstNameInput.value = professional.name.split(' ')[0] || '';
         profLastNameInput.value = professional.name.split(' ').slice(-1)[0] || '';
@@ -1643,36 +1560,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Function to find a customer by username
     function findCustomerByUsername(username) {
-        // This function is still using the dummy customerData array.
-        // In a real app, you'd query Firestore for the user by username.
         return customerData.find(cust => cust.username.toLowerCase() === username.toLowerCase());
     }
 
     // Function to load customer profile data into the form
-    async function loadCustomerProfile(customerDataFromFirestore) {
-        if (!customerProfileForm || !customerDataFromFirestore) return;
+    function loadCustomerProfile(customer) {
+        if (!customerProfileForm || !customer) return;
 
-        custFirstNameInput.value = customerDataFromFirestore.name.split(' ')[0] || '';
-        custLastNameInput.value = customerDataFromFirestore.name.split(' ').slice(-1)[0] || '';
-        custEmailInput.value = customerDataFromFirestore.email || 'not-available@example.com';
+        custFirstNameInput.value = customer.name.split(' ')[0] || '';
+        custLastNameInput.value = customer.name.split(' ').slice(-1)[0] || '';
+        custEmailInput.value = customer.email || 'not-available@example.com';
         
         // Populate country dial code dropdown for customer profile
         if (custCountryCodeSelect) {
-            populateCountryDialCodes(custCountryCodeSelect, customerDataFromFirestore.mobileNumber);
+            populateCountryDialCodes(custCountryCodeSelect, customer.mobileNumber);
         }
         // Populate mobile number input (without dial code)
-        if (custMobileNumberInput && customerDataFromFirestore.mobileNumber) {
-            const dialCode = Object.values(countryDialCodes).find(code => customerDataFromFirestore.mobileNumber.startsWith(code));
+        if (custMobileNumberInput && customer.mobileNumber) {
+            const dialCode = Object.values(countryDialCodes).find(code => customer.mobileNumber.startsWith(code));
             if (dialCode) {
-                custMobileNumberInput.value = customerDataFromFirestore.mobileNumber.substring(dialCode.length);
+                custMobileNumberInput.value = customer.mobileNumber.substring(dialCode.length);
             } else {
-                custMobileNumberInput.value = customerDataFromFirestore.mobileNumber;
+                custMobileNumberInput.value = customer.mobileNumber;
             }
         } else {
             custMobileNumberInput.value = '';
         }
 
-        custProfilePhotoPreview.src = customerDataFromFirestore.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
+        custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
     }
 
     // --- Functions for Messaging Page (messaging-page.html) ---
@@ -2120,6 +2035,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const locality = localitySelectApply.value;
             const description = document.getElementById('description').value;
 
+
             // Client-side Validation
             if (username.length < 5) {
                 formMessage.textContent = 'Username must be at least 5 characters long.';
@@ -2129,14 +2045,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             if (password.length < 8) {
                 formMessage.textContent = 'Password must be at least 8 characters long.';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                return;
-            }
-            // Password complexity checks: at least one letter, one number, one '$'
-            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$]).{8,}$/;
-            if (!passwordRegex.test(password)) {
-                formMessage.textContent = 'Password must be at least 8 characters long and include at least one letter, one number, and one "$" symbol.';
                 formMessage.className = 'form-message error';
                 formMessage.style.display = 'block';
                 return;
@@ -2175,7 +2083,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log("Calling signUp for professional:", { email, password, userType: 'tradesperson' }); // Debugging log
             // Call the shared signUp function
             await signUp(email, password, 'tradesperson', {
-                username: username.toLowerCase().replace(/\s/g, '-'), // Ensure username is stored
                 name: `${firstName} "${username}" ${lastName}`,
                 mobileNumber: mobileNumber,
                 specialty: selectedSpecificServices.length > 0 ? selectedSpecificServices.join(', ') : selectedMainServices.join(', '),
@@ -2187,8 +2094,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 locality: locality,
                 joinDate: new Date().toISOString().split('T')[0],
                 specificServices: selectedSpecificServices,
-                // The 'id' field is now handled by Firebase Auth UID in Firestore doc ID
+                id: username.toLowerCase().replace(/\s/g, '-') // Ensure ID is part of userData for Firestore doc
             });
+
+            // The showModal and navigateTo are now handled by the signUp function
+            // No need for redundant localStorage updates here, as signUp handles it.
+            // You might want to reset the form here if signUp doesn't navigate away
+            // professionalApplicationForm.reset();
+            // updateSpecificServices();
+            // populateApplyCountries();
+            // updateApplyLocalities();
         });
     }
 
@@ -2228,14 +2143,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 formMessage.style.display = 'block';
                 return;
             }
-            // Password complexity checks: at least one letter, one number, one '$'
-            const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[$]).{8,}$/;
-            if (!passwordRegex.test(password)) {
-                formMessage.textContent = 'Password must be at least 8 characters long and include at least one letter, one number, and one "$" symbol.';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                return;
-            }
             if (password !== confirmPassword) {
                 formMessage.textContent = 'Password and Confirm Password do not match.';
                 formMessage.className = 'form-message error';
@@ -2252,36 +2159,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log("Calling signUp for customer:", { email, password, userType: 'customer' }); // Debugging log
             // Call the shared signUp function
             await signUp(email, password, 'customer', {
-                username: username.toLowerCase().replace(/\s/g, '-'), // Ensure username is stored
                 name: `${firstName} ${lastName}`,
+                username: username,
                 mobileNumber: mobileNumber, // Store mobile number with dial code
                 avatar: `https://placehold.co/150x150/FFD700/36454F?text=${firstName.substring(0,1).toUpperCase()}${lastName.substring(0,1).toUpperCase()}`, // Generate initial avatar
                 joinDate: new Date().toISOString().split('T')[0],
-                // The 'id' field is now handled by Firebase Auth UID in Firestore doc ID
+                id: username.toLowerCase().replace(/\s/g, '-') // Ensure ID is part of userData for Firestore doc
             });
+
+            // The showModal and navigateTo are now handled by the signUp function
         });
     }
 
 
     // Logic for login page (login.html)
     if (loginForm) {
-        console.log("Login form element found. Attaching submit listener."); // Debugging log
         loginForm.addEventListener('submit', async function(event) { // Made async
             event.preventDefault();
-            console.log("Login Form submitted."); // Debugging log
 
             formMessage.style.display = 'none'; // Use the generic formMessage
             formMessage.className = 'form-message';
 
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
-            console.log("Login attempt for username:", username, "password:", password); // Debugging log
 
             if (username === '' || password === '') {
                 formMessage.textContent = 'Please enter both username and password.';
                 formMessage.className = 'form-message error';
                 formMessage.style.display = 'block';
-                console.warn("Validation failed: Missing username or password."); // Debugging log
                 return;
             }
 
@@ -2292,39 +2197,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             let userType = '';
             let foundUser = null;
 
-            console.log("Attempting to find user email for username:", username); // Debugging log
-            // Query Firestore to find the user by username
-            const usersRef = collection(db, "users");
-            const q = query(usersRef, where("username", "==", username));
-            try {
-                const querySnapshot = await getDocs(q);
-                if (!querySnapshot.empty) {
-                    foundUser = querySnapshot.docs[0].data();
-                    targetEmail = foundUser.email;
-                    userType = foundUser.userType;
-                    console.log("Found user in Firestore:", foundUser.name, "email:", targetEmail, "type:", userType);
-                } else {
-                    console.warn("No user found in Firestore for username:", username);
+            // Attempt to find user in tradespeopleData (simulated)
+            for (const serviceCategory in tradespeopleData) {
+                const pro = tradespeopleData[serviceCategory].find(p => p.id === username);
+                if (pro) {
+                    foundUser = pro;
+                    targetEmail = pro.email; // Assuming professionals have an email field
+                    userType = 'tradesperson';
+                    break;
                 }
-            } catch (error) {
-                console.error("Error querying user by username from Firestore:", error);
-                formMessage.textContent = 'Error during login. Please try again.';
-                formMessage.className = 'form-message error';
-                formMessage.style.display = 'block';
-                return;
+            }
+
+            // If not found in tradespeople, try to find in customerData (simulated)
+            if (!foundUser) {
+                const cust = customerData.find(c => c.username === username);
+                if (cust) {
+                    foundUser = cust;
+                    targetEmail = cust.email; // Assuming customers have an email field
+                    userType = 'customer';
+                }
             }
 
             if (!targetEmail) {
                 formMessage.textContent = 'Invalid username or password.';
                 formMessage.className = 'form-message error';
                 formMessage.style.display = 'block';
-                console.warn("No target email found for username:", username); // Debugging log
                 return;
             }
-            console.log("Found target email:", targetEmail, "for user type:", userType); // Debugging log
 
             // Call the shared logIn function
-            console.log("Calling logIn with email:", targetEmail, "and password (hidden)."); // Debugging log
             await logIn(targetEmail, password);
 
             // The showModal and navigateTo are now handled by the logIn function
@@ -2368,32 +2269,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Logic specifically for professional account page (professional-account.html)
     if (professionalProfileForm) {
-        const loggedInUserId = getLoggedInUserId(); // This is the Firebase Auth UID
-        const loggedInUserType = getLoggedInUserType();
+        const loggedInUser = localStorage.getItem('loggedInUser'); // This is the username/ID
+        const loggedInUserType = localStorage.getItem('loggedInUserType');
 
-        if (loggedInUserId && loggedInUserType === 'tradesperson') {
-            loadProfessionalProfile(loggedInUserId); // Pass the UID to load data
+        if (loggedInUser && loggedInUserType === 'tradesperson') { // Changed to 'tradesperson'
+            const professional = findProfessionalByUsername(loggedInUser); // Find the professional's data
+            if (professional) {
+                loadProfessionalProfile(professional);
 
-            // Event listener for main service checkboxes on profile page to update specific services
-            profMainServiceCheckboxesContainer.addEventListener('change', async () => {
-                const professional = await loadTradespersonDataFromFirestore(loggedInUserId); // Re-fetch for current services
-                updateSpecificServices(profSpecificServicesCheckboxesDiv, profMainServiceCheckboxesContainer, true, professional ? professional.specificServices : []);
-            });
-
-            // Event listener for country change on profile page
-            profCountrySelect.addEventListener('change', async () => {
-                const professional = await loadTradespersonDataFromFirestore(loggedInUserId); // Re-fetch for current locality
-                populateProfLocalities(profCountrySelect.value, professional ? professional.locality : '');
-            });
-
-            // Add event listener for "Manage All Bookings" button
-            if (manageAllBookingsButton) {
-                manageAllBookingsButton.addEventListener('click', () => {
-                    // Corrected path to professional-bookings.html
-                    window.location.href = 'professional-bookings.html'; 
+                // Event listener for main service checkboxes on profile page to update specific services
+                profMainServiceCheckboxesContainer.addEventListener('change', () => {
+                    updateSpecificServices(profSpecificServicesCheckboxesDiv, profMainServiceCheckboxesContainer, true, professional.specificServices || []);
                 });
-            }
 
+                // Event listener for country change on profile page
+                profCountrySelect.addEventListener('change', () => {
+                    populateProfLocalities(profCountrySelect.value, professional.locality);
+                });
+
+                // Add event listener for "Manage All Bookings" button
+                if (manageAllBookingsButton) {
+                    manageAllBookingsButton.addEventListener('click', () => {
+                        // Corrected path to professional-bookings.html
+                        window.location.href = 'professional-bookings.html'; 
+                    });
+                }
+
+            } else {
+                console.error('Professional data not found for logged in user:', loggedInUser);
+                professionalProfileForm.innerHTML = '<p class="form-message error">Professional profile could not be loaded. Please log in again.</p>';
+                // Optionally redirect to login
+            }
         } else {
             // Not logged in as a professional, redirect to login or show message
             professionalProfileForm.innerHTML = '<p class="form-message error">You must be logged in as a professional to view this page. <a href="login.html">Login here</a></p>';
@@ -2405,8 +2311,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             profileUpdateMessage.style.display = 'none';
             profileUpdateMessage.className = 'form-message';
 
-            const loggedInUserId = getLoggedInUserId();
-            if (!loggedInUserId) {
+            const loggedInUsername = localStorage.getItem('loggedInUser');
+            if (!loggedInUsername) {
                 profileUpdateMessage.textContent = 'You are not logged in.';
                 profileUpdateMessage.className = 'form-message error';
                 profileUpdateMessage.style.display = 'block';
@@ -2414,7 +2320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             // Find the professional to update in Firestore
-            const professionalRef = doc(db, `users`, loggedInUserId); // Use UID as document ID
+            const professionalRef = doc(db, `users`, loggedInUsername); // Changed to 'users' collection
             let professionalToUpdate = null;
             try {
                 const docSnap = await getDoc(professionalRef);
@@ -2475,7 +2381,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Update the professional's data in Firestore
             try {
                 await updateDoc(professionalRef, {
-                    name: `${newFirstName} "${professionalToUpdate.username}" ${newLastName}`, // Use existing username for consistency
+                    name: `${newFirstName} "${loggedInUsername}" ${newLastName}`,
                     mobileNumber: newMobileNumber,
                     country: newCountry,
                     locality: newLocality,
@@ -2539,7 +2445,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     try {
                         // Delete user document from Firestore
                         await deleteDoc(doc(db, "users", userIdToDelete));
-                        console.log("User document deleted from Firestore for UID:", userIdToDelete);
 
                         // Delete user from Firebase Authentication
                         // NOTE: This operation can only be performed on the server-side for security reasons
@@ -2548,7 +2453,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                         // For a full solution, you'd need a Firebase Cloud Function or similar backend.
                         // For this client-side demo, we'll simulate it but acknowledge the limitation.
                         // await auth.currentUser.delete(); // This line would be problematic client-side
-                        console.warn("Firebase Auth user deletion is typically done server-side for security. Simulating client-side deletion.");
 
                         // Simulate successful deletion for the demo
                         localStorage.removeItem('isLoggedIn');
@@ -2581,10 +2485,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Logic specifically for customer account page (customer-account.html)
     if (customerProfileForm) {
-        const loggedInUserId = getLoggedInUserId(); // This is the Firebase Auth UID
-        const loggedInUserType = getLoggedInUserType();
+        const loggedInUser = localStorage.getItem('loggedInUser'); // This is the username
+        const loggedInUserType = localStorage.getItem('loggedInUserType');
 
-        if (loggedInUserId && loggedInUserType === 'customer') {
+        if (loggedInUser && loggedInUserType === 'customer') {
             // Load customer data from Firestore
             loadCustomerDataFromFirestore().then(customer => {
                 if (customer) {
@@ -2608,7 +2512,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     custEmailInput.value = customer.email || 'not-available@example.com';
                     custProfilePhotoPreview.src = customer.avatar || 'https://placehold.co/150x150/CCCCCC/000000?text=No+Photo';
                 } else {
-                    console.error('Customer data not found for logged in user:', loggedInUserId);
+                    console.error('Customer data not found for logged in user:', loggedInUser);
                     customerProfileForm.innerHTML = '<p class="form-message error">Customer profile could not be loaded. Please log in again.</p>';
                 }
             });
@@ -2734,11 +2638,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                     try {
                         await deleteDoc(doc(db, "users", userIdToDelete));
-                        console.log("User document deleted from Firestore for UID:", userIdToDelete);
-
                         // await auth.currentUser.delete(); // Client-side deletion of auth user is problematic without recent re-auth
-                        console.warn("Firebase Auth user deletion is typically done server-side for security. Simulating client-side deletion.");
-
 
                         localStorage.removeItem('isLoggedIn');
                         localStorage.removeItem('loggedInUser');
