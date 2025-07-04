@@ -250,14 +250,14 @@ import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnap
 // 4. Scroll down to "Your apps" and select your Web App (or add one if you haven't).
 // 5. Copy the 'firebaseConfig' object provided there and paste it below, replacing this entire block.
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY", // <-- PASTE YOUR API KEY HERE (e.g., "AIzaSyC...")
-    authDomain: "YOUR_AUTH_DOMAIN", // <-- PASTE YOUR AUTH DOMAIN HERE (e.g., "your-project-id.firebaseapp.com")
-    projectId: "YOUR_PROJECT_ID", // <-- PASTE YOUR PROJECT ID HERE (e.g., "your-project-id")
-    storageBucket: "YOUR_STORAGE_BUCKET", // <-- PASTE YOUR STORAGE BUCKET HERE (e.g., "your-project-id.appspot.com")
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // <-- PASTE YOUR MESSAGING SENDER ID HERE (e.g., "1234567890")
-    appId: "YOUR_APP_ID", // <-- PASTE YOUR APP ID HERE (e.g., "1:1234567890:web:abcdef1234567890abcdef")
-    // measurementId: "G-XXXXXXXXXX" // <-- UNCOMMENT AND PASTE IF YOU USE GOOGLE ANALYTICS
-};
+    apiKey: "AIzaSyABazepGHmdDtJ3qfgBPbZgLTEhsD8i8ks",
+  authDomain: "fixerupper-d3d19.firebaseapp.com",
+  projectId: "fixerupper-d3d19",
+  storageBucket: "fixerupper-d3d19.firebasestorage.app",
+  messagingSenderId: "536236224510",
+  appId: "1:536236224510:web:72e5d1b4ae35d9368edaaf",
+  measurementId: "G-78WR2HXYTZ"
+  };
 // --- END OF FIREBASE CONFIGURATION ---
 
 // Add this line to log the firebaseConfig and check its content
