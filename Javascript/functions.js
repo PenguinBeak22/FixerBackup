@@ -2387,3 +2387,5 @@ let bookingsData = JSON.parse(localStorage.getItem('bookingsData')) || [
     `;
     document.head.appendChild(styleTag);
 });
+
+    };
