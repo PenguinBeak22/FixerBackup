@@ -7,6 +7,24 @@ const admin = require("firebase-admin");
 admin.initializeApp(); // Initializes with default credentials from the environment
 const db = admin.firestore();
 
+
+exports.createFirestoreUserProfile = functions.auth.user().onCreate(async (user) => {
+    // 'user' object here contains details of the newly created Firebase Auth user
+    // (UID, email, display name if set, etc.)
+
+    const userRef = db.collection("users").doc(user.uid);
+
+    // You'll need to decide how to get the 'userType' and other specific data (like username)
+    // for customers vs. tradespeople, as this info isn't directly in the Auth 'user' object.
+    // You have a few options:
+    // A) Add a custom claim to the user's Auth token during client-side signup (advanced).
+    // B) Have the client *then* write the specific type info to a separate temporary collection,
+    //    and the Cloud Function picks it up, then deletes it. (More complex).
+    // C) Simplest for a quick start: default to 'customer' and let the user update later,
+    //    or assume a user is a 'tradesperson' if they sign up via that form and then
+    //
+
+
 const tradespeopleData = {
     plumbing: [
         {
