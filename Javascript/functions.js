@@ -1,5 +1,12 @@
 // Centralized Data for various services and their specific offerings
 // This structure now holds all types of professionals
+
+
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp(); // Initializes with default credentials from the environment
+const db = admin.firestore();
+
 const tradespeopleData = {
     plumbing: [
         {
@@ -3175,3 +3182,6 @@ const countryDialCodes = {
     "Guernsey": "+44",
     "Jersey": "+44"
 };
+
+
+
