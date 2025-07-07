@@ -267,6 +267,7 @@ const countriesAndLocalities = {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import {getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
 // --- IMPORTANT: YOU MUST REPLACE THESE PLACEHOLDER VALUES WITH YOUR ACTUAL FIREBASE CONFIG ---
 // 1. Go to your Firebase Console: https://console.firebase.google.com/
@@ -296,7 +297,7 @@ let currentUserId = null; // To store the authenticated user's ID
 // Always attempt to initialize Firebase app
 try {
     app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
+    db = getDatabase(app);
     auth = getAuth(app);
 
     onAuthStateChanged(auth, (user) => {
